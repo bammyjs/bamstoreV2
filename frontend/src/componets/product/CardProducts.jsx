@@ -1,5 +1,4 @@
 import { useGetAllProductsQuery } from "../../redux/features/product/productsApi";
-// import ProductCard from "./ProductCard";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/features/cartSlice";
 import {
@@ -9,13 +8,23 @@ import {
 } from "react-icons/io5";
 import { shortenText } from "../../utils";
 import ReactStars from "react-rating-stars-component";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, Link, useParams } from "react-router-dom";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import CardSkeleton from "./CardSkeleton";
 
 function CardProducts({}) {
   const { data: products, error, isLoading } = useGetAllProductsQuery();
-  console.log(products);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 10000);
+  });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,10 +39,8 @@ function CardProducts({}) {
       <div className="container max-w-7xl flex flex-col item-center justify-center gap-8 p-6 ">
         <div className="w-full p-2">
           <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
-            {isLoading ? (
-              <p>Loading...</p>
-            ) : error ? (
-              <p>An error occurred...</p>
+            {loading ? (
+              <CardSkeleton cards={8} />
             ) : (
               <>
                 {products?.map((product, i) => {
@@ -65,7 +72,11 @@ function CardProducts({}) {
                             {product.price}
                           </p>
 
-                          <div className="flex items-center space-x-1.5 rounded-lg bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep">
+                          <button
+                            type="buttton"
+                            onClick={() => handleAddToCart(product)}
+                            className="flex items-center space-x-1.5 rounded-lg bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
+                          >
                             <motion.div
                               whileHover={{ rotate: 45 }}
                               whileTap={{ scale: 1 }}
@@ -77,19 +88,19 @@ function CardProducts({}) {
                               />
                             </motion.div>
 
-                            <button
+                            {/* <button
                               type="button"
                               onClick={() => handleAddToCart(product)}
                               className="text-sm"
                             >
                               Add
-                            </button>
-                          </div>
+                            </button> */}
+                          </button>
                         </div>
                       </div>
                     </div>
                   );
-                })}
+                })}{" "}
               </>
             )}
           </div>

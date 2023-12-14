@@ -291,7 +291,7 @@ export default function AllProducts() {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-4">
+              <div className="lg:col-span-4 ">
                 <CardProducts />
               </div>
             </div>

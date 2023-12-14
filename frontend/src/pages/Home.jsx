@@ -1,7 +1,6 @@
 import React from "react";
 import Hero from "../componets/home/Hero";
 import Brand from "../componets/home/Brand";
-import Videoplay from "../componets/home/Videoplay";
 import FeaturedProduct from "../componets/home/FeaturedProduct";
 import BestSelling from "../componets/home/BestSelling";
 import Workspace from "../componets/home/Workspace";
@@ -17,7 +16,6 @@ function Home() {
       <main className=" flex flex-col gap-8 bg-light">
         <Hero />
         <Brand />
-        {/* <Videoplay /> */}
         <FeaturedProduct />
         <BestSelling />
         <Workspace />

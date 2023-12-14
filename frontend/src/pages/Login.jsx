@@ -63,7 +63,7 @@ const Login = () => {
   return (
     <>
       <Meta title={"Login"} />
-      <BreadCrumb title="Login" />
+      {/* <BreadCrumb title="Login" /> */}
       <>
         {isLoading && <Loader />}
         <main className=" w-full px-6 flex flex-col items-center justify-center gap-6 my-32  md:my-60">

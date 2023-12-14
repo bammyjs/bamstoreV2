@@ -13,6 +13,7 @@ import {
 
 import { Link, useNavigate } from "react-router-dom";
 import BreadCrumb from "../componets/BreadCrumb";
+import CardSkeleton from "../componets/product/CardSkeleton";
 
 const ShopByCategory = (props) => {
   const { data, error, isLoading } = useGetAllProductsQuery();
@@ -36,9 +37,10 @@ const ShopByCategory = (props) => {
           <h1 className="bg- w-full text-pry-deep p-4 text-2xl text-left capitalize">
             {props.category}
           </h1>
+
           <div className="pt-2 md:pt-4 grid  justify-between overflow-auto   grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
             {isLoading ? (
-              <p>Loading...</p>
+              <CardSkeleton cards={8} />
             ) : error ? (
               <p>An error occurred...</p>
             ) : (

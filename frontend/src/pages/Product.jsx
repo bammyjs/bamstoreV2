@@ -31,7 +31,7 @@ const Product = () => {
             6
             <>
               <h1>Single item page</h1>
-              {/* <h2>{product.name}</h2> */}
+              <h2>{product.name}</h2>
               {/* <SingleProduct /> */}
             </>
           </div>
