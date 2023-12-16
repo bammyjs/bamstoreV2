@@ -38,7 +38,7 @@ const ShopByCategory = (props) => {
             {props.category}
           </h1>
 
-          <div className="pt-2 md:pt-4 grid  justify-between overflow-auto   grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
+          <div className="pt-2 md:pt-4 grid  justify-between grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
             {isLoading ? (
               <CardSkeleton cards={8} />
             ) : error ? (

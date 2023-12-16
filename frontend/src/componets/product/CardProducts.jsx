@@ -23,7 +23,7 @@ function CardProducts({}) {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 10000);
+    }, 1000);
   });
 
   const dispatch = useDispatch();

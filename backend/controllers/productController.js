@@ -88,7 +88,7 @@ const createProduct = asyncHandler(async (req, res) => {
     color,
   });
 
-  res.status(201).json(product);
+  res.status(200).json(product);
 });
 
 // Get all Products
@@ -99,7 +99,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
 // Get single product
 const getProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params._id);
 
   // if product doesn't exist
 

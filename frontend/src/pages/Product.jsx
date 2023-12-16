@@ -16,9 +16,9 @@ import { useGetSingleProductQuery } from "../redux/features/product/productsApi"
 //Get single Product details
 
 const Product = () => {
-  const { _id } = useParams();
-  console.log(_id);
-  const { data: product, error, isLoading } = useGetSingleProductQuery(_id);
+  const { id } = useParams();
+  console.log(id);
+  const { data: product, error, isLoading } = useGetSingleProductQuery(id);
 
   console.log(product);
 
@@ -27,8 +27,7 @@ const Product = () => {
       {/* <BreadCrumb data={data} />; */}
       <main className="bg-neutral flex flex-col gap-6 items-center ">
         <section className="py-12 sm:py-16 text-dark">
-          <div>
-            6
+          <div key={id}>
             <>
               <h1>Single item page</h1>
               <h2>{product.name}</h2>
