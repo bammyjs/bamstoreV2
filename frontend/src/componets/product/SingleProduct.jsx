@@ -1,18 +1,30 @@
 import React from "react";
+import { motion } from "framer-motion";
+
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/features/cartSlice";
+import { IoCartOutline } from "react-icons/io5";
+import mmm from "../../assets/ps5pad.svg";
 
 const SingleProduct = () => {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    // navigate("/cart");
+  };
   return (
-    <section className="text-gray-700 body-font overflow-hidden bg-white">
+    <section className="text-gray-700 body-font overflow-hidden bg-white md:mt-16">
       <div className="container px-5 py-24 mx-auto">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <img
-            src="https://www.whitmorerarebooks.com/pictures/medium/2465.jpg"
-            alt=""
+            src={mmm}
+            alt="ps5 pad"
             className="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200"
           />
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-            <h2 className="text-sm title-font text-gray-500 tracking-widest">
-              BRAND NAME
+            <h2 className="text-lg   text-gray-500 tracking-widest">
+              PlayStation 5 Controller
             </h2>
             <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
               The Catcher in the Rye
@@ -155,25 +167,29 @@ const SingleProduct = () => {
                 </div>
               </div>
             </div>
-            <div className="flex">
+            <div className="flex justify-between">
               <span className="title-font font-medium text-2xl text-gray-900">
                 $58.00
               </span>
-              <button className="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">
-                Button
-              </button>
-              <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                <svg
-                  fill="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
+              <div className="flex gap-2">
+                <button className="btn btn-secondary text-neutral">Buy</button>
+                <button
+                  type="buttton"
+                  onClick={() => handleAddToCart(product)}
+                  className="flex items-center space-x-1.5 rounded-lg bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
                 >
-                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                </svg>
-              </button>
+                  <motion.div
+                    whileHover={{ rotate: 45 }}
+                    whileTap={{ scale: 1 }}
+                    to="/"
+                  >
+                    <IoCartOutline
+                      style={{ fontSize: "15px" }}
+                      className="text-2xl"
+                    />
+                  </motion.div>
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -8,24 +8,10 @@ import {
 } from "react-icons/io5";
 import { shortenText } from "../../utils";
 import ReactStars from "react-rating-stars-component";
-import { Fragment, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, Link, useParams } from "react-router-dom";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import CardSkeleton from "./CardSkeleton";
 
-function CardProducts({}) {
-  const { data: products, error, isLoading } = useGetAllProductsQuery();
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  });
-
+function CardProducts({ products }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,70 +25,56 @@ function CardProducts({}) {
       <div className="container max-w-7xl flex flex-col item-center justify-center gap-8 p-6 ">
         <div className="w-full p-2">
           <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
-            {loading ? (
-              <CardSkeleton cards={8} />
-            ) : (
-              <>
-                {products?.map((product, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="rounded-xl  items-baseline bg- p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 "
-                    >
-                      <div className="relative w-full  bg-neutral flex items-end overflow-hidden rounded-xl">
-                        <Link to={`/products/${product._id}`}>
-                          <img
-                            className="aspect-[2/2] object-cover "
-                            src={product.image}
-                            alt={product.name}
+            {products?.map((product, i) => {
+              return (
+                <div
+                  key={i}
+                  className="rounded-xl  items-baseline bg- p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 "
+                >
+                  <div className="relative w-full  bg-neutral flex items-end overflow-hidden rounded-xl">
+                    <Link to={`/product/${product._id}`}>
+                      <img
+                        className="aspect-[2/2] object-cover "
+                        src={product.image}
+                        alt={product.name}
+                      />
+                    </Link>
+                    {/* <div className="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600"></div> */}
+                  </div>
+
+                  <div className="mt-1 p-2">
+                    <h2 className="text-slate-700">{product.name}</h2>
+                    <p className="mt-1 text-sm text-slate-400">
+                      {shortenText(product.description, 15)}
+                    </p>
+
+                    <div className="mt-3 flex items-end justify-between">
+                      <p className="text-base font-bold text-pry-deep">
+                        <span>&#8358;</span>
+                        {product.price}
+                      </p>
+
+                      <button
+                        type="buttton"
+                        onClick={() => handleAddToCart(product)}
+                        className="flex items-center space-x-1.5 rounded-lg bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
+                      >
+                        <motion.div
+                          whileHover={{ rotate: 45 }}
+                          whileTap={{ scale: 1 }}
+                          to="/"
+                        >
+                          <IoCartOutline
+                            style={{ fontSize: "15px" }}
+                            className="text-2xl"
                           />
-                        </Link>
-                        {/* <div className="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600"></div> */}
-                      </div>
-
-                      <div className="mt-1 p-2">
-                        <h2 className="text-slate-700">{product.name}</h2>
-                        <p className="mt-1 text-sm text-slate-400">
-                          {shortenText(product.description, 15)}
-                        </p>
-
-                        <div className="mt-3 flex items-end justify-between">
-                          <p className="text-base font-bold text-pry-deep">
-                            <span>&#8358;</span>
-                            {product.price}
-                          </p>
-
-                          <button
-                            type="buttton"
-                            onClick={() => handleAddToCart(product)}
-                            className="flex items-center space-x-1.5 rounded-lg bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
-                          >
-                            <motion.div
-                              whileHover={{ rotate: 45 }}
-                              whileTap={{ scale: 1 }}
-                              to="/"
-                            >
-                              <IoCartOutline
-                                style={{ fontSize: "15px" }}
-                                className="text-2xl"
-                              />
-                            </motion.div>
-
-                            {/* <button
-                              type="button"
-                              onClick={() => handleAddToCart(product)}
-                              className="text-sm"
-                            >
-                              Add
-                            </button> */}
-                          </button>
-                        </div>
-                      </div>
+                        </motion.div>
+                      </button>
                     </div>
-                  );
-                })}{" "}
-              </>
-            )}
+                  </div>
+                </div>
+              );
+            })}{" "}
           </div>
         </div>
       </div>

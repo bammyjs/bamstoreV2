@@ -9,7 +9,7 @@ export const productsApi = createApi({
       query: () => "products",
     }),
     getSingleProduct: builder.query({
-      query: (id) => `product/${id}`,
+      query: (id) => `products/${id}`,
 
       validateStatus: (response, result) =>
         response.status === 200 && !result.isError,

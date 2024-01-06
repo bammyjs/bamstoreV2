@@ -8,7 +8,7 @@ import AllProducts from "../componets/product/AllProducts";
 import { useGetAllProductsQuery } from "../redux/features/product/productsApi";
 import { Navigate, useLocation } from "react-router";
 
-export const OurStore = ({ match }) => {
+export const OurStore = () => {
   const { data, error, isLoading } = useGetAllProductsQuery();
 
   return (
@@ -17,12 +17,17 @@ export const OurStore = ({ match }) => {
       <main className=" flex  bg-gray-100 flex-col gap-6 mt-20  md:mt-24">
         <div className="w-full  mb-10 flex flex-wrap justify-center items-center">
           {isLoading ? (
-            <p>Loading...</p>
+            <>
+              <span className="loading loading-ball loading-xs"></span>
+              <span className="loading loading-ball loading-sm"></span>
+              <span className="loading loading-ball loading-md"></span>
+              <span className="loading loading-ball loading-lg"></span>
+            </>
           ) : error ? (
             <p>An error occurred...</p>
           ) : (
             <>
-              <AllProducts {...data} />
+              <AllProducts />
             </>
           )}
         </div>

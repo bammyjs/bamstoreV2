@@ -6,7 +6,7 @@ const CardSkeleton = ({ cards }) => {
   return Array(cards)
     .fill(0)
     .map((items) => (
-      <div className="w-full rounded-xl  items-baseline bg- p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 ">
+      <div className=" rounded-xl  items-baseline  p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 ">
         <div className="relative w-full  bg-neutral flex items-end overflow-hidden rounded-xl">
           <Skeleton className=" h-44 " />
         </div>

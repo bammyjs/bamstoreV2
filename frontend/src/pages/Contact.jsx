@@ -7,8 +7,8 @@ function Contact() {
   return (
     <>
       <Meta title={"Contact Us"} />
-      <section className="flex flex-col gap-6 items-center  md:mt-24">
-        <BreadCrumb title="Contact Us" />
+      <section className="flex flex-col gap-6 items-center  md:mt-24 bg-neutral">
+        {/* <BreadCrumb title="Contact Us" /> */}
         <h3 className="text-dark text-center text-lg md:text-3xl md:my-10  font-bold">
           Contact Us
         </h3>

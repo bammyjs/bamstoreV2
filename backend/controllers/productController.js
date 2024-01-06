@@ -99,7 +99,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
 // Get single product
 const getProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params._id);
+  const product = await Product.findById(req.params.id);
 
   // if product doesn't exist
 

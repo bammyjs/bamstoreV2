@@ -40,12 +40,12 @@ const productSchema = new mongoose.Schema(
       trim: true,
     },
     price: {
-      type: String,
+      type: Number,
       required: [true, "Please add a price"],
       trim: true,
     },
     regularPrice: {
-      type: String,
+      type: Number,
       // required: [true, "Please add a price"],
       trim: true,
     },

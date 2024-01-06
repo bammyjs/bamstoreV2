@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import {
   IoAddSharp,
@@ -12,6 +12,10 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { filters } from "./FilterData";
 import CardProducts from "./CardProducts";
+import { useGetAllProductsQuery } from "../../redux/features/product/productsApi";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import CardSkeleton from "./CardSkeleton";
 
 const sortOptions = [
   { name: "Price: Low to High", href: "#", current: false },
@@ -23,6 +27,17 @@ function classNames(...classes) {
 }
 
 export default function AllProducts() {
+  const { data: products, error, isLoading } = useGetAllProductsQuery();
+  console.log(products);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  });
+
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const location = useLocation();
@@ -292,7 +307,11 @@ export default function AllProducts() {
 
               {/* Product grid */}
               <div className="lg:col-span-4 ">
-                <CardProducts />
+                {loading ? (
+                  <CardSkeleton cards={4} products={products} />
+                ) : (
+                  <CardProducts products={products} />
+                )}
               </div>
             </div>
           </section>
