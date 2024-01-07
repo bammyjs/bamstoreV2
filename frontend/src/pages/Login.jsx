@@ -66,7 +66,7 @@ const Login = () => {
       {/* <BreadCrumb title="Login" /> */}
       <>
         {isLoading && <Loader />}
-        <main className=" w-full px-6 flex flex-col items-center justify-center gap-6 my-32  md:my-60">
+        <main className="bg-gray-bk w-full px-6 flex flex-col items-center justify-center gap-6 my-32  md:my-60">
           <h3 className="text-3xl text-dark text-center md:text-4xl font-bold">
             Login
           </h3>

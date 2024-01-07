@@ -39,7 +39,7 @@ function Header() {
     navigate("/login");
   };
   return (
-    <header className="fixed text-base-100  bg-light w-full p-2 md:p-4  flex justify-center items-center  md:fixed z-[9999]  box-shadow ">
+    <header className="fixed text-base-100  bg-light w-full p-2 md:px-4 md:py-8 flex justify-center items-center  md:fixed z-[9999]  box-shadow ">
       <nav className="container max-w-7xl  p-1 flex   font-medium justify-between  w-full  items-center">
         <div className=" z-50  md:w-auto w-full flex justify-between items-center">
           <div className=" md:hidden block " onClick={() => setOpen(!open)}>

@@ -67,10 +67,10 @@ const Register = () => {
   return (
     <>
       <Meta title={"Register"} />
-      <BreadCrumb title="Register" />
+      {/* <BreadCrumb title="Register" /> */}
       <>
         {isLoading && <Loader />}
-        <main className=" w-full text-dark px-6 flex flex-col items-center justify-center gap-6 my-32 md:my-60">
+        <main className="bg-gray-bk w-full text-dark px-6 flex flex-col items-center justify-center gap-6 my-32 md:my-60">
           <h3 className="text-3xl text-dark text-center md:text-5xl font-bold">
             Sign Up
           </h3>

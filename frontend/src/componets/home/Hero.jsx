@@ -28,7 +28,7 @@ const Hero = () => {
             duration: 2,
             type: "spring",
           }}
-          className="flex flex-col max-w-lg md:py-20 lg:py-36 gap-4 justify-center items-center md:items-start"
+          className="flex flex-col max-w-lg md:py-20 lg:py-44 gap-8 md:gap-10 justify-center items-center md:items-start"
         >
           <p className="text-sm text-neutral text-center md:text-left">
             Best Product
