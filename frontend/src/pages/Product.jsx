@@ -4,12 +4,11 @@ import BreadCrumb from "../componets/BreadCrumb";
 
 import { Meta } from "../componets/Meta";
 import { Link } from "react-router-dom";
-import image1 from "../assets/14pro.svg";
-import image2 from "../assets/controller.svg";
 import ReactStars from "react-rating-stars-component";
 import { motion } from "framer-motion";
 import { IoCartOutline } from "react-icons/io5";
 import SingleProduct from "../componets/product/SingleProduct";
+
 import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../redux/features/product/productsApi";
 import { useDispatch } from "react-redux";
@@ -32,12 +31,13 @@ const Product = () => {
     dispatch(addToCart(product));
     // navigate("/cart");
   };
+  // const [activeImg, setActiveImage] = useState(product.image[0]);
 
   return (
     <>
       {/* <BreadCrumb data={data} />; */}
-      <main className="bg-gray-bk flex flex-col gap-6 items-center ">
-        <section className="py-12 sm:py-16 text-dark">
+      <main className="bg-gray-bk flex flex-col gap-6 items-center mt-20  md:mt-24 ">
+        <section className=" text-dark">
           <>
             {isLoading ? (
               <>
@@ -52,11 +52,40 @@ const Product = () => {
               <section className="text-gray-700 body-font overflow-hidden  md:mt-16">
                 <div className="container px-5 py-24 mx-auto">
                   <div className="lg:w-4/5 mx-auto flex flex-wrap">
-                    <img
-                      src={product.image}
+                    <div className="flex flex-col gap-6 lg:w-2/4">
+                      <img
+                        src={product.image[0]}
+                        alt=""
+                        className="w-full h-full aspect-square object-cover rounded-xl"
+                      />
+                      <div className="flex flex-row justify-between h-24">
+                        <img
+                          src={product.image[0]}
+                          alt=""
+                          className="w-24 h-24 rounded-md cursor-pointer"
+                        />
+                        <img
+                          src={product.image[1]}
+                          alt=""
+                          className="w-24 h-24 rounded-md cursor-pointer"
+                        />
+                        <img
+                          src={product.image[2]}
+                          alt=""
+                          className="w-24 h-24 rounded-md cursor-pointer"
+                        />
+                        <img
+                          src={product.image[3]}
+                          alt=""
+                          className="w-24 h-24 rounded-md cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                    {/* <img
+                      src={product.image[0]}
                       alt="ps5 pad"
                       className="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200"
-                    />
+                    /> */}
                     <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                       <h2 className="text-lg   text-gray-500 tracking-widest">
                         {product.name}
