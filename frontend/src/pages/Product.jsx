@@ -25,6 +25,16 @@ const Product = () => {
 
   const { data: product, error, isLoading } = useGetSingleProductQuery(id);
 
+  // const firstImage = product && product.image && product.image.length > 0 ? product.image[0] : null;
+
+  const [activeImg, setActiveImage] = useState("");
+
+  useEffect(() => {
+    if (product && product.image && product.image.length > 0) {
+      setActiveImage(product.image[0]);
+    }
+  }, [product]);
+
   // console.log(product);
   const dispatch = useDispatch();
 
@@ -32,7 +42,6 @@ const Product = () => {
     dispatch(addToCart(product));
     // navigate("/cart");
   };
-  // const [activeImg, setActiveImage] = useState(product.image[0]);
 
   return (
     <>
@@ -52,41 +61,28 @@ const Product = () => {
             ) : (
               <section className="text-gray-700 body-font overflow-hidden  md:mt-16">
                 <div className="container px-5 py-24 mx-auto">
-                  <div className="lg:w-4/5 mx-auto flex flex-wrap">
-                    <div className="flex flex-col gap-6 lg:w-2/4">
+                  <div className=" max-w-7xl mx-auto flex flex-wrap">
+                    <div className="flex flex-col gap-6 lg:w-2/4 ">
                       <img
-                        src={product.image[0]}
+                        src={activeImg}
                         alt=""
                         className="w-full h-full aspect-square object-cover rounded-xl"
                       />
-                      <div className="flex flex-row justify-between h-24">
-                        <img
-                          src={product.image[0]}
-                          alt=""
-                          className="w-24 h-24 rounded-md cursor-pointer"
-                        />
-                        <img
-                          src={product.image[1]}
-                          alt=""
-                          className="w-24 h-24 rounded-md cursor-pointer"
-                        />
-                        <img
-                          src={product.image[2]}
-                          alt=""
-                          className="w-24 h-24 rounded-md cursor-pointer"
-                        />
-                        <img
-                          src={product.image[3]}
-                          alt=""
-                          className="w-24 h-24 rounded-md cursor-pointer"
-                        />
+                      <div className="flex flex-row justify-between h-24 ">
+                        {product &&
+                          product.image &&
+                          product.image.length > 0 &&
+                          product.image.map((img, index) => (
+                            <img
+                              key={index}
+                              src={img}
+                              alt={`Product ${index}`}
+                              onClick={() => setActiveImage(img)}
+                              className="thumbnail-class" // Add your styling classes
+                            />
+                          ))}
                       </div>
                     </div>
-                    {/* <img
-                      src={product.image[0]}
-                      alt="ps5 pad"
-                      className="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200"
-                    /> */}
                     <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                       <h2 className="text-lg   text-gray-500 tracking-widest">
                         {product.name}
