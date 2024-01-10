@@ -72,7 +72,7 @@ const CartModal = () => {
                                 <div className="shrink-0 relative">
                                   <img
                                     className="bg-white p-2 h-24 w-24 max-w-full rounded-lg object-contain"
-                                    src={cartItem.image}
+                                    src={cartItem.image[0]}
                                     alt=""
                                   />
                                   <div className="sm:order-1 absolute top-0 right-0 ">

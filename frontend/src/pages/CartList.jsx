@@ -68,7 +68,7 @@ const CartList = () => {
                                 <div className="shrink-0">
                                   <img
                                     className="h-24 w-24 max-w-full rounded-lg object-contain"
-                                    src={cartItem.image}
+                                    src={cartItem.image[0]}
                                     alt=""
                                   />
                                 </div>

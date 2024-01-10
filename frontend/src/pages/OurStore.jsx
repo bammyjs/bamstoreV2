@@ -14,7 +14,7 @@ export const OurStore = () => {
   return (
     <>
       <Meta title={"Store"} />
-      <main className=" flex  bg-gray-100 flex-col gap-6 mt-20  md:mt-24 lg:mt-36">
+      <main className=" flex  bg-gray-bk flex-col gap-6 mt-20  md:mt-24 lg:mt-36">
         <div className="w-full  mb-10 flex flex-wrap justify-center items-center">
           {isLoading ? (
             <>

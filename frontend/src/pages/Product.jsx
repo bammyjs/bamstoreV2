@@ -25,7 +25,7 @@ const Product = () => {
 
   const { data: product, error, isLoading } = useGetSingleProductQuery(id);
 
-  // const firstImage = product && product.image && product.image.length > 0 ? product.image[0] : null;
+  console.log("Product", product);
 
   const [activeImg, setActiveImage] = useState("");
 
@@ -46,8 +46,8 @@ const Product = () => {
   return (
     <>
       {/* <BreadCrumb data={data} />; */}
-      <main className="bg-gray-bk flex flex-col gap-6 items-center mt-20  md:mt-24 ">
-        <section className=" text-dark">
+      <main className="bg-gray-bk flex flex-col gap-6 items-center mt-20 md:mt-24 lg:mt-36 ">
+        <section className="w-full  mb-10 flex flex-wrap justify-center items-center">
           <>
             {isLoading ? (
               <>
@@ -59,16 +59,16 @@ const Product = () => {
             ) : error ? (
               <p>An error occurred...</p>
             ) : (
-              <section className="text-gray-700 body-font overflow-hidden  md:mt-16">
-                <div className="container px-5 py-24 mx-auto">
-                  <div className=" max-w-7xl mx-auto flex flex-wrap">
-                    <div className="flex flex-col gap-6 lg:w-2/4 ">
+              <div className="text-dark body-font overflow-hidden ">
+                <div className="container px-5 py-24 mx-auto ">
+                  <div className=" max-w-7xl mx-auto flex flex-wrap  ">
+                    <div className="flex flex-col gap-6 lg:w-2/4 border ">
                       <img
                         src={activeImg}
                         alt=""
                         className="w-full h-full aspect-square object-cover rounded-xl"
                       />
-                      <div className="flex flex-row justify-between h-24 ">
+                      <div className="flex flex-row justify-between h-24 border-t py-2">
                         {product &&
                           product.image &&
                           product.image.length > 0 &&
@@ -78,17 +78,14 @@ const Product = () => {
                               src={img}
                               alt={`Product ${index}`}
                               onClick={() => setActiveImage(img)}
-                              className="thumbnail-class" // Add your styling classes
+                              className="w-full h-full aspect-square object-contain" // Add your styling classes
                             />
                           ))}
                       </div>
                     </div>
                     <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                      <h2 className="text-lg   text-gray-500 tracking-widest">
-                        {product.name}
-                      </h2>
                       <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
-                        {product.description}
+                        {product.name}
                       </h1>
                       <div className="flex mb-4">
                         <ReactStars
@@ -141,28 +138,42 @@ const Product = () => {
                           </a>
                         </span>
                       </div>
-                      <p className="leading-relaxed">
-                        Fam locavore kickstarter distillery. Mixtape chillwave
-                        tumeric sriracha taximy chia microdosing tilde DIY. XOXO
-                        fam indxgo juiceramps cornhole raw denim forage
-                        brooklyn. Everyday carry +1 seitan poutine tumeric.
-                        Gastropub blue bottle austin listicle pour-over, neutra
-                        jean shorts keytar banjo tattooed umami cardigan.
-                      </p>
-                      <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5"></div>
-                      <div className="flex justify-between">
-                        <span className="title-font font-medium text-2xl text-gray-900">
+                      <ul className="flex flex-col">
+                        <li className="flex justify-between py-2 border-y  border-gray">
+                          <p className="font-bold text-xl">Brand:</p>
+                          <span className="text-xl">{product.brand}</span>
+                        </li>
+                        <li className="flex justify-between py-2 border-b border-gray">
+                          <p className="font-bold text-xl">Category:</p>
+                          <span className="text-xl">{product.category}</span>
+                        </li>
+                        <li className="flex justify-between py-2 border-b border-gray">
+                          <p className="font-bold text-xl">Color:</p>
+                          <span className="text-xl">As seen</span>
+                        </li>
+                        <li className="flex justify-between py-2 border-b border-gray">
+                          <p className="font-bold text-xl">
+                            Available in stock
+                          </p>
+                          <span className="text-xl">
+                            {product.quantity} left
+                          </span>
+                        </li>
+                      </ul>
+
+                      <div className="w-full flex justify-between mt-6">
+                        <span className="title-font font-medium text-2xl text-gray-900 rounded-lg p-4 border">
                           <span className="text-3xl">&#8358;</span>{" "}
                           {product.price}
                         </span>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 justify-between">
                           <button className="btn btn-secondary text-neutral">
                             Buy
                           </button>
                           <button
                             type="buttton"
                             onClick={() => handleAddToCart(product)}
-                            className="flex items-center space-x-1.5 rounded-lg bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
+                            className="btn bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
                           >
                             <motion.div
                               whileHover={{ rotate: 45 }}
@@ -177,10 +188,71 @@ const Product = () => {
                           </button>
                         </div>
                       </div>
+                      <div className="flex mt-1 items-center pb-5 border-b-2 border-gray-200 mb-5"></div>
+                      <div className="flex flex-col gap-2">
+                        <p className="font-bold text-xl">
+                          Product Description:
+                        </p>
+                        <h2 className="font-light text-xl">KEY FEATURES</h2>
+                        {product.description}
+                      </div>
+                    </div>
+
+                    {/* reviews */}
+                    <div className="py-12 px-4 md:px-6 2xl:px-0  flex justify-center items-center">
+                      <div className="flex flex-col justify-start items-start w-full space-y-8">
+                        <div className="flex justify-start items-start">
+                          <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
+                            Reviews
+                          </p>
+                        </div>
+                        <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 p-8 border">
+                          <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 md:px-8 py-8">
+                            <div className="flex flex-col md:flex-row justify-between w-full">
+                              <div className="flex flex-row justify-between items-start">
+                                <p className="text-xl md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
+                                  {product.ratings[0]?.review}
+                                </p>
+                              </div>
+                              <ReactStars
+                                count={5}
+                                // onChange={ratingChanged}
+                                size={24}
+                                isHalf={true}
+                                emptyIcon={<i className="far fa-star"></i>}
+                                halfIcon={
+                                  <i className="fa fa-star-half-alt"></i>
+                                }
+                                fullIcon={<i className="fa fa-star"></i>}
+                                activeColor="#ffd700"
+                                value="3"
+                              />
+                            </div>
+                            <div id="menu2" className="">
+                              <div className="mt-6 flex justify-start items-center flex-row space-x-2.5">
+                                <div>
+                                  <img
+                                    src="https://i.ibb.co/RCTGZTc/Mask-Group-1.png"
+                                    alt="girl-avatar"
+                                  />
+                                </div>
+                                <div className="flex flex-col justify-start items-start space-y-2">
+                                  <p className="text-base font-medium leading-none text-gray-800 dark:text-white">
+                                    {product.ratings[0]?.name}
+                                  </p>
+                                  <p className="text-sm leading-none text-gray-600 dark:text-white">
+                                    {product.ratings[0]?.reviewDate}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </section>
+              </div>
             )}
           </>
         </section>

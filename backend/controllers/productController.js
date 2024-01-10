@@ -199,7 +199,7 @@ const reviewProduct = asyncHandler(async (req, res) => {
     star,
     review,
     reviewDate,
-    name: req.user.name,
+    name: req.user.firstName,
     userID: req.user._id,
   });
   product.save();
@@ -251,7 +251,7 @@ const updateReview = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
 
-  // // Update Product review
+  // Update Product review
   const updatedReview = await Product.findOneAndUpdate(
     { _id: product._id, "ratings.userID": mongoose.Types.ObjectId(userID) },
     {
