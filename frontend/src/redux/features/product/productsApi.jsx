@@ -14,6 +14,9 @@ export const productsApi = createApi({
       validateStatus: (response, result) =>
         response.status === 200 && !result.isError,
     }),
+    reviewProduct: builder.query({
+      query: (id) => `products/${id}`,
+    }),
   }),
 });
 

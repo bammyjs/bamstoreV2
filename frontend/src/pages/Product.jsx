@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 import ReactStars from "react-rating-stars-component";
 import { motion } from "framer-motion";
 import { IoCartOutline } from "react-icons/io5";
-import SingleProduct from "../componets/product/SingleProduct";
-
 import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../redux/features/product/productsApi";
 import { useDispatch } from "react-redux";
@@ -62,7 +60,7 @@ const Product = () => {
               <div className="text-dark body-font overflow-hidden ">
                 <div className="container px-5 py-24 mx-auto ">
                   <div className=" max-w-7xl mx-auto flex flex-wrap  ">
-                    <div className="flex flex-col gap-6 lg:w-2/4 border ">
+                    <div className="flex flex-col gap-6 lg:w-2/4 border bg-light ">
                       <img
                         src={activeImg}
                         alt=""
@@ -97,7 +95,7 @@ const Product = () => {
                           halfIcon={<i className="fa fa-star-half-alt"></i>}
                           fullIcon={<i className="fa fa-star"></i>}
                           activeColor="#ffd700"
-                          value="3"
+                          value={3}
                         />
                         <span className="flex ml-3 pl-3 py-2 border-l-2 border-gray-200">
                           <a className="text-gray-500">
@@ -206,48 +204,69 @@ const Product = () => {
                             Reviews
                           </p>
                         </div>
-                        <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 p-8 border">
-                          <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 md:px-8 py-8">
-                            <div className="flex flex-col md:flex-row justify-between w-full">
-                              <div className="flex flex-row justify-between items-start">
-                                <p className="text-xl md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
-                                  {product.ratings[0]?.review}
-                                </p>
-                              </div>
-                              <ReactStars
-                                count={5}
-                                // onChange={ratingChanged}
-                                size={24}
-                                isHalf={true}
-                                emptyIcon={<i className="far fa-star"></i>}
-                                halfIcon={
-                                  <i className="fa fa-star-half-alt"></i>
-                                }
-                                fullIcon={<i className="fa fa-star"></i>}
-                                activeColor="#ffd700"
-                                value="3"
-                              />
-                            </div>
-                            <div id="menu2" className="">
-                              <div className="mt-6 flex justify-start items-center flex-row space-x-2.5">
-                                <div>
-                                  <img
-                                    src="https://i.ibb.co/RCTGZTc/Mask-Group-1.png"
-                                    alt="girl-avatar"
-                                  />
+                        {product.ratings?.map((rate, i) => {
+                          let ratingView;
+                          if (!product.ratings) {
+                            ratingView = false;
+                          } else if (product.ratings) {
+                            ratingView = true;
+                          }
+                          return (
+                            <>
+                              {ratingView ? (
+                                <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 p-8 border">
+                                  <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 md:px-8 py-8">
+                                    <div className="flex flex-col md:flex-row justify-between w-full">
+                                      <div className="flex flex-row justify-between items-start w-3/4 ">
+                                        <p className="text-xl md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
+                                          {rate?.review}
+                                        </p>
+                                      </div>
+                                      <ReactStars
+                                        count={5}
+                                        // onChange={ratingChanged}
+                                        edit={false}
+                                        size={24}
+                                        isHalf={true}
+                                        emptyIcon={
+                                          <i className="far fa-star"></i>
+                                        }
+                                        halfIcon={
+                                          <i className="fa fa-star-half-alt"></i>
+                                        }
+                                        fullIcon={
+                                          <i className="fa fa-star"></i>
+                                        }
+                                        activeColor="#ffd700"
+                                        value={rate?.star}
+                                      />
+                                    </div>
+                                    <div id="menu2" className="">
+                                      <div className="mt-6 flex justify-start items-center flex-row space-x-2.5">
+                                        <div>
+                                          <img
+                                            src="https://i.ibb.co/RCTGZTc/Mask-Group-1.png"
+                                            alt="girl-avatar"
+                                          />
+                                        </div>
+                                        <div className="flex flex-col justify-start items-start space-y-2">
+                                          <p className="text-base font-medium leading-none text-gray-800 dark:text-white">
+                                            {rate?.name}
+                                          </p>
+                                          <p className="text-sm leading-none text-gray-600 dark:text-white">
+                                            {rate?.reviewDate}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div className="flex flex-col justify-start items-start space-y-2">
-                                  <p className="text-base font-medium leading-none text-gray-800 dark:text-white">
-                                    {product.ratings[0]?.name}
-                                  </p>
-                                  <p className="text-sm leading-none text-gray-600 dark:text-white">
-                                    {product.ratings[0]?.reviewDate}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                              ) : (
+                                <p>no review yet</p>
+                              )}
+                            </>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
