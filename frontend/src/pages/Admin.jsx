@@ -10,9 +10,9 @@ import { Link } from "react-router-dom";
 import DashBoardPreview from "../componets/admin/DashBoardPreview";
 import CreateProduct from "../componets/admin/CreateProduct";
 import DisplayUsers from "../componets/admin/DisplayUsers";
+import AvailableProducts from "../componets/admin/AvailableProducts";
 import { getUser } from "../redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import AvailableProducts from "../componets/admin/AvailableProducts";
 
 export const Admin = () => {
   const [select, setSelect] = useState(1);
