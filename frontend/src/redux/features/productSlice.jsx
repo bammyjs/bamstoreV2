@@ -98,10 +98,4 @@ const productSlice = createSlice({
   },
 });
 
-export const getAllProducts = (state) => state.products.items;
-export const getAllProductsStatus = (state) => state.products.itemsStatus;
-export const getProductSingle = (state) => state.products.itemSingle;
-export const getSingleProductStatus = (state) =>
-  state.products.itemSingleStatus;
-
 export default productSlice.reducer;

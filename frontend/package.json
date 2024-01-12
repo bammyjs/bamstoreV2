@@ -38,6 +38,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.10.1",
     "react-loading-skeleton": "^3.3.1",
+    "react-medium-image-zoom": "^5.1.9",
     "react-multi-carousel": "^2.8.4",
     "react-outside-click-handler": "^1.3.0",
     "react-paginate": "^8.1.4",
@@ -48,7 +49,6 @@
     "react-router-dom": "^6.15.0",
     "react-router-hash-link": "^2.4.3",
     "react-toastify": "^9.1.3",
-    "reactjs-image-zoom": "^1.0.8",
     "sass": "^1.65.1",
     "tw-elements-react": "^1.0.0-alpha1",
     "web-vitals": "^2.1.4"

@@ -11,6 +11,8 @@ import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../redux/features/product/productsApi";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/features/cartSlice";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 
 //Get single Product
@@ -61,11 +63,14 @@ const Product = () => {
                 <div className="container px-5 py-24 mx-auto ">
                   <div className=" max-w-7xl mx-auto flex flex-wrap  ">
                     <div className="flex flex-col gap-6 lg:w-2/4 border bg-light ">
-                      <img
-                        src={activeImg}
-                        alt=""
-                        className="w-full h-full aspect-square object-cover rounded-xl"
-                      />
+                      <Zoom>
+                        <img
+                          src={activeImg}
+                          alt=""
+                          className="w-full h-full aspect-square object-cover rounded-xl"
+                          width="500"
+                        />
+                      </Zoom>
                       <div className="flex flex-row justify-between h-24 border-t py-2">
                         {product &&
                           product.image &&
@@ -201,7 +206,7 @@ const Product = () => {
                       <div className="flex flex-col justify-start items-start w-full space-y-8">
                         <div className="flex justify-start items-start">
                           <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
-                            Reviews
+                            Reviews ({product.ratings.length})
                           </p>
                         </div>
                         {product.ratings?.map((rate, i) => {

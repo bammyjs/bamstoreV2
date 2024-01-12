@@ -20,14 +20,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getLoginStatus } from "./redux/features/auth/authSlice";
-import CreateProduct from "./componets/admin/createProduct";
-import NewProducts from "./componets/home/NewProducts";
 import ShopByCategory from "./pages/ShopByCategory";
 import banner1 from "./assets/banner1.jpg";
 import banner2 from "./assets/workwork2.jpg";
-import { ProductData } from "./datas/productData";
 import Product from "./pages/Product";
 import SingleProduct from "./componets/product/SingleProduct";
+import { Admin } from "./pages/Admin";
+import CreateProduct from "./componets/admin/CreateProduct";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -77,8 +76,8 @@ function App() {
           <Route path="/testPage" element={<SingleProduct />} />
 
           <Route path="/cart" element={<CartList />} />
-          <Route path="createProduct" element={<CreateProduct />} />
-          {/* <Route path="newProduct" element={<NewProducts />} /> */}
+          <Route path="/createProduct" element={<CreateProduct />} />
+          <Route path="/admin" element={<Admin />} />
         </Route>
       </Routes>
     </BrowserRouter>
