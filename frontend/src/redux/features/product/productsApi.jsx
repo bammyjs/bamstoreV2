@@ -14,10 +14,21 @@ export const productsApi = createApi({
       validateStatus: (response, result) =>
         response.status === 200 && !result.isError,
     }),
+    createProduct: builder.mutation({
+      query: (newProduct) => ({
+        url: "products",
+        method: "POST",
+        body: newProduct,
+      }),
+    }),
     reviewProduct: builder.query({
       query: (id) => `products/${id}`,
     }),
   }),
 });
 
-export const { useGetAllProductsQuery, useGetSingleProductQuery } = productsApi;
+export const {
+  useGetAllProductsQuery,
+  useGetSingleProductQuery,
+  useCreateProductMutation,
+} = productsApi;

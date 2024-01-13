@@ -3,9 +3,11 @@ import authReducer from "../redux/features/auth/authSlice";
 import cartReducer, { getTotals } from "./features/cartSlice";
 // import productReducer, { productsFetch } from "./features/productSlice";
 import { productsApi } from "./features/product/productsApi";
+import { userApi } from "./features/user/usersApi";
 
 export const store = configureStore({
   reducer: {
+    [userApi.reducerPath]: userApi.reducer,
     auth: authReducer,
     cart: cartReducer,
     // products: productReducer,

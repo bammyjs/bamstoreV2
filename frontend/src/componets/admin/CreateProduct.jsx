@@ -1,21 +1,37 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createProduct } from "../../redux/features/productSlice";
+import { useCreateProductMutation } from "../../redux/features/product/productsApi";
 
 function CreateProduct() {
-  const dispatch = useDispatch();
+  const [createProduct, { isLoading, data, error }] =
+    useCreateProductMutation();
+  const [productDetails, setProductDetails] = useState({
+    name: "",
+    sku: "",
+    category: "",
+    quantity: "",
+    brand: "",
+    price: "",
+    description: "",
+    image: "",
+    regularPrice: "",
+    color: "",
+    // ... other product fields ...
+  });
+  // const dispatch = useDispatch();
   // const { createStatus } = useSelector((state) => state.products);
 
-  const [name, setName] = useState("");
-  const [sku, setSku] = useState("");
-  const [category, setCategory] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [brand, setBrand] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, SetDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [regularPrice, setRegularPrice] = useState("");
-  const [color, setColor] = useState("");
+  // const [name, setName] = useState("");
+  // const [sku, setSku] = useState("");
+  // const [category, setCategory] = useState("");
+  // const [quantity, setQuantity] = useState("");
+  // const [brand, setBrand] = useState("");
+  // const [price, setPrice] = useState("");
+  // const [description, SetDescription] = useState("");
+  // const [image, setImage] = useState("");
+  // const [regularPrice, setRegularPrice] = useState("");
+  // const [color, setColor] = useState("");
 
   const handleProductImageUpload = (e) => {
     const file = e.target.files[0];
@@ -34,25 +50,36 @@ function CreateProduct() {
       setImage("");
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    dispatch(
-      createProduct({
-        name,
-        sku,
-        category,
-        quantity,
-        brand,
-        regularPrice,
-        color,
-        description,
-        price,
-        image: image,
+    createProduct(productDetails)
+      .unwrap()
+      .then((payload) => {
+        console.log("Product created successfully", payload);
       })
-    );
+      .catch((error) => {
+        console.error("Failed to create the product", error);
+      });
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   dispatch(
+  //     createProduct({
+  //       name,
+  //       sku,
+  //       category,
+  //       quantity,
+  //       brand,
+  //       regularPrice,
+  //       color,
+  //       description,
+  //       price,
+  //       image: image,
+  //     })
+  //   );
+  // };
 
   return (
     <div className=" w-full  flex flex-col  gap-6 my-2">
@@ -79,75 +106,110 @@ function CreateProduct() {
           <input
             type="text"
             placeholder="Name"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({ ...productDetails, name: e.target.value })
+            }
+            value={productDetails.name}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <input
             type="text"
             placeholder="sku"
-            onChange={(e) => setSku(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({ ...productDetails, sku: e.target.value })
+            }
+            value={productDetails.sku}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <input
             type="text"
             placeholder="Category"
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({ ...productDetails, category: e.target.value })
+            }
+            value={productDetails.category}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <input
             type="text"
             placeholder="Quantity"
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({ ...productDetails, quantity: e.target.value })
+            }
+            value={productDetails.quantity}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <input
             type="text"
             placeholder="Brand"
-            onChange={(e) => setBrand(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({ ...productDetails, brand: e.target.value })
+            }
+            value={productDetails.brand}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <input
             type="text"
             placeholder="Color"
-            onChange={(e) => setColor(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({ ...productDetails, color: e.target.value })
+            }
+            value={productDetails.color}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <input
             type="number"
             placeholder="RegularPrice"
-            onChange={(e) => setRegularPrice(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({
+                ...productDetails,
+                regularPrice: e.target.value,
+              })
+            }
+            value={productDetails.regularPrice}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <input
             type="number"
             placeholder="Price"
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({ ...productDetails, price: e.target.value })
+            }
+            value={productDetails.price}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <input
             type="text"
             placeholder="Description"
-            onChange={(e) => SetDescription(e.target.value)}
+            onChange={(e) =>
+              setProductDetails({
+                ...productDetails,
+                description: e.target.value,
+              })
+            }
+            value={productDetails.description}
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
           <button
-            onSubmit={handleSubmit}
             type="submit"
+            disabled={isLoading}
             className="btn btn-primary"
           >
+            Create Product
             {/* {createStatus === "pending" ? "Submitting" : "Submit"} */}
           </button>
+          {error && <p>Error: {error.message}</p>}
         </form>
-        <div className=" bg-black ">
+        {/* <div className=" bg-black ">
           {image ? (
             <>
               <img src={image} alt="error!" className="w-full h-auto" />
@@ -157,7 +219,7 @@ function CreateProduct() {
               Product image uploaded preview will appear here!
             </p>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
