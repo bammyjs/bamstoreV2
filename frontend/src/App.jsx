@@ -27,6 +27,9 @@ import Product from "./pages/Product";
 import SingleProduct from "./componets/product/SingleProduct";
 import { Admin } from "./pages/Admin";
 import CreateProduct from "./componets/admin/CreateProduct";
+import DashBoardPreview from "./componets/admin/DashBoardPreview";
+import AvailableProducts from "./componets/admin/AvailableProducts";
+import DisplayUsers from "./componets/admin/DisplayUsers";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -77,7 +80,12 @@ function App() {
 
           <Route path="/cart" element={<CartList />} />
           <Route path="/createProduct" element={<CreateProduct />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<Admin />}>
+            <Route path="dashboard" element={<DashBoardPreview />} />
+            <Route path="products" element={<AvailableProducts />} />
+            <Route path="createProduct" element={<CreateProduct />} />
+            <Route path="users" element={<DisplayUsers />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

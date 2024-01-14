@@ -41,7 +41,7 @@ const AvailableProducts = () => {
                           <span>
                             <img
                               className="rounded-full w-8 h-8"
-                              src={product.image[0]}
+                              src={product.image?.[0]}
                             />
                           </span>
                           <span>{shortenText(product.name, 10)}</span>

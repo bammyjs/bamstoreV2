@@ -19,7 +19,9 @@ function CreateProduct() {
     color: "",
     // ... other product fields ...
   });
-  // const dispatch = useDispatch();
+  console.log(productDetails);
+
+  const dispatch = useDispatch();
   // const { createStatus } = useSelector((state) => state.products);
 
   // const [name, setName] = useState("");
@@ -30,36 +32,43 @@ function CreateProduct() {
   // const [price, setPrice] = useState("");
   // const [description, SetDescription] = useState("");
   // const [image, setImage] = useState("");
+  // console.log(image);
   // const [regularPrice, setRegularPrice] = useState("");
   // const [color, setColor] = useState("");
 
   const handleProductImageUpload = (e) => {
-    const file = e.target.files[0];
+    if (e.target.files && e.target.files[0]) {
+      let reader = new FileReader();
 
-    TransformFileData(file);
-  };
-  const TransformFileData = (file) => {
-    const reader = new FileReader();
-
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImage(reader.result);
+      reader.onload = (e) => {
+        setProductDetails({ ...productDetails, image: e.target.result });
       };
-    } else {
-      setImage("");
+
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   createProduct(productDetails)
+  //     .unwrap()
+  //     .then((payload) => {
+  //       console.log("Product created successfully", payload);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Failed to create the product", error);
+  //     });
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    createProduct(productDetails)
-      .unwrap()
-      .then((payload) => {
-        console.log("Product created successfully", payload);
-      })
-      .catch((error) => {
-        console.error("Failed to create the product", error);
-      });
+    try {
+      await createProduct(productDetails).unwrap();
+      console.log("Product created successfully", payload);
+      // Handle success, e.g., showing a success message, clearing the form, etc.
+    } catch (error) {
+      console.error("Failed to create the product", error);
+      // Handle error, e.g., showing an error message
+    }
   };
 
   // const handleSubmit = async (e) => {
@@ -143,16 +152,22 @@ function CreateProduct() {
             required
             className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           />
-          <input
-            type="text"
-            placeholder="Brand"
+          <select
+            name=""
+            id=""
+            required
             onChange={(e) =>
               setProductDetails({ ...productDetails, brand: e.target.value })
             }
-            value={productDetails.brand}
-            required
-            className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
-          />
+            className="border py-3 text-dark"
+          >
+            <option value="">Select Brand</option>
+            <option value="apple">Apple</option>
+            <option value="orico">Orico</option>
+            <option value="playstation">PlayStation</option>
+            <option value="samsung">Samsung</option>
+          </select>
+
           <input
             type="text"
             placeholder="Color"
@@ -209,17 +224,21 @@ function CreateProduct() {
           </button>
           {error && <p>Error: {error.message}</p>}
         </form>
-        {/* <div className=" bg-black ">
-          {image ? (
+        <div className=" bg-black ">
+          {productDetails.image ? (
             <>
-              <img src={image} alt="error!" className="w-full h-auto" />
+              <img
+                src={productDetails.image}
+                alt="error!"
+                className="w-full h-auto"
+              />
             </>
           ) : (
             <p className="text-center">
               Product image uploaded preview will appear here!
             </p>
           )}
-        </div> */}
+        </div>
       </div>
     </div>
   );
