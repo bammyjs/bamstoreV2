@@ -1,12 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useGetAllUsersQuery } from "../../redux/features/user/usersApi";
-import { useParams } from "react-router-dom";
 
 const DisplayUsers = () => {
-  const { id } = useParams();
-  const { data: users, error, isLoading } = useGetAllUsersQuery(id);
-  console.log("All user:", id);
+  const { data: users, error, isLoading } = useGetAllUsersQuery();
+  console.log("All user:", users);
   return (
     <>
       <h3 className="text-xl text-dark text-center mb-4 md:text-3xl font-bold">

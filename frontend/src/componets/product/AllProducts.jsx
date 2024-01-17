@@ -8,14 +8,17 @@ import {
   IoGridSharp,
   IoFunnelSharp,
   IoChevronDownSharp,
+  IoChevronForward,
+  IoChevronBack,
 } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import { filters } from "./FilterData";
 import CardProducts from "./CardProducts";
 import { useGetAllProductsQuery } from "../../redux/features/product/productsApi";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import CardSkeleton from "./CardSkeleton";
+import ReactPaginate from "react-paginate";
+import { motion } from "framer-motion";
 
 const sortOptions = [
   { name: "Price: Low to High", href: "#", current: false },
@@ -27,8 +30,21 @@ function classNames(...classes) {
 }
 
 export default function AllProducts() {
-  const { data: products, error, isLoading } = useGetAllProductsQuery();
-  console.log(products);
+  const [currentPage, setCurrentPage] = useState(1);
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useGetAllProductsQuery(currentPage);
+  // console.log(products);
+
+  // Pagination change handler
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected + 1); // +1 because event.selected is zero-based
+  };
+
+  const showNextBtn = (currentPage) => 1;
+  const showPrevBtn = currentPage > 1;
 
   const [loading, setLoading] = useState(true);
 
@@ -63,6 +79,24 @@ export default function AllProducts() {
     const query = searchParams.toString();
     navigate({ search: `?${query}` });
   };
+
+  const paginationVariants = {
+    hidden: {
+      opacity: 0,
+      y: 100,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        duration: 2,
+      },
+    },
+  };
+
   return (
     <div className="">
       <div>
@@ -310,7 +344,42 @@ export default function AllProducts() {
                 {loading ? (
                   <CardSkeleton cards={4} products={products} />
                 ) : (
-                  <CardProducts products={products} />
+                  <>
+                    <CardProducts
+                      products={products}
+                      key={products.id}
+                      {...products}
+                    />
+                    <motion.div
+                      variants={paginationVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <ReactPaginate
+                        breakLabel="..."
+                        previousLabel={
+                          showPrevBtn ? (
+                            <span>
+                              <IoChevronBack style={{ fontSize: "15px" }} />
+                            </span>
+                          ) : null
+                        }
+                        nextLabel={
+                          showNextBtn ? (
+                            <span>
+                              <IoChevronForward style={{ fontSize: "15px" }} />
+                            </span>
+                          ) : null
+                        }
+                        pageRangeDisplayed={5}
+                        pageCount={products?.pages || 1}
+                        onPageChange={handlePageClick}
+                        containerClassName="join gap-4 flex items-center justify-center mt-8 mb-4"
+                        pageClassName="btn btn-secondary"
+                        activeClassName="btn-active "
+                      />
+                    </motion.div>
+                  </>
                 )}
               </div>
             </div>

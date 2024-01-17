@@ -38,6 +38,23 @@ function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // const getToken = () => {
+  //   const tokenString = document.cookie
+  //     .split("; ")
+  //     .find((row) => row.startsWith("token="));
+  //   return tokenString ? tokenString.split("=")[1] : null;
+  // };
+
+  // useEffect(() => {
+  //   const token = getToken();
+  //   if (!token) {
+  //     // Handle the absence of token, e.g., redirect to login
+  //     navigate("/login");
+  //   } else if (user === null) {
+  //     dispatch(getUser());
+  //   }
+  // }, [dispatch, user, navigate]);
+
   useEffect(() => {
     if (user === null) {
       dispatch(getUser());
@@ -104,7 +121,7 @@ function Profile() {
         </h3>
         {user ? (
           <div className="  top-16 right-10">
-            <Link className="btn btn-primary" to={"/admin"}>
+            <Link className="btn btn-primary" to={"/admin/dashboard"}>
               Admin ?
             </Link>
           </div>

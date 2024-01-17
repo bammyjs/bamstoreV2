@@ -30,6 +30,7 @@ import CreateProduct from "./componets/admin/CreateProduct";
 import DashBoardPreview from "./componets/admin/DashBoardPreview";
 import AvailableProducts from "./componets/admin/AvailableProducts";
 import DisplayUsers from "./componets/admin/DisplayUsers";
+import Orders from "./componets/admin/Orders";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -45,6 +46,10 @@ function App() {
       {/* <Loader /> */}
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route
+            path="*"
+            element={<div> Not Found or You do not have permission.</div>}
+          />
           <Route index element={<Home />} />
           <Route
             path="/gaming"
@@ -63,10 +68,6 @@ function App() {
             element={<ShopByCategory banner={banner2} category="workspace" />}
           />
 
-          {/* <Route
-            path="*"
-            element={<div> Not Found or You do not have permission.</div>}
-          /> */}
           <Route path="/phone" element={<ShopByCategory category="phones" />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
@@ -84,6 +85,7 @@ function App() {
             <Route path="dashboard" element={<DashBoardPreview />} />
             <Route path="products" element={<AvailableProducts />} />
             <Route path="createProduct" element={<CreateProduct />} />
+            <Route path="orders" element={<Orders />} />
             <Route path="users" element={<DisplayUsers />} />
           </Route>
         </Route>

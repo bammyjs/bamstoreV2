@@ -68,7 +68,7 @@ const DashBoardPreview = () => {
               </div>
               <div>
                 <p className="text-blue-300 text-sm font-medium uppercase leading-4">
-                  Invoices
+                  Orders
                 </p>
                 <p className="text-white font-bold text-2xl inline-flex items-center space-x-2">
                   <span>+79</span>

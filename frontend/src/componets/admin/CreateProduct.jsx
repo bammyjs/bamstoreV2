@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createProduct } from "../../redux/features/productSlice";
+// import { createProduct } from "../../redux/features/productSlice";
 import { useCreateProductMutation } from "../../redux/features/product/productsApi";
 
 function CreateProduct() {
@@ -47,17 +47,6 @@ function CreateProduct() {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   createProduct(productDetails)
-  //     .unwrap()
-  //     .then((payload) => {
-  //       console.log("Product created successfully", payload);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Failed to create the product", error);
-  //     });
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,25 +59,6 @@ function CreateProduct() {
       // Handle error, e.g., showing an error message
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   dispatch(
-  //     createProduct({
-  //       name,
-  //       sku,
-  //       category,
-  //       quantity,
-  //       brand,
-  //       regularPrice,
-  //       color,
-  //       description,
-  //       price,
-  //       image: image,
-  //     })
-  //   );
-  // };
 
   return (
     <div className=" w-full  flex flex-col  gap-6 my-2">
@@ -245,3 +215,23 @@ function CreateProduct() {
 }
 
 export default CreateProduct;
+
+// const handleSubmit = async (e) => {
+
+//   e.preventDefault();
+
+//   dispatch(
+//     createProduct({
+//       name,
+//       sku,
+//       category,
+//       quantity,
+//       brand,
+//       regularPrice,
+//       color,
+//       description,
+//       price,
+//       image: image,
+//     })
+//   );
+// };

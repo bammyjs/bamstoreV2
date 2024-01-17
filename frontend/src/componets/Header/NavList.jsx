@@ -1,30 +1,93 @@
 import React from "react";
 import { Fragment } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export const NavList = () => {
   return (
     <>
       <ul className="hidden md:flex justify-between items-center gap-4">
         <li>
-          <Link to="/phone">Phones</Link>
+          <NavLink
+            to="/phone"
+            className={({ isActive }) =>
+              isActive
+                ? " border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+            }
+          >
+            Phones
+          </NavLink>
         </li>
         <li>
-          <Link to="/laptop">Laptops</Link>
+          <NavLink
+            to="/laptop"
+            className={({ isActive }) =>
+              isActive
+                ? " border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+            }
+          >
+            Laptops
+          </NavLink>
         </li>
         <li>
-          <Link to="/gaming">Gaming</Link>
+          <NavLink
+            to="/gaming"
+            className={({ isActive }) =>
+              isActive
+                ? " border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+            }
+          >
+            Gaming
+          </NavLink>
         </li>
         <li>
-          <Link to="/workspace">WorkSpace</Link>
+          <NavLink
+            to="/workspace"
+            className={({ isActive }) =>
+              isActive
+                ? " border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+            }
+          >
+            WorkSpace
+          </NavLink>
         </li>
         <li>
-          <Link to="/products">All Products</Link>
+          <NavLink
+            to="/products"
+            className={({ isActive }) =>
+              isActive
+                ? " border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+            }
+          >
+            All Products
+          </NavLink>
         </li>
         <li>
-          <Link to="/accessories">Accessories</Link>
+          <NavLink
+            to="/accessories"
+            className={({ isActive }) =>
+              isActive
+                ? " border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+            }
+          >
+            Accessories
+          </NavLink>
         </li>
-        <Link>Contact</Link>
+        <NavLink
+          to={"/contact"}
+          className={({ isActive }) =>
+            isActive
+              ? " border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+              : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1 px-2 group"
+          }
+        >
+          Contact
+        </NavLink>
       </ul>
     </>
   );

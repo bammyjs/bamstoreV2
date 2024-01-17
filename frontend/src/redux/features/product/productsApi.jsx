@@ -1,12 +1,26 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { url } from "../auth/api";
+
+// const getToken = () => {
+//   console.log("Current cookies:", document.cookie);
+//   const cookieString = document.cookie || "";
+//   const tokenString = cookieString
+//     .split("; ")
+//     .find((row) => row.startsWith("token="));
+//   const token = tokenString ? tokenString.split("=")[1] : null;
+//   console.log("Retrieved token:", token);
+//   return token;
+// };
 
 export const productsApi = createApi({
   reducerPath: "productsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: url,
+  }),
 
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: () => "products",
+      query: (page = 1) => `products?pageNumber=${page}`,
     }),
     getSingleProduct: builder.query({
       query: (id) => `products/${id}`,
@@ -20,9 +34,6 @@ export const productsApi = createApi({
         method: "POST",
         body: newProduct,
       }),
-    }),
-    reviewProduct: builder.query({
-      query: (id) => `products/${id}`,
     }),
   }),
 });

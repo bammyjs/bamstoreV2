@@ -4,6 +4,7 @@ import {
   IoDocumentOutline,
   IoHomeOutline,
   IoPersonOutline,
+  IoPhonePortraitOutline,
   IoSettingsOutline,
 } from "react-icons/io5";
 import { Link, NavLink, Outlet } from "react-router-dom";
@@ -19,24 +20,6 @@ export const Admin = () => {
   useEffect(() => {
     if (user === null) {
       dispatch(getUser());
-    }
-  }, [dispatch, user]);
-
-  useEffect(() => {
-    if (user) {
-      setProfile({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        role: user?.role || "",
-        // photo: user?.photo || "",
-        address: user.address || {
-          address: user?.address?.address || "",
-          state: user?.address?.state || "",
-          country: user?.address?.country || "",
-        },
-      });
     }
   }, [dispatch, user]);
 
@@ -123,7 +106,7 @@ export const Admin = () => {
             >
               <div className="flex flex-col space-y-2 md:flex-row md:space-y-0 space-x-2 items-center">
                 <div>
-                  <IoAddOutline style={{ fontSize: "20px" }} />
+                  <IoPhonePortraitOutline style={{ fontSize: "20px" }} />
                 </div>
                 <div>
                   <p className="font-bold text-base lg:text-lg  leading-4 group-hover:text-indigo-400">
@@ -134,7 +117,7 @@ export const Admin = () => {
               </div>
             </NavLink>
             <NavLink
-              to="/admin/invoice"
+              to="/admin/orders"
               className={({ isActive }) =>
                 isActive
                   ? "bg-sec-color text-danger-900 hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group"
@@ -147,9 +130,9 @@ export const Admin = () => {
                 </div>
                 <div>
                   <p className="font-bold text-base lg:text-lg  leading-4 group-hover:text-indigo-400">
-                    Invoices
+                    orders
                   </p>
-                  <p className=" text-sm hidden md:block">Manage invoices</p>
+                  <p className=" text-sm hidden md:block">Manage orders</p>
                 </div>
                 <div className="absolute -top-3 -right-3 md:top-0 md:right-0 px-2 py-1.5 rounded-full bg-indigo-800 text-xs font-mono font-bold">
                   23

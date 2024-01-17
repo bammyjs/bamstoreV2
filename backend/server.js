@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
 const errorHandler = require("./middleware/errorMiddleware");
-const products = require("./products");
 // const protect = require("./middleware/protect");
 
 const app = express();

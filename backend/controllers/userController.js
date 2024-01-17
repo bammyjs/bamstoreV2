@@ -113,8 +113,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     path: "/",
     httpOnly: true,
     expires: new Date(0),
-    //   secure: true,
-    //   sameSite: none,
+    secure: true,
+    sameSite: none,
   });
   return res.json({ message: "successfully Logout" });
 });

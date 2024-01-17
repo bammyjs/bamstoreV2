@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGetAllProductsQuery } from "../../redux/features/product/productsApi";
+import { IoChevronForward, IoChevronBack } from "react-icons/io5";
 import { shortenText } from "../../utils";
+import ReactPaginate from "react-paginate";
+import { motion } from "framer-motion";
 
 const AvailableProducts = () => {
-  const { data: products, error, isLoading } = useGetAllProductsQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useGetAllProductsQuery(currentPage);
   console.log(products);
+
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected + 1); // +1 because event.selected is zero-based
+  };
+
+  const showNextBtn = (currentPage) => 1;
+  const showPrevBtn = currentPage > 1;
 
   const [loading, setLoading] = useState(true);
 
@@ -14,6 +29,23 @@ const AvailableProducts = () => {
       setLoading(false);
     }, 1000);
   });
+
+  const paginationVariants = {
+    hidden: {
+      opacity: 0,
+      y: 100,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        duration: 2,
+      },
+    },
+  };
   return (
     <>
       <h3 className="text-xl text-dark text-center mb-4 md:text-3xl font-bold">
@@ -32,9 +64,9 @@ const AvailableProducts = () => {
             <p>Loading...</p>
           ) : (
             <>
-              {products.map((product, i) => {
+              {products?.map((product, i) => {
                 return (
-                  <>
+                  <tbody key={i}>
                     <tr className="border-b text-dark border-gray-700">
                       <td className="py-3 px-2  font-bold">
                         <div className="inline-flex space-x-3 items-center">
@@ -117,9 +149,38 @@ const AvailableProducts = () => {
                         </div>
                       </td>
                     </tr>
-                  </>
+                  </tbody>
                 );
               })}
+              <motion.div
+                variants={paginationVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <ReactPaginate
+                  breakLabel="..."
+                  previousLabel={
+                    showPrevBtn ? (
+                      <span>
+                        <IoChevronBack style={{ fontSize: "15px" }} />
+                      </span>
+                    ) : null
+                  }
+                  nextLabel={
+                    showNextBtn ? (
+                      <span>
+                        <IoChevronForward style={{ fontSize: "15px" }} />
+                      </span>
+                    ) : null
+                  }
+                  pageRangeDisplayed={5}
+                  pageCount={products?.pages || 1}
+                  onPageChange={handlePageClick}
+                  containerClassName="join gap-4 flex items-center justify-center mt-8 mb-4"
+                  pageClassName="btn btn-secondary"
+                  activeClassName="btn-active "
+                />
+              </motion.div>
             </>
           )}
         </table>
