@@ -4,6 +4,14 @@ const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 console.log(BACKEND_URL);
 export const API_URL = `${BACKEND_URL}/api/users/`;
 
+const setAuthToken = (token) => {
+  if (token) {
+    axios.defaults.headers.common["authorization"] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers.common["authorization"];
+  }
+};
+
 //register user
 
 const register = async (userData) => {
@@ -16,8 +24,20 @@ const register = async (userData) => {
 //login user
 
 const login = async (userData) => {
-  const response = await axios.post(API_URL + "login", userData);
-  return response.data;
+  try {
+    const response = await axios.post(API_URL + "login", userData);
+    const { token, user } = response.data;
+
+    // Set the token in the headers
+    setAuthToken(token);
+
+    // Optionally, you can dispatch an action to store the token in the Redux store
+    // Example: dispatch(setToken(token));
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
 };
 
 //logout user

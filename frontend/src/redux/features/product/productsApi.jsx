@@ -1,16 +1,19 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { url } from "../auth/api";
 
-// const getToken = () => {
-//   console.log("Current cookies:", document.cookie);
-//   const cookieString = document.cookie || "";
-//   const tokenString = cookieString
-//     .split("; ")
-//     .find((row) => row.startsWith("token="));
-//   const token = tokenString ? tokenString.split("=")[1] : null;
-//   console.log("Retrieved token:", token);
-//   return token;
-// };
+// Custom base query function to include headers
+const baseQuery = fetchBaseQuery({
+  baseUrl: url,
+  prepareHeaders: (headers, { getState }) => {
+    const { token } = getState().auth;
+
+    if (token) {
+      headers.set("authorization", `Bearer ${token}`);
+    }
+
+    return headers;
+  },
+});
 
 export const productsApi = createApi({
   reducerPath: "productsApi",
@@ -33,6 +36,11 @@ export const productsApi = createApi({
         url: "products",
         method: "POST",
         body: newProduct,
+        headers: {
+          // Include any additional headers here
+          // Example: Authorization header for user login status
+          Authorization: `Bearer ${token}`, // Replace with your actual access token
+        },
       }),
     }),
   }),

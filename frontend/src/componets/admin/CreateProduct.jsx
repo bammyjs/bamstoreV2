@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { createProduct } from "../../redux/features/productSlice";
+import { createProduct } from "../../redux/features/productSlice";
 import { useCreateProductMutation } from "../../redux/features/product/productsApi";
 
 function CreateProduct() {
-  const [createProduct, { isLoading, data, error }] =
+  const [createProductMutation, { isLoading, data, error }] =
     useCreateProductMutation();
   const [productDetails, setProductDetails] = useState({
     name: "",
@@ -21,21 +21,6 @@ function CreateProduct() {
   });
   console.log(productDetails);
 
-  const dispatch = useDispatch();
-  // const { createStatus } = useSelector((state) => state.products);
-
-  // const [name, setName] = useState("");
-  // const [sku, setSku] = useState("");
-  // const [category, setCategory] = useState("");
-  // const [quantity, setQuantity] = useState("");
-  // const [brand, setBrand] = useState("");
-  // const [price, setPrice] = useState("");
-  // const [description, SetDescription] = useState("");
-  // const [image, setImage] = useState("");
-  // console.log(image);
-  // const [regularPrice, setRegularPrice] = useState("");
-  // const [color, setColor] = useState("");
-
   const handleProductImageUpload = (e) => {
     if (e.target.files && e.target.files[0]) {
       let reader = new FileReader();
@@ -51,7 +36,7 @@ function CreateProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createProduct(productDetails).unwrap();
+      await createProductMutation(productDetails).unwrap(); // Updated the name here
       console.log("Product created successfully", payload);
       // Handle success, e.g., showing a success message, clearing the form, etc.
     } catch (error) {
@@ -217,7 +202,6 @@ function CreateProduct() {
 export default CreateProduct;
 
 // const handleSubmit = async (e) => {
-
 //   e.preventDefault();
 
 //   dispatch(
@@ -235,3 +219,18 @@ export default CreateProduct;
 //     })
 //   );
 // };
+
+// const dispatch = useDispatch();
+// const { createStatus } = useSelector((state) => state.products);
+
+// const [name, setName] = useState("");
+// const [sku, setSku] = useState("");
+// const [category, setCategory] = useState("");
+// const [quantity, setQuantity] = useState("");
+// const [brand, setBrand] = useState("");
+// const [price, setPrice] = useState("");
+// const [description, SetDescription] = useState("");
+// const [image, setImage] = useState("");
+// console.log(image);
+// const [regularPrice, setRegularPrice] = useState("");
+// const [color, setColor] = useState("");

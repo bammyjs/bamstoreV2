@@ -3,14 +3,14 @@ const Product = require("../models/productModel");
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 const dotenv = require("dotenv");
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("../utils/cloudinary");
 
 // set your env variable CLOUDINARY_URL or set the following configuration
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_NAME,
+//   api_key: process.env.CLOUDINARY_API_KEY,
+//   api_secret: process.env.CLOUDINARY_API_SECRET,
+// });
 
 // Create Product
 const createProduct = asyncHandler(async (req, res) => {

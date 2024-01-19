@@ -150,11 +150,7 @@ const Login = () => {
             <Link to={"/forgot-password"} className="text-dark">
               Forgot your password?
             </Link>
-            <button
-              onSubmit={loginUser}
-              type="submit"
-              className="btn btn-primary"
-            >
+            <button type="submit" className="btn btn-primary">
               Login
             </button>
           </form>
