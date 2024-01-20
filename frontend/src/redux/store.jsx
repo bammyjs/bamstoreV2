@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "../redux/features/auth/authSlice";
 import cartReducer, { getTotals } from "./features/cartSlice";
 import { productsApi } from "./features/product/productsApi";
@@ -17,7 +17,7 @@ export const store = configureStore({
 });
 
 // store.dispatch(productsFetch());
-// store.dispatch(getTotals());
+store.dispatch(getTotals());
 
 // const rootReducer = combineReducers({
 //   authReducer: authReducer,

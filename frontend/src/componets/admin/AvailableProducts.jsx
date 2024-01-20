@@ -16,7 +16,7 @@ const AllProducts = ({ products }) => {
         <th className="text-left py-3 px-2">Category</th>
         <th className="text-left py-3 px-2 rounded-r-lg">Action</th>
       </thead>
-      {products.map((product, i) => {
+      {products?.map((product, i) => {
         return (
           <tbody key={i}>
             <tr className="border-b text-dark border-gray-700">

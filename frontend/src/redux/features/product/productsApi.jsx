@@ -4,7 +4,7 @@ import { url } from "../auth/api";
 // Custom base query function to include headers
 const baseQuery = fetchBaseQuery({
   baseUrl: url,
-  prepareHeaders: (headers, { getState }) => {
+  prepareHeaders: (headers, { getItem }) => {
     const { token } = getState().auth;
 
     if (token) {
@@ -17,9 +17,7 @@ const baseQuery = fetchBaseQuery({
 
 export const productsApi = createApi({
   reducerPath: "productsApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: url,
-  }),
+  baseQuery,
 
   endpoints: (builder) => ({
     getAllProducts: builder.query({
@@ -32,16 +30,15 @@ export const productsApi = createApi({
         response.status === 200 && !result.isError,
     }),
     createProduct: builder.mutation({
-      query: (newProduct) => ({
-        url: "products",
-        method: "POST",
-        body: newProduct,
-        headers: {
-          // Include any additional headers here
-          // Example: Authorization header for user login status
-          Authorization: `Bearer ${token}`, // Replace with your actual access token
-        },
-      }),
+      query: (newProduct, { getItem }) => {
+        const { token } = getItem().auth;
+
+        return {
+          url: "products",
+          method: "POST",
+          body: newProduct,
+        };
+      },
     }),
   }),
 });

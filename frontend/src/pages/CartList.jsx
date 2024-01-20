@@ -62,13 +62,13 @@ const CartList = () => {
                           {cart.cartItems?.map((cartItem) => {
                             return (
                               <li
-                                key={cartItem._id}
+                                key={cartItem.id}
                                 className="flex flex-col space-y-3 py-6 text-left sm:flex-row sm:space-x-5 sm:space-y-0"
                               >
                                 <div className="shrink-0">
                                   <img
                                     className="h-24 w-24 max-w-full rounded-lg object-contain"
-                                    src={cartItem.image[0]}
+                                    src={cartItem.image?.[0]}
                                     alt=""
                                   />
                                 </div>
