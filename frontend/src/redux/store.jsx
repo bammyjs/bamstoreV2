@@ -9,6 +9,8 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     auth: authReducer,
     cart: cartReducer,
+    // filter: filterReducer,
+    // category: couponSlice,
     [productsApi.reducerPath]: productsApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {

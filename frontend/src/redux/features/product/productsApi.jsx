@@ -4,7 +4,7 @@ import { url } from "../auth/api";
 // Custom base query function to include headers
 const baseQuery = fetchBaseQuery({
   baseUrl: url,
-  prepareHeaders: (headers, { getItem }) => {
+  prepareHeaders: (headers, { getState }) => {
     const { token } = getState().auth;
 
     if (token) {
@@ -30,13 +30,16 @@ export const productsApi = createApi({
         response.status === 200 && !result.isError,
     }),
     createProduct: builder.mutation({
-      query: (newProduct, { getItem }) => {
-        const { token } = getItem().auth;
+      query: (newProduct, { getState }) => {
+        const { token } = getState().auth;
 
         return {
           url: "products",
           method: "POST",
           body: newProduct,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         };
       },
     }),

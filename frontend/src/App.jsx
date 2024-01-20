@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 
 import "./style.scss";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { OurStore } from "./pages/OurStore";
 import ForgotPassword from "./pages/ForgotPassword";
 import CartList from "./pages/CartList";
@@ -18,28 +18,41 @@ import axios from "axios";
 
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { getLoginStatus } from "./redux/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getLoginStatus,
+  getUser,
+  selectIsLoggedIn,
+  selectUser,
+} from "./redux/features/auth/authSlice";
 import ShopByCategory from "./pages/ShopByCategory";
 import banner1 from "./assets/banner1.jpg";
 import banner2 from "./assets/workwork2.jpg";
 import Product from "./pages/Product";
 import SingleProduct from "./componets/product/SingleProduct";
 import { Admin } from "./pages/Admin";
-import CreateProduct from "./componets/admin/CreateProduct";
+// import CreateProduct from "./componets/admin/CreateProduct";
 import DashBoardPreview from "./componets/admin/DashBoardPreview";
 import AvailableProducts from "./componets/admin/AvailableProducts";
 import DisplayUsers from "./componets/admin/DisplayUsers";
 import Orders from "./componets/admin/Orders";
+import AddProduct from "./componets/admin/AddProduct";
 
 function App() {
   axios.defaults.withCredentials = true;
-
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     dispatch(getLoginStatus());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoggedIn && user === null) {
+      dispatch(getUser());
+    }
+  }, [dispatch, isLoggedIn, user]);
 
   return (
     <BrowserRouter>
@@ -80,11 +93,11 @@ function App() {
           <Route path="/testPage" element={<SingleProduct />} />
 
           <Route path="/cart" element={<CartList />} />
-          <Route path="/createProduct" element={<CreateProduct />} />
+          {/* <Route path="/createProduct" element={<CreateProduct />} /> */}
           <Route path="/admin" element={<Admin />}>
             <Route path="dashboard" element={<DashBoardPreview />} />
             <Route path="products" element={<AvailableProducts />} />
-            <Route path="createProduct" element={<CreateProduct />} />
+            <Route path="createProduct" element={<AddProduct />} />
             <Route path="orders" element={<Orders />} />
             <Route path="users" element={<DisplayUsers />} />
           </Route>
