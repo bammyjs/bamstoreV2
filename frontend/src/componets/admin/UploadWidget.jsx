@@ -36,7 +36,7 @@ const UploadWidget = ({ files, setFiles }) => {
   };
   // File upload end
 
-  const url = "https://api.cloudinary.com/v1_1/zinotrust/image/upload";
+  const url = "https://api.cloudinary.com/v1_1/bamtech1/image/upload";
 
   const uploadImages = async () => {
     setUploading(true);
@@ -46,8 +46,8 @@ const UploadWidget = ({ files, setFiles }) => {
     for (let i = 0; i < images.length; i++) {
       let file = images[i];
       formData.append("file", file);
-      formData.append("upload_preset", "mqxbycre");
-      formData.append("folder", "shopito");
+      formData.append("upload_preset", "bamstore");
+      formData.append("folder", "bamstore");
 
       fetch(url, {
         method: "POST",
@@ -106,13 +106,14 @@ const UploadWidget = ({ files, setFiles }) => {
 
   return (
     <div>
-      <div cardClass="">
-        <label className="uploadWidget">
+      <div className="">
+        <label className="my-0 mx-auto flex flex-col justify-center items-center border-2 border-dashed w-full cursor-pointer h-40">
           <AiOutlineCloudUpload size={35} />
           <br />
 
-          <span>Click to upload Up to 5 images</span>
+          <span className="text-sm pt-2">Click to upload Up to 5 images</span>
           <input
+            className="hidden"
             type="file"
             name="images"
             onChange={addImages}
@@ -133,7 +134,7 @@ const UploadWidget = ({ files, setFiles }) => {
             <>
               <div className="--center-all">
                 <button
-                  className="--btn --btn-danger --btn-large"
+                  className="btn btn-secondary"
                   disabled={uploading}
                   onClick={() => {
                     uploadImages();
@@ -149,13 +150,25 @@ const UploadWidget = ({ files, setFiles }) => {
             </>
           ))}
 
-        <div className={selectedImages.length > 0 ? "images" : ""}>
+        <div
+          className={
+            selectedImages.length > 0
+              ? "border rounded-md overflow-hidden bg-slate-700 mt-4"
+              : ""
+          }
+        >
           {selectedImages.length !== 0 &&
             selectedImages.map((image, index) => {
               return (
-                <div key={image} className="image">
+                <div
+                  key={image}
+                  className="border rounded-md overflow-hidden bg-slate-700 mt-4"
+                >
                   <img src={image} width="200" alt="productImage" />
-                  <button className="--btn" onClick={() => removeImage(image)}>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => removeImage(image)}
+                  >
                     <BsTrash size={25} />
                   </button>
                   <p>{index + 1}</p>

@@ -13,46 +13,68 @@ const cloudinary = require("../utils/cloudinary");
 // });
 
 // Create Product
+// const createProduct = asyncHandler(async (req, res) => {
+//   const {
+//     name,
+//     sku,
+//     category,
+//     brand,
+//     quantity,
+//     price,
+//     description,
+//     regularPrice,
+//     color,
+//     image,
+//   } = req.body;
+
+//   //   Validation
+//   if (
+//     !name ||
+//     !category ||
+//     !sku ||
+//     !regularPrice ||
+//     !color ||
+//     !brand ||
+//     !quantity ||
+//     !price ||
+//     !description
+//   ) {
+//     res.status(400);
+//     throw new Error("Please fill in all fields");
+//   }
+
+//   try {
+//     let imageUrl = null;
+//     if (image) {
+//       const uploadRes = await cloudinary.uploader.upload(image, {
+//         upload_preset: "bamstore",
+//       });
+//       imageUrl = uploadRes.url; // Store only the URL
+//     }
+//     const product = new Product({
+//       user: req.user.id, // Uncomment if you're associating product with a user
+//       name,
+//       sku,
+//       category,
+//       brand,
+//       quantity,
+//       price,
+//       description,
+//       regularPrice,
+//       color,
+//       image: imageUrl, // Use the Cloudinary image URL
+//     });
+
+//     const savedProduct = await product.save();
+//     res.status(200).json(savedProduct);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
 const createProduct = asyncHandler(async (req, res) => {
-  const {
-    name,
-    sku,
-    category,
-    brand,
-    quantity,
-    price,
-    description,
-    regularPrice,
-    color,
-    image,
-  } = req.body;
-
-  //   Validation
-  if (
-    !name ||
-    !category ||
-    !sku ||
-    !regularPrice ||
-    !color ||
-    !brand ||
-    !quantity ||
-    !price ||
-    !description
-  ) {
-    res.status(400);
-    throw new Error("Please fill in all fields");
-  }
-
   try {
-    let imageUrl = null;
-    if (image) {
-      const uploadRes = await cloudinary.uploader.upload(image, {
-        upload_preset: "bamstore",
-      });
-      imageUrl = uploadRes.url; // Store only the URL
-    }
-    const product = new Product({
-      user: req.user.id, // Uncomment if you're associating product with a user
+    const {
       name,
       sku,
       category,
@@ -60,15 +82,52 @@ const createProduct = asyncHandler(async (req, res) => {
       quantity,
       price,
       description,
+      image,
       regularPrice,
       color,
-      image: imageUrl, // Use the Cloudinary image URL
+    } = req.body;
+
+    //   Validation
+    if (!name || !category || !brand || !quantity || !price || !description) {
+      res.status(400);
+      throw new Error("Please fill in all fields");
+    }
+
+    // Create Product
+    const product = await Product.create({
+      user: req.user.id,
+      name,
+      sku,
+      category,
+      quantity,
+      brand,
+      price,
+      description,
+      image,
+      regularPrice,
+      color,
     });
 
-    const savedProduct = await product.save();
-    res.status(200).json(savedProduct);
+    // Create a MutationObserver instance
+    const observer = new MutationObserver(function (mutationsList, observer) {
+      // Handle the mutation here
+      // You may need to adjust the handler function based on your specific use case
+    });
+
+    // Start observing the target node for child list changes
+    observer.observe(product, { childList: true });
+
+    res.status(201).json(product);
+
+    res.status(201).json(product);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error.name === "ValidationError") {
+      // Handle validation errors
+      res.status(400).json({ message: error.message });
+    } else {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   }
 });
 

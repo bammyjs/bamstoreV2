@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
-// import {
-//   getBrands,
-//   getCategories,
-// } from "../../../redux/features/categoryAndBrand/categoryAndBrandSlice";
 
 import ProductForm from "./ProductForm";
 import {
   createProduct,
-  //   selectIsLoading,
+  selectIsLoading,
 } from "../../redux/features/product/productSlice";
+import {
+  getBrands,
+  getCategories,
+} from "../../redux/features/categoryAndBrand/categorySlice";
 
 const initialState = {
   name: "",
@@ -33,16 +33,16 @@ const AddProduct = () => {
   const [imagePreview, setImagePreview] = useState([]);
   const [description, setDescription] = useState("");
 
-  //   const isLoading = useSelector(selectIsLoading);
+  const isLoading = useSelector((state) => state.selectIsLoading);
 
   const { name, category, brand, price, quantity, color, regularPrice } =
     product;
-  //   const { categories, brands } = useSelector((state) => state.category);
+  const { categories, brands } = useSelector((state) => state.category);
 
-  //   useEffect(() => {
-  //     dispatch(getCategories());
-  //     dispatch(getBrands());
-  //   }, [dispatch]);
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getBrands());
+  }, [dispatch]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -75,11 +75,11 @@ const AddProduct = () => {
       image: files,
     };
 
-    // console.log(formData);
+    console.log(formData);
 
     await dispatch(createProduct(formData));
 
-    navigate("/admin/all-products");
+    navigate("/admin/products");
   };
   const [filteredBrands, setFilteredBrands] = useState([]);
   function filterBrands(selectedCategoryName) {
@@ -89,15 +89,22 @@ const AddProduct = () => {
     setFilteredBrands(newBrands);
   }
 
-  //   useEffect(() => {
-  //     filterBrands(category);
-  //     // console.log(filteredBrands);
-  //   }, [category]);
+  useEffect(() => {
+    filterBrands(category);
+    console.log(filteredBrands);
+  }, [category]);
 
   return (
     <div>
-      {/* {isLoading && <Loader />} */}
-      <h3 className="--mt">Add New Product</h3>
+      <h3 className="mt-4 text-center">Add New Product</h3>
+      {isLoading && (
+        <div className="flex  justify-center ">
+          <span className="loading loading-ball loading-xs"></span>
+          <span className="loading loading-ball loading-sm"></span>
+          <span className="loading loading-ball loading-md"></span>
+          <span className="loading loading-ball loading-lg"></span>
+        </div>
+      )}
 
       <ProductForm
         files={files}
@@ -110,7 +117,7 @@ const AddProduct = () => {
         setDescription={setDescription}
         handleInputChange={handleInputChange}
         saveProduct={saveProduct}
-        // categories={categories}
+        categories={categories}
         filteredBrands={filteredBrands}
         isEditing={false}
       />

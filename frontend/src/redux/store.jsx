@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "../redux/features/auth/authSlice";
+
 import cartReducer, { getTotals } from "./features/cartSlice";
 import { productsApi } from "./features/product/productsApi";
 import { userApi } from "./features/user/usersApi";
+import categoryReducer from "./features/categoryAndBrand/categorySlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,7 +12,7 @@ export const store = configureStore({
     auth: authReducer,
     cart: cartReducer,
     // filter: filterReducer,
-    // category: couponSlice,
+    category: categoryReducer,
     [productsApi.reducerPath]: productsApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {

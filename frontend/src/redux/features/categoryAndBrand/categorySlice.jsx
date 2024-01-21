@@ -124,7 +124,7 @@ export const deleteBrand = createAsyncThunk(
   }
 );
 
-const couponSlice = createSlice({
+const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
@@ -242,6 +242,6 @@ const couponSlice = createSlice({
   },
 });
 
-export const { RESET_CAT } = couponSlice.actions;
+export const { RESET_CAT } = categorySlice.actions;
 
-export default couponSlice.reducer;
+export default categorySlice.reducer;
