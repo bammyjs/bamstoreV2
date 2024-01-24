@@ -49,6 +49,7 @@ const AllProducts = ({ products }) => {
   return (
     <>
       <thead className="bg-pry-deep">
+        <th className="text-left py-3 px-2 rounded-l-lg">s/n</th>
         <th className="text-left py-3 px-2 rounded-l-lg">item</th>
         <th className="text-left py-3 px-2">Category</th>
         <th className="text-left py-3 px-2">Price</th>
@@ -59,7 +60,8 @@ const AllProducts = ({ products }) => {
       {products?.map((product, i) => {
         return (
           <tbody key={i}>
-            <tr className="border-b text-dark border-gray-700">
+            <tr className=" border-b text-dark border-gray-700">
+              <td className="py-3 px-2">{i + 1}</td>
               <td className="py-3 px-2  font-bold">
                 <div className="inline-flex space-x-3 items-center">
                   {/* <span>
@@ -161,7 +163,7 @@ const AvailableProducts = () => {
         All products<span className="text-red-700">{}</span>
       </h3>
       <div className="overflow-x-scroll">
-        <table className="w-full  whitespace-nowrap">
+        <table className="table  w-full  whitespace-nowrap">
           {loading ? (
             <div className="flex  justify-center ">
               <span className="loading loading-ball loading-xs"></span>

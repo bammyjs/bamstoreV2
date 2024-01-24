@@ -87,36 +87,69 @@ const ProductForm = ({
           </div>
           <br />
           <hr />
-          <div className="flex-wrap flex gap-2 my-2 text-base text-dark">
-            <label>Product Name:</label>
-            <input
-              className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
-              type="text"
-              placeholder="Product name"
-              name="name"
-              value={product?.name}
-              onChange={handleInputChange}
-            />
+          <div className="flex-wrap items-center justify-center flex gap-2 my-2 text-base text-dark">
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Product Name:</span>
+              </div>
+              <input
+                placeholder="Product name"
+                name="name"
+                value={product?.name}
+                onChange={handleInputChange}
+                type="text"
+                className="input text-neutral input-bordered w-full max-w-xs"
+              />
+            </label>
 
-            <label>Product Category:</label>
-            <select
-              className="border py-3 text-gray rounded-md px-4 w-full"
-              name="category"
-              value={product?.category}
-              onChange={handleInputChange}
-            >
-              {isEditing ? (
-                <option>{product?.category}</option>
-              ) : (
-                <option>Select Category</option>
-              )}
-              {categories.length > 0 &&
-                categories.map((cat) => (
-                  <option key={cat._id} value={cat._name}>
-                    {cat.name}
-                  </option>
-                ))}
-            </select>
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Product Category:</span>
+              </div>
+              <select
+                className="select text-neutral select-bordered w-full max-w-xs"
+                name="category"
+                value={product?.category}
+                onChange={handleInputChange}
+              >
+                {isEditing ? (
+                  <option>{product?.category}</option>
+                ) : (
+                  <option>Select Category</option>
+                )}
+                {categories.length > 0 &&
+                  categories.map((cat) => (
+                    <option className="p-2" key={cat._id} value={cat._name}>
+                      {cat.name}
+                    </option>
+                  ))}
+              </select>
+            </label>
+
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Product Brand:</span>
+              </div>
+              <select
+                name="brand"
+                value={product?.brand}
+                className="select text-neutral select-bordered w-full max-w-xs"
+                onChange={handleInputChange}
+              >
+                {isEditing ? (
+                  <option>{product?.brand}</option>
+                ) : (
+                  <option>Select Brand</option>
+                )}
+
+                {filteredBrands.length > 0 &&
+                  filteredBrands.map((brand) => (
+                    <option key={brand._id} value={brand.name}>
+                      {brand.name}
+                    </option>
+                  ))}
+              </select>
+            </label>
 
             {/* <input
               className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
@@ -127,26 +160,6 @@ const ProductForm = ({
               onChange={handleInputChange}
             /> */}
 
-            <label>Product Brand:</label>
-            <select
-              name="brand"
-              value={product?.brand}
-              className="border py-3 text-gray rounded-md px-4 w-full"
-              onChange={handleInputChange}
-            >
-              {isEditing ? (
-                <option>{product?.brand}</option>
-              ) : (
-                <option>Select Brand</option>
-              )}
-
-              {filteredBrands.length > 0 &&
-                filteredBrands.map((brand) => (
-                  <option key={brand._id} value={brand.name}>
-                    {brand.name}
-                  </option>
-                ))}
-            </select>
             {/* <input
               className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
               type="text"
@@ -155,47 +168,65 @@ const ProductForm = ({
               value={product?.brand}
               onChange={handleInputChange}
             /> */}
-            <label>Product Color:</label>
-            <input
-              className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
-              type="text"
-              placeholder="Color"
-              name="color"
-              value={product?.color}
-              onChange={handleInputChange}
-            />
 
-            <label>Regular Price:</label>
-            <input
-              className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
-              type="text"
-              placeholder="Regular Price"
-              name="regularPrice"
-              value={product?.regularPrice}
-              onChange={handleInputChange}
-            />
-            <label>Product Price:</label>
-            <input
-              className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
-              type="text"
-              placeholder="Product Price"
-              name="price"
-              value={product?.price}
-              onChange={handleInputChange}
-            />
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Product Color:</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Color"
+                name="color"
+                value={product?.color}
+                onChange={handleInputChange}
+                className="input text-neutral input-bordered w-full max-w-xs"
+              />
+            </label>
 
-            <label>Product Quantity:</label>
-            <input
-              className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
-              type="text"
-              placeholder="Product Quantity"
-              name="quantity"
-              value={product?.quantity}
-              onChange={handleInputChange}
-            />
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Regular Price:</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Regular Price"
+                name="regularPrice"
+                value={product?.regularPrice}
+                onChange={handleInputChange}
+                className="input text-neutral input-bordered w-full max-w-xs"
+              />
+            </label>
+
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Product Price:</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Product Price"
+                name="price"
+                value={product?.price}
+                onChange={handleInputChange}
+                className="input text-neutral input-bordered w-full max-w-xs"
+              />
+            </label>
+
+            <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Product Quantity:</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Product Quantity"
+                name="quantity"
+                value={product?.quantity}
+                onChange={handleInputChange}
+                className="input text-neutral input-bordered w-full max-w-xs"
+              />
+            </label>
           </div>
           <label>Product Description:</label>
-          <div dangerouslySetInnerHTML={{ __html: description }} />
+          {/* <div dangerouslySetInnerHTML={{ __html: description }} /> */}
           <ReactQuill
             theme="snow"
             value={description}

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import styles from "./ProductList.module.scss";
+// import styles from "./ProductList.module.scss";
 import { BsFillGridFill } from "react-icons/bs";
 import { FaListAlt } from "react-icons/fa";
-import Search from "../../search/Search";
-import ProductItem from "../productItem/ProductItem";
+// import Search from "../../search/Search";
+// import ProductItem from "../productItem/ProductItem";
 import { useDispatch, useSelector } from "react-redux";
 import {
   FILTER_BY_SEARCH,
@@ -11,6 +11,7 @@ import {
   selectFilteredProducts,
 } from "../../redux/features/product/filterSlice";
 import ReactPaginate from "react-paginate";
+import CardProducts from "./CardProducts";
 
 const ProductList = ({ products }) => {
   const [grid, setGrid] = useState(true);
@@ -48,9 +49,9 @@ const ProductList = ({ products }) => {
   }, [dispatch, products, search]);
 
   return (
-    <div className={styles["product-list"]} id="product">
-      <div className={styles.top}>
-        <div className={styles.icons}>
+    <div className="" id="product">
+      <div className="">
+        <div className="">
           <BsFillGridFill
             size={22}
             color="orangered"
@@ -65,10 +66,14 @@ const ProductList = ({ products }) => {
         </div>
         {/* Search Icon */}
         <div>
-          <Search value={search} onChange={(e) => setSearch(e.target.value)} />
+          <inpute
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
         {/* Sort Products */}
-        <div className={styles.sort}>
+        <div className="">
           <label>Sort by:</label>
           <select value={sort} onChange={(e) => setSort(e.target.value)}>
             <option value="latest">Latest</option>
@@ -80,7 +85,7 @@ const ProductList = ({ products }) => {
         </div>
       </div>
 
-      <div className={grid ? `${styles.grid}` : `${styles.list}`}>
+      <div className="">
         {products.length === 0 ? (
           <p>No product found.</p>
         ) : (
@@ -88,7 +93,7 @@ const ProductList = ({ products }) => {
             {currentItems.map((product) => {
               return (
                 <div key={product._id}>
-                  <ProductItem {...product} grid={grid} product={product} />
+                  <CardProducts {...product} product={product} />
                 </div>
               );
             })}

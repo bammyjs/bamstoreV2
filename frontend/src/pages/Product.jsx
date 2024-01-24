@@ -62,7 +62,7 @@ const Product = () => {
               <div className="text-dark body-font overflow-hidden ">
                 <div className="container px-5 py-24 mx-auto ">
                   <div className=" max-w-7xl mx-auto flex flex-wrap  ">
-                    <div className="flex flex-col gap-6 lg:w-2/4 border bg-light ">
+                    <div className="flex flex-col gap-6 lg:w-2/4 border bg-light h-fit ">
                       <Zoom>
                         <img
                           src={activeImg}
@@ -71,7 +71,7 @@ const Product = () => {
                           width="500"
                         />
                       </Zoom>
-                      <div className="flex flex-row justify-between h-24 border-t py-2">
+                      <div className="flex flex-row justify-between h-24 border-t py-2 ">
                         {product &&
                           product.image &&
                           product.image.length > 0 &&
@@ -192,12 +192,17 @@ const Product = () => {
                         </div>
                       </div>
                       <div className="flex mt-1 items-center pb-5 border-b-2 border-gray-200 mb-5"></div>
+
                       <div className="flex flex-col gap-2">
                         <p className="font-bold text-xl">
                           Product Description:
                         </p>
                         <h2 className="font-light text-xl">KEY FEATURES</h2>
-                        {product.description}
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: product.description,
+                          }}
+                        />
                       </div>
                     </div>
 

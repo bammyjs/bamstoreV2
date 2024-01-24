@@ -15,6 +15,7 @@ import Loader from "../componets/home/Loader";
 import { useState, useEffect } from "react";
 import ShowOnLogin from "../componets/hiddenLink/hiddenLink";
 import { IoLogOutOutline } from "react-icons/io5";
+import { AdminOnlyLink } from "../componets/admin/AdminAccessOnly";
 // import { TEInput, TERipple } from "tw-elements-react";
 
 function Profile() {
@@ -120,10 +121,12 @@ function Profile() {
           Profile
         </h3>
         {user ? (
-          <div className="  top-16 right-10">
-            <Link className="btn btn-primary" to={"/admin/dashboard"}>
-              Admin ?
-            </Link>
+          <div className="   ">
+            <AdminOnlyLink>
+              <Link className="btn btn-primary" to={"/admin/dashboard"}>
+                Admin
+              </Link>
+            </AdminOnlyLink>
           </div>
         ) : null}
         {!isLoading && user && (
