@@ -30,13 +30,18 @@ import banner1 from "./assets/banner1.jpg";
 import banner2 from "./assets/workwork2.jpg";
 import Product from "./pages/Product";
 import SingleProduct from "./componets/product/SingleProduct";
+
 import { Admin } from "./pages/Admin";
 // import CreateProduct from "./componets/admin/CreateProduct";
 import DashBoardPreview from "./componets/admin/DashBoardPreview";
 import AvailableProducts from "./componets/admin/AvailableProducts";
 import DisplayUsers from "./componets/admin/DisplayUsers";
 import Orders from "./componets/admin/Orders";
-import AddProduct from "./componets/admin/AddProduct";
+import AddProduct from "./componets/admin/product/AddProduct";
+import AdminAccessOnly from "./componets/admin/AdminAccessOnly";
+import NotFound from "./pages/NotFound";
+import GetProducts from "./componets/admin/product/GetProducts";
+import EditProduct from "./componets/admin/product/EditProduct";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -59,10 +64,7 @@ function App() {
       {/* <Loader /> */}
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route
-            path="*"
-            element={<div> Not Found or You do not have permission.</div>}
-          />
+          <Route path="*" element={<NotFound />} />
           <Route index element={<Home />} />
           <Route
             path="/gaming"
@@ -94,10 +96,18 @@ function App() {
 
           <Route path="/cart" element={<CartList />} />
           {/* <Route path="/createProduct" element={<CreateProduct />} /> */}
-          <Route path="/admin" element={<Admin />}>
+          <Route
+            path="/admin"
+            element={
+              <AdminAccessOnly>
+                <Admin />
+              </AdminAccessOnly>
+            }
+          >
             <Route path="dashboard" element={<DashBoardPreview />} />
             <Route path="products" element={<AvailableProducts />} />
             <Route path="createProduct" element={<AddProduct />} />
+            <Route path="editProduct/:id" element={<EditProduct />} />
             <Route path="orders" element={<Orders />} />
             <Route path="users" element={<DisplayUsers />} />
           </Route>

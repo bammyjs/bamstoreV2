@@ -4,15 +4,6 @@ import { url } from "../auth/api";
 // Custom base query function to include headers
 const baseQuery = fetchBaseQuery({
   baseUrl: url,
-  prepareHeaders: (headers, { getState }) => {
-    const { token } = getState().auth;
-
-    if (token) {
-      headers.set("authorization", `Bearer ${token}`);
-    }
-
-    return headers;
-  },
 });
 
 export const productsApi = createApi({
@@ -29,19 +20,23 @@ export const productsApi = createApi({
       validateStatus: (response, result) =>
         response.status === 200 && !result.isError,
     }),
-    createProduct: builder.mutation({
-      query: (newProduct, { getState }) => {
-        const { token } = getState().auth;
-
-        return {
-          url: "products",
-          method: "POST",
-          body: newProduct,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-      },
+    searchProducts: builder.query({
+      // Add parameters as needed for search (e.g., query, category, brand)
+      query: ({ query, category, brand }) =>
+        `products?search=${query}&category=${category}&brand=${brand}`,
+    }),
+    sortProducts: builder.query({
+      // Add parameters as needed for sorting (e.g., sortBy, sortOrder)
+      query: ({ sortBy, sortOrder }) =>
+        `products?sortBy=${sortBy}&sortOrder=${sortOrder}`,
+    }),
+    filterProductsByBrand: builder.query({
+      // Add parameters as needed for filtering (e.g., brand)
+      query: (brand) => `products?brand=${brand}`,
+    }),
+    filterProductsByCategory: builder.query({
+      // Add parameters as needed for filtering (e.g., category)
+      query: (category) => `products?category=${category}`,
     }),
   }),
 });
@@ -49,5 +44,8 @@ export const productsApi = createApi({
 export const {
   useGetAllProductsQuery,
   useGetSingleProductQuery,
-  useCreateProductMutation,
+  useSearchProductsQuery,
+  useSortProductsQuery,
+  useFilterProductsByBrandQuery,
+  useFilterProductsByCategoryQuery,
 } = productsApi;

@@ -13,19 +13,38 @@ import {
   IoPerson,
 } from "react-icons/io5";
 import { TECollapse, TERipple } from "tw-elements-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RESET_AUTH, logout } from "../../redux/features/auth/authSlice";
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/hiddenLink";
 import { NavList } from "./NavList";
 import Cart from "../../pages/Cart";
 import CartList from "../../pages/CartList";
 import CartModal from "../product/CartModal";
+import { useSearchProductsQuery } from "../../redux/features/product/productsApi";
 // import { motion } from "framer-motion";
 
-function Header() {
+function Header({ products }) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const {
+    data: searchResults,
+    isLoading,
+    isError,
+  } = useSearchProductsQuery({
+    query: searchQuery,
+    category: selectedCategory,
+    brand: selectedBrand,
+  });
+
+  const handleSearch = () => {
+    // Trigger the search based on the current state of searchQuery, selectedCategory, and selectedBrand
+  };
+
   const { cartTotalQuantity } = useSelector((state) => state.cart);
   const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
+  // const [search, setSearch] = useState("");
 
   const toggleShow = () => setShow(!show);
 
@@ -38,6 +57,7 @@ function Header() {
     await dispatch(RESET_AUTH());
     navigate("/login");
   };
+
   return (
     <header className="fixed text-base-100  bg-light w-full p-2 md:px-4 md:py-8 flex justify-center items-center  md:fixed z-[9999]  box-shadow ">
       <nav className="container max-w-7xl  p-1 flex   font-medium justify-between  w-full  items-center">
@@ -133,6 +153,8 @@ function Header() {
               placeholder="Search"
               aria-label="Search"
               aria-describedby="button-addon3"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
 
             {/* <!--Search button--> */}
@@ -141,6 +163,7 @@ function Header() {
                 className="relative z-[2] rounded-r border-2 border-pry px-6 py-2 text-xs font-medium uppercase text-primary transition duration-150 ease-in-out hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0"
                 type="button"
                 id="button-addon3"
+                onClick={handleSearch}
               >
                 Search
               </button>
@@ -185,6 +208,8 @@ function Header() {
               placeholder="Search"
               aria-label="Search"
               aria-describedby="button-addon3"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
 
             {/* <!--Search button--> */}
@@ -193,11 +218,21 @@ function Header() {
                 className="relative z-[2] rounded-lg border-2 border-pry px-6 py-2 text-xs font-medium uppercase text-primary transition duration-150 ease-in-out hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0"
                 type="button"
                 id="button-addon3"
+                onClick={handleSearch}
               >
                 Search
               </button>
             </TERipple>
           </div>
+          {isLoading && <p>Loading...</p>}
+          {isError && <p>Error loading search results.</p>}
+
+          {searchResults && (
+            <div>
+              <h3>Search Results:</h3>
+              {/* Render the search results here */}
+            </div>
+          )}
         </div>
       </TECollapse>
     </header>

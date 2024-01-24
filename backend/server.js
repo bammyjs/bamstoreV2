@@ -7,6 +7,8 @@ const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
+const filterRoute = require("./routes/filterRoute");
+const searchRoute = require("./routes/searchRoute");
 const errorHandler = require("./middleware/errorMiddleware");
 
 const app = express();
@@ -29,6 +31,9 @@ app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/brand", brandRoute);
+
+app.use("/api/filter", filterRoute);
+app.use("/api/search", searchRoute);
 
 app.get("/", (req, res) => {
   res.send("Home page...");

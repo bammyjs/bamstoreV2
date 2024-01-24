@@ -36,17 +36,17 @@ const BrandList = ({ brands }) => {
   };
 
   return (
-    <div className="--mb2 ">
+    <div className="mb-2  ">
       <h3>All Brands</h3>
       {/* <pre>{JSON.stringify(brands, null, 2)}</pre> */}
 
-      <div className={"table"}>
+      <div className="w-full">
         {brands.length === 0 ? (
           <p>No brand found</p>
         ) : (
-          <table>
+          <table className="table">
             <thead>
-              <tr>
+              <tr className="bg-base-200">
                 <th>s/n</th>
                 <th>Name</th>
                 <th>Category</th>

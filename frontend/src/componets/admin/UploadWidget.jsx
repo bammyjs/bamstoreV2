@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // import Card from "../../card/Card";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
+import { IoCloudUploadOutline, IoTrashOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
 
 const UploadWidget = ({ files, setFiles }) => {
@@ -78,89 +79,85 @@ const UploadWidget = ({ files, setFiles }) => {
     }
   };
 
-  //   const uploadImages = async () => {
-  //     console.log(images);
-  //     let files = [];
-  //     try {
-  //       for (let i = 0; i < images.length; i++) {
-  //         let formData = new FormData();
-  //         formData.append("file", images[i]);
-  //         formData.append("upload_preset", "mqxbycre");
-
-  //         const res = await instance.post(url, formData);
-  //         console.log(res.data.url);
-  //         return res.data;
-  //         // .then((response) => {
-  //         //   console.log(response.data);
-  //         //   return response.data;
-  //         // });
-
-  //         //   .then((data) => {
-  //         //     console.log(data.secure_url);
-  //         //   });
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
   return (
-    <div>
-      <div className="">
-        <label className="my-0 mx-auto flex flex-col justify-center items-center border-2 border-dashed w-full cursor-pointer h-40">
-          <AiOutlineCloudUpload size={35} />
-          <br />
-
-          <span className="text-sm pt-2">Click to upload Up to 5 images</span>
-          <input
-            className="hidden"
-            type="file"
-            name="images"
-            onChange={addImages}
-            multiple
-            accept="image/png , image/jpeg, image/webp"
-          />
-        </label>
+    <div className="">
+      <label className="my-0 mx-auto px-10 flex flex-col justify-center items-center border-2 border-dashed w-full cursor-pointer h-40">
+        <IoCloudUploadOutline size={35} />
         <br />
-        {selectedImages.length > 0 &&
-          (selectedImages.length > 5 ? (
-            <p className="error">
-              You can't upload more than 5 images! <br />
-              <span>
-                please remove <b> {selectedImages.length - 5} </b> of them.
-              </span>
-            </p>
-          ) : (
-            <>
-              <div className="--center-all">
-                <button
-                  className="btn btn-secondary"
-                  disabled={uploading}
-                  onClick={() => {
-                    uploadImages();
-                  }}
-                >
-                  {uploading
-                    ? `Uploading... ${progress} of ${selectedImages.length}`
-                    : `Upload ${selectedImages.length} Image${
-                        selectedImages.length === 1 ? "" : "s"
-                      }`}
-                </button>
-              </div>
-            </>
-          ))}
 
-        <div
-          className={
-            selectedImages.length > 0
-              ? "border rounded-md overflow-hidden bg-slate-700 mt-4"
-              : ""
-          }
-        >
-          {selectedImages.length !== 0 &&
-            selectedImages.map((image, index) => {
-              return (
-                <div
+        <span className="text-sm pt-2">Click to upload Up to 4 images</span>
+        <input
+          className="hidden"
+          type="file"
+          name="images"
+          onChange={addImages}
+          multiple
+          accept="image/png , image/jpeg, image/webp"
+        />
+      </label>
+      <br />
+      {selectedImages.length > 0 &&
+        (selectedImages.length > 5 ? (
+          <p className="error">
+            You can't upload more than 4 images! <br />
+            <span>
+              please remove <b> {selectedImages.length - 4} </b> of them.
+            </span>
+          </p>
+        ) : (
+          <>
+            <div className="flex justify-center">
+              <button
+                className="btn btn-secondary"
+                disabled={uploading}
+                onClick={() => {
+                  uploadImages();
+                }}
+              >
+                {uploading
+                  ? `Uploading... ${progress} of ${selectedImages.length}`
+                  : `Upload ${selectedImages.length} Image${
+                      selectedImages.length === 1 ? "" : "s"
+                    }`}
+              </button>
+            </div>
+          </>
+        ))}
+
+      <div
+        className={
+          selectedImages.length > 0
+            ? "w-full max-w-3xl my-4 mx-auto flex  justify-center items-center overflow-x-hidden flex-wrap touch-auto border border-dark transition-all rounded-xl"
+            : ""
+        }
+      >
+        {selectedImages.length !== 0 &&
+          selectedImages.map((image, index) => {
+            return (
+              <div
+                key={image}
+                className="card card-compact  m-1 bg-base-100 shadow-xl overflow-x-clip transform scale-95 hover:scale-100"
+              >
+                <figure className="w-36 h-36">
+                  <img
+                    className=" w-full h-auto aspect-square  object-contain"
+                    src={image}
+                    alt="Shoes"
+                  />
+                </figure>
+                <div className="card-body">
+                  <div className="card-actions justify-end">
+                    <IoTrashOutline
+                      style={{ fontSize: "20px", color: "red" }}
+                      onClick={() => removeImage(image)}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+      </div>
+      {/* <div
                   key={image}
                   className="border rounded-md overflow-hidden bg-slate-700 mt-4"
                 >
@@ -172,11 +169,7 @@ const UploadWidget = ({ files, setFiles }) => {
                     <BsTrash size={25} />
                   </button>
                   <p>{index + 1}</p>
-                </div>
-              );
-            })}
-        </div>
-      </div>
+                </div> */}
     </div>
   );
 };

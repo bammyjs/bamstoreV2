@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-import UploadWidget from "./UploadWidget";
-import { BsTrash } from "react-icons/bs";
+import UploadWidget from "../UploadWidget";
+import { IoTrashOutline } from "react-icons/io5";
 
 const ProductForm = ({
   files,
@@ -30,36 +30,59 @@ const ProductForm = ({
   };
 
   return (
-    <div className="my-20">
+    <div className=" w-full flex flex-col items-center my-20">
       <UploadWidget files={files} setFiles={setFiles} />
 
-      <div className="w-full container   px-6  bg-light py-6 rounded-lg  gap-6 flex flex-col shadow-2xl">
+      <div className="w-full container   px-6  bg-neutral  rounded-lg  gap-6 flex flex-col shadow-2xl">
         <br />
-        <form onSubmit={saveProduct} className="flex flex-col items-center">
+        <form onSubmit={saveProduct} className="flex flex-col  items-center">
           <label className="block text-2xl text-dark font-medium">
             Product Images:
           </label>
           <div className="max-w-5xl flex items-center justify-center my-o mx-auto">
-            <aside className="w-full my-0 mx-auto flex start justify-start items-center overflow-x-auto flex-nowrap touch-auto border border-dark transition-all bg-pry-color">
+            <aside className="w-full md:max-w-3xl my-0 mx-auto flex  justify-start items-center overflow-x-hidden flex-wrap touch-auto border border-dark transition-all rounded-xl">
               {files.length > 0 &&
                 files.map((image) => (
                   <div
                     key={image}
-                    className="flex-initial object-cover m-1 overflow-hidden transform scale-95 hover:scale-100"
+                    className="card card-compact  m-1 bg-base-100 shadow-xl overflow-x-clip transform scale-95 hover:scale-100"
                   >
-                    <img src={image} alt="productImage" height={100} />
-                    <div>
-                      <BsTrash
-                        size={15}
-                        className="cursor-pointer text-red-900"
-                        onClick={() => removeImage(image)}
+                    <figure className="w-36 h-36">
+                      <img
+                        className=" w-full h-auto aspect-square  object-contain"
+                        src={image}
+                        alt="Shoes"
                       />
+                    </figure>
+                    <div className="card-body">
+                      <div className="card-actions justify-end">
+                        <IoTrashOutline
+                          style={{ fontSize: "20px", color: "red" }}
+                          onClick={() => removeImage(image)}
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
               {files.length < 1 && (
-                <p className="--m">No image set for this poduct.</p>
+                <p className="p-6">No image set for this poduct.</p>
               )}
+              {/* <div
+                    key={image}
+                    className=" flex flex-col  m-1 overflow-hidden transform scale-95 hover:scale-100"
+                  >
+                    <img
+                      src={image}
+                      className=" w-full h-auto aspect-square  object-contain"
+                      alt="productImage"
+                    />
+                    <div className=" z-40 bg-slate-50 p-4">
+                      <IoTrashOutline
+                        style={{ fontSize: "20px", color: "red" }}
+                        onClick={() => removeImage(image)}
+                      />
+                    </div>
+                  </div> */}
             </aside>
           </div>
           <br />
@@ -76,7 +99,7 @@ const ProductForm = ({
             />
 
             <label>Product Category:</label>
-            {/* <select
+            <select
               className="border py-3 text-gray rounded-md px-4 w-full"
               name="category"
               value={product?.category}
@@ -93,19 +116,19 @@ const ProductForm = ({
                     {cat.name}
                   </option>
                 ))}
-            </select> */}
+            </select>
 
-            <input
+            {/* <input
               className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
               type="text"
               placeholder="Product Category"
               name="category"
               value={product?.category}
               onChange={handleInputChange}
-            />
+            /> */}
 
             <label>Product Brand:</label>
-            {/* <select
+            <select
               name="brand"
               value={product?.brand}
               className="border py-3 text-gray rounded-md px-4 w-full"
@@ -123,15 +146,15 @@ const ProductForm = ({
                     {brand.name}
                   </option>
                 ))}
-            </select> */}
-            <input
+            </select>
+            {/* <input
               className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
               type="text"
               placeholder="Brand"
               name="brand"
               value={product?.brand}
               onChange={handleInputChange}
-            />
+            /> */}
             <label>Product Color:</label>
             <input
               className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
@@ -172,6 +195,7 @@ const ProductForm = ({
             />
           </div>
           <label>Product Description:</label>
+          <div dangerouslySetInnerHTML={{ __html: description }} />
           <ReactQuill
             theme="snow"
             value={description}

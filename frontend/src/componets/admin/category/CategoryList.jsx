@@ -39,16 +39,16 @@ const CategoryList = () => {
   };
 
   return (
-    <div className="--mb2 mb-2">
-      <h3>All Categories</h3>
+    <div className="mb-2 ">
+      <h3 className="text-dark ">All Categories</h3>
 
-      <div className={"table"}>
+      <div className="">
         {categories.length === 0 ? (
           <p>No category found</p>
         ) : (
-          <table>
+          <table className=" table">
             <thead>
-              <tr>
+              <tr className="bg-base-200">
                 <th>s/n</th>
                 <th>Name</th>
                 <th>Action</th>

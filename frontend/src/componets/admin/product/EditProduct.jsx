@@ -1,42 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-
+// import Loader from "../../loader/Loader";
 import ProductForm from "./ProductForm";
 import {
-  createProduct,
+  getProduct,
   selectIsLoading,
-} from "../../redux/features/product/productSlice";
+  selectProduct,
+  updateProduct,
+} from "../../../redux/features/product/productSlice";
 import {
   getBrands,
   getCategories,
-} from "../../redux/features/categoryAndBrand/categorySlice";
+} from "../../../redux/features/categoryAndBrand/categorySlice";
 
-const initialState = {
-  name: "",
-  category: "",
-  brand: "",
-  quantity: "",
-  price: "",
-  color: "",
-  regularPrice: "",
-};
-
-const AddProduct = () => {
+const EditProduct = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [product, setProduct] = useState(initialState);
-  const [productImage, setProductImage] = useState([]);
+  const isLoading = useSelector(selectIsLoading);
+
+  const productEdit = useSelector(selectProduct);
   const [files, setFiles] = useState([]);
+  const [product, setProduct] = useState(productEdit);
+  const [productImage, setProductImage] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
   const [description, setDescription] = useState("");
-
-  const isLoading = useSelector((state) => state.selectIsLoading);
-
-  const { name, category, brand, price, quantity, color, regularPrice } =
-    product;
   const { categories, brands } = useSelector((state) => state.category);
 
   useEffect(() => {
@@ -44,16 +34,37 @@ const AddProduct = () => {
     dispatch(getBrands());
   }, [dispatch]);
 
+  const [filteredBrands, setFilteredBrands] = useState([]);
+  function filterBrands(selectedCategoryName) {
+    const newBrands = brands.filter(
+      (brand) => brand.category === selectedCategoryName
+    );
+    setFilteredBrands(newBrands);
+  }
+  useEffect(() => {
+    filterBrands(product?.category);
+    // console.log(filteredBrands);
+  }, [product?.category]);
+
+  useEffect(() => {
+    dispatch(getProduct(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    setProduct(productEdit);
+
+    if (productEdit && productEdit.image) {
+      setFiles(productEdit.image);
+    }
+
+    setDescription(
+      productEdit && productEdit.description ? productEdit.description : ""
+    );
+  }, [productEdit]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
-  };
-
-  const generateKSKU = (category) => {
-    const letter = category.slice(0, 3).toUpperCase();
-    const number = Date.now();
-    const sku = letter + "-" + number;
-    return sku;
   };
 
   const saveProduct = async (e) => {
@@ -63,40 +74,29 @@ const AddProduct = () => {
     }
 
     const formData = {
-      name: name,
-      sku: generateKSKU(category),
-      category: category,
-      brand: brand,
-      color: color,
-      quantity: Number(quantity),
-      regularPrice: regularPrice,
-      price: price,
+      name: product?.name,
+      category: product?.category,
+      brand: product?.brand,
+      color: product?.color,
+      quantity: Number(product?.quantity),
+      regularPrice: product?.regularPrice,
+      price: product?.price,
       description: description,
       image: files,
     };
 
     console.log(formData);
 
-    await dispatch(createProduct(formData));
-
-    navigate("/admin/products");
+    await dispatch(updateProduct({ id, formData }));
+    // await dispatch(getProducts());
+    navigate("/admin/all-products");
   };
-  const [filteredBrands, setFilteredBrands] = useState([]);
-  function filterBrands(selectedCategoryName) {
-    const newBrands = brands.filter(
-      (brand) => brand.category === selectedCategoryName
-    );
-    setFilteredBrands(newBrands);
-  }
-
-  useEffect(() => {
-    filterBrands(category);
-    console.log(filteredBrands);
-  }, [category]);
 
   return (
-    <div>
-      <h3 className="mt-4 text-center">Add New Product</h3>
+    <div className="item-center flex flex-col justify-center">
+      <h3 className="text-xl text-dark text-center mb-4 md:text-3xl font-bold">
+        Edit products<span className="text-red-700">{}</span>
+      </h3>
       {isLoading && (
         <div className="flex  justify-center ">
           <span className="loading loading-ball loading-xs"></span>
@@ -105,7 +105,6 @@ const AddProduct = () => {
           <span className="loading loading-ball loading-lg"></span>
         </div>
       )}
-
       <ProductForm
         files={files}
         setFiles={setFiles}
@@ -119,10 +118,10 @@ const AddProduct = () => {
         saveProduct={saveProduct}
         categories={categories}
         filteredBrands={filteredBrands}
-        isEditing={false}
+        isEditing={true}
       />
     </div>
   );
 };
 
-export default AddProduct;
+export default EditProduct;

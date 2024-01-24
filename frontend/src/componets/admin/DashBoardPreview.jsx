@@ -107,6 +107,12 @@ const DashBoardPreview = () => {
           </div>
         </div>
       </div>
+      {/* <div>
+        <iframe
+          style={{"background: #F1F5F4;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);width: 100vw;height: 100vh;"}}
+          src="https://charts.mongodb.com/charts-project-0-gdwym/embed/dashboards?id=65ad1f6b-f981-40f2-8abb-91b2db8e7da6&theme=light&autoRefresh=true&maxDataAge=3600&showTitleAndDesc=false&scalingWidth=scale&scalingHeight=scale"
+        ></iframe>
+      </div> */}
       <div id="last-users">
         <h1 className="font-bold py-4 uppercase">Last 24h users</h1>
         <div className="overflow-x-scroll">

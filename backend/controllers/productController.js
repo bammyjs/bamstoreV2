@@ -3,75 +3,8 @@ const Product = require("../models/productModel");
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 const dotenv = require("dotenv");
-const cloudinary = require("../utils/cloudinary");
 
-// set your env variable CLOUDINARY_URL or set the following configuration
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY,
-//   api_secret: process.env.CLOUDINARY_API_SECRET,
-// });
-
-// Create Product
-// const createProduct = asyncHandler(async (req, res) => {
-//   const {
-//     name,
-//     sku,
-//     category,
-//     brand,
-//     quantity,
-//     price,
-//     description,
-//     regularPrice,
-//     color,
-//     image,
-//   } = req.body;
-
-//   //   Validation
-//   if (
-//     !name ||
-//     !category ||
-//     !sku ||
-//     !regularPrice ||
-//     !color ||
-//     !brand ||
-//     !quantity ||
-//     !price ||
-//     !description
-//   ) {
-//     res.status(400);
-//     throw new Error("Please fill in all fields");
-//   }
-
-//   try {
-//     let imageUrl = null;
-//     if (image) {
-//       const uploadRes = await cloudinary.uploader.upload(image, {
-//         upload_preset: "bamstore",
-//       });
-//       imageUrl = uploadRes.url; // Store only the URL
-//     }
-//     const product = new Product({
-//       user: req.user.id, // Uncomment if you're associating product with a user
-//       name,
-//       sku,
-//       category,
-//       brand,
-//       quantity,
-//       price,
-//       description,
-//       regularPrice,
-//       color,
-//       image: imageUrl, // Use the Cloudinary image URL
-//     });
-
-//     const savedProduct = await product.save();
-//     res.status(200).json(savedProduct);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-
+//Create new product
 const createProduct = asyncHandler(async (req, res) => {
   try {
     const {
@@ -107,17 +40,6 @@ const createProduct = asyncHandler(async (req, res) => {
       regularPrice,
       color,
     });
-
-    // Create a MutationObserver instance
-    const observer = new MutationObserver(function (mutationsList, observer) {
-      // Handle the mutation here
-      // You may need to adjust the handler function based on your specific use case
-    });
-
-    // Start observing the target node for child list changes
-    observer.observe(product, { childList: true });
-
-    res.status(201).json(product);
 
     res.status(201).json(product);
   } catch (error) {
