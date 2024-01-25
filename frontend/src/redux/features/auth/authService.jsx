@@ -41,6 +41,12 @@ const getUser = async () => {
   return response.data;
 };
 
+//get all users
+
+const getUsers = async () => {
+  const response = await axios.get(API_URL + "");
+  return response.data;
+};
 //update user profile
 
 const updateUser = async (userData) => {
@@ -60,6 +66,7 @@ const authService = {
   login,
   logout,
   getLoginStatus,
+  getUsers,
   getUser,
   updateUser,
   updatePhoto,

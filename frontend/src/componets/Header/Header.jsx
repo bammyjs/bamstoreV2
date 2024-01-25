@@ -169,27 +169,7 @@ function Header({ products }) {
               </button>
             </TERipple>
           </div>
-          <ul className=" mt-4 flex flex-col justify-between items-start gap-6">
-            <li className="">
-              <Link to="/phone">Phones</Link>
-            </li>
-            <li>
-              <Link to="/laptop">Laptops</Link>
-            </li>
-            <li>
-              <Link to="/gaming">Gaming</Link>
-            </li>
-            <li>
-              <Link to="/workspace">WorkSpace</Link>
-            </li>
-            <li>
-              <Link to="/products">All Products</Link>
-            </li>
-            <li>
-              <Link to="/accessories">Accessories</Link>
-            </li>
-            <Link>Contact</Link>
-          </ul>
+          <NavList />
         </ul>
       </nav>
       <TECollapse show={show}>

@@ -5,7 +5,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 export const NavList = () => {
   return (
     <>
-      <ul className="hidden md:flex justify-between items-center gap-4">
+      <ul className="flex flex-col items-start gap-6 py-4 md:py-0 md:flex-row justify-between md:items-center md:gap-4">
         <li>
           <NavLink
             to="/phone"

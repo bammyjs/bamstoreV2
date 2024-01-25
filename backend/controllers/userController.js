@@ -119,6 +119,25 @@ const logoutUser = asyncHandler(async (req, res) => {
   return res.json({ message: "successfully Logout" });
 });
 
+//get all user
+
+const getUsers = asyncHandler(async (req, res) => {
+  const pageSize = 8;
+  const page = Number(req.query.pageNumber) || 1;
+
+  const count = await User.countDocuments();
+  const users = await User.find()
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .sort("-createdAt");
+
+  res.json({
+    users,
+    page,
+    pages: Math.ceil(count / pageSize),
+  });
+});
+
 // get user
 
 const getUser = asyncHandler(async (req, res) => {
@@ -179,6 +198,7 @@ module.exports = {
   registerUser,
   loginUser,
   logoutUser,
+  getUsers,
   getUser,
   getLoginStatus,
   updateUser,

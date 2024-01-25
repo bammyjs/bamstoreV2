@@ -28,13 +28,11 @@ function CardProducts({ products }) {
           <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
             {products?.map((product, i) => {
               let textInputs;
-              let bgColor;
               if (product.quantity === 0) {
                 textInputs = "sold out";
                 bgColor = "bg-sec-color";
               } else if (product.quantity > 0) {
                 textInputs = "in stock";
-                bgColor = "bg-sec-color";
               }
 
               let displayCart;
@@ -46,9 +44,9 @@ function CardProducts({ products }) {
               return (
                 <div
                   key={i}
-                  className="rounded-xl  items-baseline bg- p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 "
+                  className="border rounded-xl  items-baseline shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 "
                 >
-                  <div className="relative w-full  $`{bgColor}` flex items-end overflow-hidden rounded-xl">
+                  <div className="relative w-full bg-light   flex items-end overflow-hidden rounded-xl">
                     <Link to={`/product/${product._id}`}>
                       <img
                         className="aspect-[2/2] object-cover "

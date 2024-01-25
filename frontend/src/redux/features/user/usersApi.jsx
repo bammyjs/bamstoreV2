@@ -1,12 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { url } from "../auth/api";
+
+// Custom base query function to include headers
+const baseQuery = fetchBaseQuery({
+  baseUrl: url,
+});
 
 export const userApi = createApi({
-  reducerPath: "productsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+  reducerPath: "usersApi",
+  baseQuery,
 
   endpoints: (builder) => ({
     getAllUsers: builder.query({
-      query: () => "users/getUser",
+      query: (page = 1) => `users?pageNumber=${page}`,
     }),
   }),
 });

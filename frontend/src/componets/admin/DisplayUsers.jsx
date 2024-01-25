@@ -1,101 +1,202 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  IoChevronForward,
+  IoChevronBack,
+  IoTrashOutline,
+  IoEyeOutline,
+  IoCreateOutline,
+} from "react-icons/io5";
+import { shortenText } from "../../utils";
+import ReactPaginate from "react-paginate";
+import { motion } from "framer-motion";
+import { confirmAlert } from "react-confirm-alert";
+import { useDispatch } from "react-redux";
 import { useGetAllUsersQuery } from "../../redux/features/user/usersApi";
+import { getUsers, updateUser } from "../../redux/features/auth/authSlice";
 
-const DisplayUsers = () => {
-  const { data: users, error, isLoading } = useGetAllUsersQuery();
-  console.log("All user:", users);
+const AllUsers = ({ users }) => {
+  const dispatch = useDispatch();
+
+  const delProduct = async (id) => {
+    // await dispatch(deleteProduct(id));
+    await dispatch(getUsers());
+
+    // Reload the page after successful deletion
+    window.location.reload();
+  };
+
+  // const confirmDelete = (id) => {
+  //   confirmAlert({
+  //     title: "Delete Product",
+  //     message: "Are you sure you want to delete this product.",
+  //     buttons: [
+  //       {
+  //         label: "Delete",
+  //         onClick: () => delProduct(id),
+  //       },
+  //       {
+  //         label: "Cancel",
+  //         // onClick: () => alert('Click No')
+  //       },
+  //     ],
+  //   });
+  // };
+
+  return (
+    <>
+      <thead className="bg-pry-deep">
+        <th className="text-left py-3 px-2 rounded-l-lg">s/n</th>
+        <th className="text-left py-3 px-2 rounded-l-lg">FullName</th>
+        <th className="text-left py-3 px-2">Email</th>
+        <th className="text-left py-3 px-2">Role</th>
+        <th className="text-left py-3 px-2">Phone</th>
+        <th className="text-left py-3 px-2 rounded-r-lg">Action</th>
+      </thead>
+      {users?.map((user, i) => {
+        return (
+          <tbody key={i}>
+            <tr className=" border-b text-dark border-gray-700">
+              <td className="py-3 px-2">{i + 1}</td>
+              <td className="py-3 px-2  font-bold">
+                <div className="inline-flex space-x-3 items-center">
+                  {/* <span>
+                    <img
+                      className="rounded-full w-8 h-8"
+                      src={user.image?.[0]}
+                    />
+                  </span> */}
+                  <span>
+                    {user.firstName} {user.lastName}
+                  </span>
+                </div>
+              </td>
+              <td className="py-3 px-2">{user.email}</td>
+
+              <td className="py-3 px-2">{user.role}</td>
+              <td className="py-3 px-2">{user.phone}</td>
+              <td className="py-3 px-2">
+                <div className="inline-flex items-center space-x-3">
+                  <Link
+                    to={`/admin/editProduct/${user._id}`}
+                    title="Edit"
+                    className="hover:text-gray"
+                  >
+                    <IoCreateOutline
+                      style={{ fontSize: "20px", color: "green" }}
+                    />
+                  </Link>
+                  <Link
+                    to={`/user/${user._id}`}
+                    title="Edit password"
+                    className="hover:text-gray"
+                  >
+                    <IoEyeOutline style={{ fontSize: "20px", color: "blue" }} />
+                  </Link>
+
+                  <IoTrashOutline
+                    style={{ fontSize: "20px", color: "red" }}
+                    // onClick={() => confirmDelete(user._id)}
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        );
+      })}
+    </>
+  );
+};
+
+const DisplayUser = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data: users, error, isLoading } = useGetAllUsersQuery(currentPage);
+  console.log(users);
+
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected + 1); // +1 because event.selected is zero-based
+  };
+
+  const showNextBtn = (currentPage) => 1;
+  const showPrevBtn = currentPage > 1;
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  });
+
+  const paginationVariants = {
+    hidden: {
+      opacity: 0,
+      y: 100,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        duration: 2,
+      },
+    },
+  };
+
   return (
     <>
       <h3 className="text-xl text-dark text-center mb-4 md:text-3xl font-bold">
-        Manage users
+        All Users<span className="text-red-700">{}</span>
       </h3>
       <div className="overflow-x-scroll">
-        <table className="w-full whitespace-nowrap">
-          <thead className="bg-pry-deep">
-            <th className="text-left py-3 px-2 rounded-l-lg">Name</th>
-            <th className="text-left py-3 px-2">Email</th>
-            <th className="text-left py-3 px-2">Group</th>
-            <th className="text-left py-3 px-2">Status</th>
-            <th className="text-left py-3 px-2 rounded-r-lg">Actions</th>
-          </thead>
-          <tr className="border-b text-dark border-gray-700">
-            <td className="py-3 px-2  font-bold">
-              <div className="inline-flex space-x-3 items-center">
-                <span>
-                  <img
-                    className="rounded-full w-8 h-8"
-                    src="https://images.generated.photos/tGiLEDiAbS6NdHAXAjCfpKoW05x2nq70NGmxjxzT5aU/rs:fit:256:256/czM6Ly9pY29uczgu/Z3Bob3Rvcy1wcm9k/LnBob3Rvcy92M18w/OTM4ODM1LmpwZw.jpg"
-                    alt=""
-                  />
-                </span>
-                <span>Thai Mei</span>
-              </div>
-            </td>
-            <td className="py-3 px-2">thai.mei@abc.com</td>
-            <td className="py-3 px-2">User</td>
-            <td className="py-3 px-2">Approved</td>
-            <td className="py-3 px-2">
-              <div className="inline-flex items-center space-x-3">
-                <Link to={"#"} title="Edit" className="hover:text-gray">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                    />
-                  </svg>
-                </Link>
-                <Link
-                  to={"#"}
-                  title="Edit password"
-                  className="hover:text-gray"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                    />
-                  </svg>
-                </Link>
-                <Link to={"#"} title="Suspend user" className="hover:text-gray">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
-                    />
-                  </svg>
-                </Link>
-              </div>
-            </td>
-          </tr>
+        <table className="table  w-full  whitespace-nowrap">
+          {loading ? (
+            <div className="flex  justify-center ">
+              <span className="loading loading-ball loading-xs"></span>
+              <span className="loading loading-ball loading-sm"></span>
+              <span className="loading loading-ball loading-md"></span>
+              <span className="loading loading-ball loading-lg"></span>
+            </div>
+          ) : (
+            <>
+              <AllUsers users={users} key={users.id} {...users} />
+            </>
+          )}
         </table>
+        <motion.div
+          variants={paginationVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <ReactPaginate
+            breakLabel="..."
+            previousLabel={
+              showPrevBtn ? (
+                <span>
+                  <IoChevronBack style={{ fontSize: "15px" }} />
+                </span>
+              ) : null
+            }
+            nextLabel={
+              showNextBtn ? (
+                <span>
+                  <IoChevronForward style={{ fontSize: "15px" }} />
+                </span>
+              ) : null
+            }
+            pageRangeDisplayed={5}
+            pageCount={users?.pages || 1}
+            onPageChange={handlePageClick}
+            containerClassName="join gap-4 flex items-center justify-center mt-8 mb-4"
+            pageClassName="btn btn-secondary"
+            activeClassName="btn-active "
+          />
+        </motion.div>
       </div>
     </>
   );
 };
 
-export default DisplayUsers;
+export default DisplayUser;

@@ -49,22 +49,17 @@ export const changePassword = createAsyncThunk(
 );
 
 // getUsers
-export const getUsers = createAsyncThunk(
-  "auth/getUsers",
-  async (_, thunkAPI) => {
-    try {
-      return await authService.getUsers();
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
+export const getUsers = createAsyncThunk("auth/", async (_, thunkAPI) => {
+  try {
+    return await authService();
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 const authSlice = createSlice({
   name: "auth",

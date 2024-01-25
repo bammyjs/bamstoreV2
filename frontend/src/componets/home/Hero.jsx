@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-    <div className=" bg-pry-deep  w-full flex justify-center items-center  bg-none  mt-20 md:mt-16 ">
-      <div className="container  md:pt-10 w-full max-w-7xl place-content-center   grid md:grid-cols-2">
+    <div className=" bg-pry-deep  w-full flex justify-center items-center    mt-20 md:mt-16 ">
+      <div className="container     md:pt-10 w-full max-w-7xl  place-items-center  grid md:grid-cols-2 md:px-6">
         <motion.picture
           initial={{ x: "2rem", opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -28,7 +28,7 @@ const Hero = () => {
             duration: 2,
             type: "spring",
           }}
-          className="flex flex-col max-w-lg md:py-20 lg:py-44 gap-8 md:gap-10 justify-center items-center md:items-start"
+          className="flex flex-col  w-full max-w-lg py-8 md:py-20 lg:py-44 gap-8 md:gap-10 justify-center items-center md:items-start"
         >
           <p className="text-sm text-neutral text-center md:text-left">
             Best Product
