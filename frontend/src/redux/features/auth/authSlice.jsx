@@ -48,19 +48,6 @@ export const changePassword = createAsyncThunk(
   }
 );
 
-// getUsers
-export const getUsers = createAsyncThunk("auth/", async (_, thunkAPI) => {
-  try {
-    return await authService();
-  } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -166,6 +153,23 @@ const authSlice = createSlice({
         toast.error(action.payload);
       })
 
+      //delete User
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("user Deleted");
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
       //update User
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
@@ -226,7 +230,7 @@ const authSlice = createSlice({
       .addCase(getUsers.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.users = action.payload;
+        state.user = action.payload;
       })
       .addCase(getUsers.rejected, (state, action) => {
         state.isLoading = false;
@@ -290,7 +294,7 @@ export const getLoginStatus = createAsyncThunk(
   }
 );
 
-//get user
+//get a user
 
 export const getUser = createAsyncThunk("auth/getUser", async (_, thunkAPI) => {
   try {
@@ -303,6 +307,37 @@ export const getUser = createAsyncThunk("auth/getUser", async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(message);
   }
 });
+
+// get all Users
+export const getUsers = createAsyncThunk("auth/", async (_, thunkAPI) => {
+  try {
+    return await authService();
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+// delete User
+export const deleteUser = createAsyncThunk(
+  "auth/deleteUser",
+  async (id, thunkAPI) => {
+    try {
+      return await authService.deleteUser(id);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 //update user
 

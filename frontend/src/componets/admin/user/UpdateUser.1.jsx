@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import UserForm from "./UserForm";
 import {
   getUser,
-  selectIsLoggedIn,
   selectUser,
-  updateUser,
   selectIsLoading,
 } from "../../../redux/features/auth/authSlice";
 
-const UpdateUser = () => {
+export const UpdateUser = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,7 +22,7 @@ const UpdateUser = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    // setUser(selectUser);
+    setUser(selectUser);
   }, [updateUser]);
 
   const handleInputChange = (e) => {
@@ -43,6 +40,7 @@ const UpdateUser = () => {
       password: "",
       role: user?.role,
       phone: user?.phone,
+      photo: files,
     };
 
     console.log(formData);
@@ -55,7 +53,7 @@ const UpdateUser = () => {
   return (
     <div className="item-center flex flex-col justify-center">
       <h3 className="text-xl text-dark text-center mb-4 md:text-3xl font-bold">
-        Edit users<span className="text-red-700">{}</span>
+        Edit users<span className="text-red-700"></span>
       </h3>
       {isLoading && (
         <div className="flex  justify-center ">
@@ -74,5 +72,3 @@ const UpdateUser = () => {
     </div>
   );
 };
-
-export default UpdateUser;

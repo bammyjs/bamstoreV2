@@ -41,6 +41,13 @@ const getUser = async () => {
   return response.data;
 };
 
+//delete a user
+
+const deleteUser = async (id) => {
+  const response = await axios.delete(API_URL + id);
+  return response.data;
+};
+
 //get all users
 
 const getUsers = async () => {
@@ -68,6 +75,7 @@ const authService = {
   getLoginStatus,
   getUsers,
   getUser,
+  deleteUser,
   updateUser,
   updatePhoto,
 };

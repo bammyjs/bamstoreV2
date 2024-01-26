@@ -167,6 +167,17 @@ const getLoginStatus = asyncHandler(async (req, res) => {
   }
 });
 
+// delete a user
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (user) {
+    res.status(200).json(deleteUser);
+  } else {
+    res.status(404);
+    throw new Error("can't delete user");
+  }
+});
+
 // update user
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -200,6 +211,7 @@ module.exports = {
   logoutUser,
   getUsers,
   getUser,
+  deleteUser,
   getLoginStatus,
   updateUser,
   updatePhoto,

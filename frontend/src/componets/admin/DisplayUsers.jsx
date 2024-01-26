@@ -13,35 +13,36 @@ import { motion } from "framer-motion";
 import { confirmAlert } from "react-confirm-alert";
 import { useDispatch } from "react-redux";
 import { useGetAllUsersQuery } from "../../redux/features/user/usersApi";
-import { getUsers, updateUser } from "../../redux/features/auth/authSlice";
+
+import { deleteUser, getUsers } from "../../redux/features/auth/authSlice";
 
 const AllUsers = ({ users }) => {
   const dispatch = useDispatch();
 
-  const delProduct = async (id) => {
-    // await dispatch(deleteProduct(id));
+  const delUser = async (id) => {
+    await dispatch(deleteUser(id));
     await dispatch(getUsers());
 
     // Reload the page after successful deletion
     window.location.reload();
   };
 
-  // const confirmDelete = (id) => {
-  //   confirmAlert({
-  //     title: "Delete Product",
-  //     message: "Are you sure you want to delete this product.",
-  //     buttons: [
-  //       {
-  //         label: "Delete",
-  //         onClick: () => delProduct(id),
-  //       },
-  //       {
-  //         label: "Cancel",
-  //         // onClick: () => alert('Click No')
-  //       },
-  //     ],
-  //   });
-  // };
+  const confirmDelete = (id) => {
+    confirmAlert({
+      title: "Delete user",
+      message: "Are you sure you want to delete this user.",
+      buttons: [
+        {
+          label: "Delete",
+          onClick: () => delUser(id),
+        },
+        {
+          label: "Cancel",
+          // onClick: () => alert('Click No')
+        },
+      ],
+    });
+  };
 
   return (
     <>
@@ -78,7 +79,7 @@ const AllUsers = ({ users }) => {
               <td className="py-3 px-2">
                 <div className="inline-flex items-center space-x-3">
                   <Link
-                    to={`/admin/editProduct/${user._id}`}
+                    to={`/admin/updateUser/${user._id}`}
                     title="Edit"
                     className="hover:text-gray"
                   >
@@ -96,7 +97,7 @@ const AllUsers = ({ users }) => {
 
                   <IoTrashOutline
                     style={{ fontSize: "20px", color: "red" }}
-                    // onClick={() => confirmDelete(user._id)}
+                    onClick={() => confirmDelete(user._id)}
                   />
                 </div>
               </td>
