@@ -21,6 +21,7 @@ import ReactPaginate from "react-paginate";
 import { motion } from "framer-motion";
 
 import { useDispatch, useSelector } from "react-redux";
+import ProductFilter from "./ProductFilter";
 
 export default function AllProducts() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,27 +49,6 @@ export default function AllProducts() {
 
   const location = useLocation();
   const navigate = useNavigate();
-
-  // const handleFilter = (value, sectionId) => {
-  //   const searchParams = new URLSearchParams(location.search);
-  //   let filterValue = searchParams.getAll(sectionId);
-
-  //   if (filterValue.length > 0 && filterValue[0].split(",").includes(value)) {
-  //     filterValue = filterValue[0].split(",").filter((item) => item !== value);
-
-  //     if (filterValue.length === 0) {
-  //       searchParams.delete(sectionId);
-  //     }
-  //   } else {
-  //     filterValue.push(value);
-  //   }
-
-  //   if (filterValue.length > 0) {
-  //     searchParams.set(sectionId, filterValue.join(","));
-  //   }
-  //   const query = searchParams.toString();
-  //   navigate({ search: `?${query}` });
-  // };
 
   const paginationVariants = {
     hidden: {
@@ -141,6 +121,7 @@ export default function AllProducts() {
                   <h3 className="text-lg font-bold text-zinc-700">Filters</h3>
                   <IoFilterSharp style={{ fontSize: "20px" }} />
                 </div>
+                <ProductFilter />
               </form>
 
               {/* Product grid */}

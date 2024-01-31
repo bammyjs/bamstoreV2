@@ -5,9 +5,9 @@ const Product = require("../models/productModel");
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 const axios = require("axios");
 const User = require("../models/userModel");
-const Transaction = require("../models/transactionModel");
+// const Transaction = require("../models/transactionModel");
 const { orderSuccessEmail } = require("../emailTemplates/orderTemplate");
-const sendEmail = require("../utils/sendEmail");
+// const sendEmail = require("../utils/sendEmail");
 
 const createOrder = asyncHandler(async (req, res) => {
   const {
@@ -18,7 +18,6 @@ const createOrder = asyncHandler(async (req, res) => {
     cartItems,
     shippingAddress,
     paymentMethod,
-    coupon,
   } = req.body;
 
   //   Validation
@@ -40,7 +39,6 @@ const createOrder = asyncHandler(async (req, res) => {
     cartItems,
     shippingAddress,
     paymentMethod,
-    coupon,
   });
 
   res.status(201).json({ message: "Order Created" });
@@ -201,7 +199,7 @@ const payWithFlutterwave = async (req, res) => {
     customer: {
       email: user?.email,
       phone_number: user.phone,
-      name: user.name,
+      name: user.firstName,
     },
     customizations: {
       title: "Shopito Online Store",
@@ -230,80 +228,80 @@ const payWithFlutterwave = async (req, res) => {
 
 // pAYWith Wallet
 // Pay with Wallet
-const payWithWallet = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-  const { items, cartItems, shippingAddress, coupon } = req.body;
-  // console.log(coupon);
-  const products = await Product.find();
-  const today = new Date();
+// const payWithWallet = asyncHandler(async (req, res) => {
+//   const user = await User.findById(req.user._id);
+//   const { items, cartItems, shippingAddress, coupon } = req.body;
+//   // console.log(coupon);
+//   const products = await Product.find();
+//   const today = new Date();
 
-  let orderAmount;
-  orderAmount = calculateTotalPrice(products, items);
-  if (coupon !== null && coupon?.name !== "nil") {
-    let totalAfterDiscount =
-      orderAmount - (orderAmount * coupon.discount) / 100;
-    orderAmount = totalAfterDiscount;
-  }
-  // console.log(orderAmount);
-  // console.log(user.balance);
+//   let orderAmount;
+//   orderAmount = calculateTotalPrice(products, items);
+//   if (coupon !== null && coupon?.name !== "nil") {
+//     let totalAfterDiscount =
+//       orderAmount - (orderAmount * coupon.discount) / 100;
+//     orderAmount = totalAfterDiscount;
+//   }
+//   // console.log(orderAmount);
+//   // console.log(user.balance);
 
-  if (user.balance < orderAmount) {
-    res.status(400);
-    throw new Error("Insufficient balance");
-  }
+//   if (user.balance < orderAmount) {
+//     res.status(400);
+//     throw new Error("Insufficient balance");
+//   }
 
-  const newTransaction = await Transaction.create({
-    amount: orderAmount,
-    sender: user.email,
-    receiver: "Shopito store",
-    description: "Payment for products.",
-    status: "success",
-  });
+//   const newTransaction = await Transaction.create({
+//     amount: orderAmount,
+//     sender: user.email,
+//     receiver: "Shopito store",
+//     description: "Payment for products.",
+//     status: "success",
+//   });
 
-  // decrease the sender's balance
-  const newBalance = await User.findOneAndUpdate(
-    { email: user.email },
-    {
-      $inc: { balance: -orderAmount },
-    }
-  );
+//   // decrease the sender's balance
+//   const newBalance = await User.findOneAndUpdate(
+//     { email: user.email },
+//     {
+//       $inc: { balance: -orderAmount },
+//     }
+//   );
 
-  const newOrder = await Order.create({
-    user: user._id,
-    orderDate: today.toDateString(),
-    orderTime: today.toLocaleTimeString(),
-    orderAmount,
-    orderStatus: "Order Placed...",
-    cartItems,
-    shippingAddress,
-    paymentMethod: "Shopito Wallet",
-    coupon,
-  });
+//   const newOrder = await Order.create({
+//     user: user._id,
+//     orderDate: today.toDateString(),
+//     orderTime: today.toLocaleTimeString(),
+//     orderAmount,
+//     orderStatus: "Order Placed...",
+//     cartItems,
+//     shippingAddress,
+//     paymentMethod: "Shopito Wallet",
+//     coupon,
+//   });
 
-  // Update Product quantity
-  const updatedProduct = await updateProductQuantity(cartItems);
-  // console.log("updated product", updatedProduct);
+//   // Update Product quantity
+//   const updatedProduct = await updateProductQuantity(cartItems);
+//   // console.log("updated product", updatedProduct);
 
-  // Send Order Email to the user
-  const subject = "Shopito Order Placed";
-  const send_to = user.email;
-  // const send_to = "zinotrust@gmail.com";
-  const template = orderSuccessEmail(user.name, cartItems);
-  const reply_to = "donaldzee.ng@gmail.com";
-  // const cc = "donaldzee.ng@gmail.com";
+//   // Send Order Email to the user
+//   const subject = "Shopito Order Placed";
+//   const send_to = user.email;
+//   // const send_to = "zinotrust@gmail.com";
+//   const template = orderSuccessEmail(user.name, cartItems);
+//   const reply_to = "donaldzee.ng@gmail.com";
+//   // const cc = "donaldzee.ng@gmail.com";
 
-  await sendEmail(subject, send_to, template, reply_to);
+//   await sendEmail(subject, send_to, template, reply_to);
 
-  if (newTransaction && newBalance && newOrder) {
-    return res.status(200).json({
-      message: "Payment successful",
-      url: `${process.env.FRONTEND_URL}/checkout-success`,
-    });
-  }
-  res
-    .status(400)
-    .json({ message: "Something went wrong, please contact admin" });
-});
+//   if (newTransaction && newBalance && newOrder) {
+//     return res.status(200).json({
+//       message: "Payment successful",
+//       url: `${process.env.FRONTEND_URL}/checkout-success`,
+//     });
+//   }
+//   res
+//     .status(400)
+//     .json({ message: "Something went wrong, please contact admin" });
+// });
 
 const updateProductQuantity = async (cartItems) => {
   // Update Product quantity
@@ -331,5 +329,4 @@ module.exports = {
   payWithStripe,
   verifyFlwPayment,
   payWithFlutterwave,
-  payWithWallet,
 };

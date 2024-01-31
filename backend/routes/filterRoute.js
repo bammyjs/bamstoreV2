@@ -6,7 +6,7 @@ const {
 } = require("../controllers/filterController");
 
 // routes
-router.get("/filterByBrand", filterProductsByBrand);
-router.get("/filterByCategory", filterProductsByCategory);
+router.get("/", filterProductsByBrand);
+router.get("/", filterProductsByCategory);
 
 module.exports = router;

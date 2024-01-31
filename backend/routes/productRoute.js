@@ -10,14 +10,15 @@ const {
   reviewProduct,
   deleteReview,
   updateReview,
+  filterProductsByCategory,
 } = require("../controllers/productController");
 
 router.post("/", protect, adminOnly, createProduct);
 router.get("/", getProducts);
+router.get("/category/:category", filterProductsByCategory);
 router.get("/:id", getProduct);
 router.delete("/:id", protect, adminOnly, deleteProduct);
 router.patch("/:id", protect, adminOnly, updateProduct);
-
 router.patch("/review/:id", protect, reviewProduct);
 router.patch("/deleteReview/:id", protect, deleteReview);
 router.patch("/updateReview/:id", protect, updateReview);

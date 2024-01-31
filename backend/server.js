@@ -5,6 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
+const orderRoute = require("./routes/orderRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
 const filterRoute = require("./routes/filterRoute");
@@ -29,6 +30,7 @@ app.use(
 //routes
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
+app.use("/api/order", orderRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/brand", brandRoute);
 app.use("/api/filter", filterRoute);

@@ -8,6 +8,7 @@ import NewProducts from "../componets/home/NewProducts";
 import GamingFun from "../componets/home/GamingFun";
 import GamingProduct from "../componets/home/GamingProduuct";
 import Recommendation from "../componets/home/Recommendations";
+import ProductCategory from "../componets/product/ProductCategory";
 Recommendation;
 
 function Home() {
@@ -18,7 +19,9 @@ function Home() {
         <Brand />
         <FeaturedProduct />
         <BestSelling />
+        {/* <ProductCategory /> */}
         <Workspace />
+
         {/* <GamingProduct /> */}
         {/*replace with workspace products}
         {/* <NewProducts /> */}

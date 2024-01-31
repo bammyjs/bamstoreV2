@@ -11,9 +11,6 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { OurStore } from "./pages/OurStore";
 import ForgotPassword from "./pages/ForgotPassword";
 import CartList from "./pages/CartList";
-
-import Loader from "./componets/home/Loader";
-
 import axios from "axios";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -32,7 +29,6 @@ import Product from "./pages/Product";
 import SingleProduct from "./componets/product/SingleProduct";
 
 import { Admin } from "./pages/Admin";
-// import CreateProduct from "./componets/admin/CreateProduct";
 import DashBoardPreview from "./componets/admin/DashBoardPreview";
 import AvailableProducts from "./componets/admin/AvailableProducts";
 import DisplayUsers from "./componets/admin/DisplayUsers";
@@ -40,7 +36,6 @@ import Orders from "./componets/admin/Orders";
 import AddProduct from "./componets/admin/product/AddProduct";
 import AdminAccessOnly from "./componets/admin/AdminAccessOnly";
 import NotFound from "./pages/NotFound";
-import GetProducts from "./componets/admin/product/GetProducts";
 import EditProduct from "./componets/admin/product/EditProduct";
 import UpdateUser from "./componets/admin/user/UpdateUser";
 
@@ -69,22 +64,25 @@ function App() {
           <Route index element={<Home />} />
           <Route
             path="/gaming"
-            element={<ShopByCategory banner={banner1} category="gaming" />}
+            element={<ShopByCategory banner={banner1} category="Gaming" />}
           />
           <Route
             path="/laptop"
-            element={<ShopByCategory category="laptops" />}
+            element={<ShopByCategory banner={banner2} category="Laptops" />}
           />
           <Route
             path="/accessories"
-            element={<ShopByCategory category="accessories" />}
+            element={<ShopByCategory banner={banner2} category="Accessories" />}
           />
           <Route
             path="/workspace"
-            element={<ShopByCategory banner={banner2} category="workspace" />}
+            element={<ShopByCategory banner={banner2} category="Workspace" />}
           />
 
-          <Route path="/phone" element={<ShopByCategory category="phones" />} />
+          <Route
+            path="/phones"
+            element={<ShopByCategory banner={banner2} category="Phones" />}
+          />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />

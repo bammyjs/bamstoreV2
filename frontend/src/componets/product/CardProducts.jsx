@@ -49,7 +49,7 @@ function CardProducts({ products }) {
                   <div className="relative w-full bg-light   flex items-end overflow-hidden rounded-xl">
                     <Link to={`/product/${product._id}`}>
                       <img
-                        className="aspect-[2/2] object-cover "
+                        className="w-full h-auto aspect-[2/2] object-cover "
                         src={product.image?.[0]}
                         alt={product.name}
                       />
@@ -64,9 +64,12 @@ function CardProducts({ products }) {
 
                   <div className="mt-1 p-2">
                     <h2 className="text-slate-700">{product.name}</h2>
-                    <p className="mt-1 text-sm text-slate-400">
-                      {shortenText(product.description, 15)}
-                    </p>
+                    <div
+                      className="mt-1 text-sm text-slate-400"
+                      dangerouslySetInnerHTML={{
+                        __html: shortenText(product.description, 50),
+                      }}
+                    />
                     <ReactStars
                       count={5}
                       // onChange={ratingChanged}

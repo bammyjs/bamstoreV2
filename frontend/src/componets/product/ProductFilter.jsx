@@ -9,109 +9,49 @@ import {
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { GET_PRICE_RANGE } from "../../redux/features/product/productSlice";
+import { NavLink } from "react-router-dom";
 
 const ProductFilter = () => {
-  const { products, minPrice, maxPrice } = useSelector(
-    (state) => state.product
-  );
-  // console.log(minPrice, maxPrice);
+  const { products } = useSelector((state) => state.product);
   const [category, setCategory] = useState("All");
-  const [brand, setBrand] = useState("All");
-  const [price, setPrice] = useState([50, 1500]);
-
   const dispatch = useDispatch();
 
   const allCategories = [
     "All",
     ...new Set(products?.map((product) => product.category)),
   ];
-  const allBrands = [
-    "All",
-    ...new Set(products.map((product) => product.brand)),
-  ];
-  // console.log(allBrands);
+  console.log("All categories:", allCategories);
 
   useEffect(() => {
-    dispatch(GET_PRICE_RANGE({ products }));
+    dispatch(FILTER_BY_BRAND({ products }));
   }, [dispatch, products]);
-
-  useEffect(() => {
-    dispatch(FILTER_BY_BRAND({ products, brand }));
-  }, [dispatch, products, brand]);
-
-  useEffect(() => {
-    dispatch(FILTER_BY_PRICE({ products, price }));
-    // console.log(price);
-  }, [dispatch, products, price]);
 
   const filterProducts = (cat) => {
     setCategory(cat);
     dispatch(FILTER_BY_CATEGORY({ products, category: cat }));
   };
 
-  const clearFilters = () => {
-    setCategory("All");
-    setBrand("All");
-    setPrice([minPrice, maxPrice]);
-  };
-
   return (
-    <div className={styles.filter}>
-      <h4>Categories</h4>
-      <div className={styles.category}>
-        {allCategories.map((cat, index) => {
-          return (
+    <>
+      {allCategories.map((cat, i) => {
+        return (
+          <li>
             <button
-              key={index}
+              key={i}
               type="button"
-              className={`${category}` === cat ? `${styles.active}` : null}
+              className={({ isActive }) =>
+                isActive
+                  ? "btn btn-primary border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                  : "btn btn-primary hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+              }
               onClick={() => filterProducts(cat)}
             >
-              &#8250; {cat}
+              {cat}
             </button>
-          );
-        })}
-      </div>
-      <h4>Brand</h4>
-      <div className={styles.brand}>
-        <select value={brand} onChange={(e) => setBrand(e.target.value)}>
-          {allBrands.map((brand, index) => {
-            return (
-              <option key={index} value={brand}>
-                {brand}
-              </option>
-            );
-          })}
-        </select>
-        <h4>Price</h4>
-        {/* <Range /> */}
-
-        <div className={styles.price}>
-          <Slider
-            range
-            marks={{
-              1: `${price[0]}`,
-              1000: `${price[1]}`,
-            }}
-            min={minPrice}
-            max={maxPrice}
-            defaultValue={[minPrice, maxPrice]}
-            tipFormatter={(value) => `$${value}`}
-            tipProps={{
-              placement: "top",
-              visible: true,
-            }}
-            value={price}
-            onChange={(price) => setPrice(price)}
-          />
-        </div>
-        <br />
-        <br />
-        <button className="--btn --btn-danger" onClick={clearFilters}>
-          Clear Filter
-        </button>
-      </div>
-    </div>
+          </li>
+        );
+      })}
+    </>
   );
 };
 

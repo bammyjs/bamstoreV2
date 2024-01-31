@@ -25,7 +25,7 @@ const UpdateUser = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    // setUser(selectUser);
+    setUser(selectUser);
   }, [updateUser]);
 
   const handleInputChange = (e) => {

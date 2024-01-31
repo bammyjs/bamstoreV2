@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Fragment } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -8,7 +8,7 @@ export const NavList = () => {
       <ul className="flex flex-col items-start gap-6 py-4 md:py-0 md:flex-row justify-between md:items-center md:gap-4">
         <li>
           <NavLink
-            to="/phone"
+            to="/phones"
             className={({ isActive }) =>
               isActive
                 ? " border-b-2  border-sec-color text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"

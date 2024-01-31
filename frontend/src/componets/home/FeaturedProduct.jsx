@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import pad from "../../assets/controller.svg";
 // import iphone from "../assets/iphone.svg"
 import accessories from "../../assets/accessories.svg";
@@ -6,72 +6,67 @@ import game from "../../assets/game.svg";
 import phone from "../../assets/14pro.svg";
 import { useNavigate } from "react-router-dom";
 
+// "https://i.ibb.co/5GVkd3m/c1.jpg"
+const categories = [
+  {
+    id: 1,
+    title: "Phones",
+    image: phone,
+  },
+  {
+    id: 2,
+    title: "Laptops",
+    image: "https://i.ibb.co/nQKLjrW/c2.jpg",
+  },
+  {
+    id: 3,
+    title: "Gaming",
+    image: "https://i.ibb.co/fNkBYgr/c3.jpg",
+  },
+  {
+    id: 4,
+    title: "WorkSpace",
+    image: "https://i.ibb.co/fNkBYgr/c3.jpg",
+  },
+];
+
+const Category = ({ title, image }) => {
+  return (
+    <div className="rounded-full  place-self-center bg-dark w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
+      <img
+        src={image}
+        alt=""
+        className="w-full aspect-[2/2] object-cover rounded-full "
+        style={{
+          // Custom styles for Firefox
+          MozAspectRatio: "2/2",
+
+          // Custom styles for Webkit browsers (Chrome, Safari)
+          WebkitAspectRatio: "2/2",
+          // Custom styles for other browsers if needed
+          aspectRatio: "2/2", // Standardized aspect-ratio property
+        }}
+      />
+      <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
+        {title}
+      </span>
+    </div>
+  );
+};
+
 function FeaturedProduct() {
   const navigate = useNavigate();
   return (
     <>
       <section className="w-full bg-black rounded-3xl flex flex-col justify-center place-item-center items-center py-10 ">
-        <div className="container  p-6 w-full gap-y-8 grid justify-center  items-center grid-cols-2 md:grid-cols-3    md:gap-y-8 max-w-7xl   ">
-          <div className="rounded-full  place-self-center bg-dark w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
-            <img
-              src={accessories}
-              alt=""
-              className=" w-full h-auto md:w-[190px] md:h-auto object-contain block mt-5 "
-            />
-            <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
-              PHONES
-            </span>
-          </div>
-          <div className="rounded-full place-self-center  bg-dark w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
-            <img
-              src={game}
-              alt=""
-              className=" w-full h-auto md:w-[190px] md:h-auto object-contain block mt-5 "
-            />
-            <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
-              PHONES
-            </span>
-          </div>
-          <div className="rounded-full place-self-center  bg-dark w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
-            <img
-              src={accessories}
-              alt=""
-              className=" w-full h-auto md:w-[190px] md:h-auto object-contain block mt-5 "
-            />
-            <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
-              PHONES
-            </span>
-          </div>
-          <div className="rounded-full place-self-center  bg-dark w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
-            <img
-              src={accessories}
-              alt=""
-              className=" w-full h-auto md:w-[190px] md:h-auto object-contain block mt-5 "
-            />
-            <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
-              PHONES
-            </span>
-          </div>
-          <div className="rounded-full place-self-center  bg-dark w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
-            <img
-              src={accessories}
-              alt=""
-              className=" w-full h-auto md:w-[190px] md:h-auto object-contain block mt-5 "
-            />
-            <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
-              PHONES
-            </span>
-          </div>
-          <div className="rounded-full place-self-center  bg-dark w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
-            <img
-              src={accessories}
-              alt=""
-              className=" w-full h-auto md:w-[190px] md:h-auto object-contain block mt-5 "
-            />
-            <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
-              PHONES
-            </span>
-          </div>
+        <div className="container  p-6 w-full gap-y-8 grid justify-center  items-center grid-cols-2 md:grid-cols-4    md:gap-y-8 max-w-7xl   ">
+          {categories.map((cat) => {
+            return (
+              <Fragment key={cat.id}>
+                <Category title={cat.title} image={cat.image} />
+              </Fragment>
+            );
+          })}
         </div>
       </section>
       <section className=" bg-light w-full  h-auto flex flex-col lg:flex-row gap-4 p-6 justify-center items-center">
