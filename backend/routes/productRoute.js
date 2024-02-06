@@ -10,12 +10,12 @@ const {
   reviewProduct,
   deleteReview,
   updateReview,
-  filterProductsByCategory,
+  // filterProductsByCategory,
 } = require("../controllers/productController");
 
 router.post("/", protect, adminOnly, createProduct);
 router.get("/", getProducts);
-router.get("/category/:category", filterProductsByCategory);
+// router.get("/category/:category", filterProductsByCategory);
 router.get("/:id", getProduct);
 router.delete("/:id", protect, adminOnly, deleteProduct);
 router.patch("/:id", protect, adminOnly, updateProduct);

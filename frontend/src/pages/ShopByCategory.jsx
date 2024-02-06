@@ -32,7 +32,6 @@ const AllProducts = ({ products }) => {
               let textInputs;
               if (product.quantity === 0) {
                 textInputs = "sold out";
-                bgColor = "bg-sec-color";
               } else if (product.quantity > 0) {
                 textInputs = "in stock";
               }
@@ -191,6 +190,8 @@ const ShopByCategory = (props) => {
               <span className="loading loading-ball loading-md"></span>
               <span className="loading loading-ball loading-lg"></span>
             </div>
+          ) : error ? (
+            <div>An error occurred: {error.message}</div>
           ) : (
             <>
               <div>

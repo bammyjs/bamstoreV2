@@ -87,32 +87,32 @@ const getProduct = asyncHandler(async (req, res) => {
 
 //get by category
 
-const filterProductsByCategory = asyncHandler(async (req, res) => {
-  const pageSize = 8;
-  const page = Number(req.query.pageNumber) || 1;
+// const filterProductsByCategory = asyncHandler(async (req, res) => {
+//   const pageSize = 8;
+//   const page = Number(req.query.pageNumber) || 1;
 
-  try {
-    const { category } = req.params;
-    const count = await Product.countDocuments({ category });
-    // Validate category if necessary
+//   try {
+//     const { category } = req.params;
+//     const count = await Product.countDocuments({ category });
+//     // Validate category if necessary
 
-    // Use exact match for category filtering
-    const products = await Product.find({ category })
-      .limit(pageSize)
-      .skip(pageSize * (page - 1))
-      .sort("-createdAt");
+//     // Use exact match for category filtering
+//     const products = await Product.find({ category })
+//       .limit(pageSize)
+//       .skip(pageSize * (page - 1))
+//       .sort("-createdAt");
 
-    if (!products) {
-      res.status(404);
-      throw new Error("Products in this category not found");
-    }
+//     if (!products) {
+//       res.status(404);
+//       throw new Error("Products in this category not found");
+//     }
 
-    res.json({ products, page, pages: Math.ceil(count / pageSize) });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     res.json({ products, page, pages: Math.ceil(count / pageSize) });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 // Delete Product
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -284,5 +284,5 @@ module.exports = {
   reviewProduct,
   deleteReview,
   updateReview,
-  filterProductsByCategory,
+  // filterProductsByCategory,
 };

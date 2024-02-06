@@ -26,7 +26,6 @@ import ShopByCategory from "./pages/ShopByCategory";
 import banner1 from "./assets/banner1.jpg";
 import banner2 from "./assets/workwork2.jpg";
 import Product from "./pages/Product";
-import SingleProduct from "./componets/product/SingleProduct";
 
 import { Admin } from "./pages/Admin";
 import DashBoardPreview from "./componets/admin/DashBoardPreview";
@@ -91,7 +90,6 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/products" element={<OurStore />} />
           <Route path="/product/:id" element={<Product />} />
-          <Route path="/testPage" element={<SingleProduct />} />
 
           <Route path="/cart" element={<CartList />} />
           {/* <Route path="/createProduct" element={<CreateProduct />} /> */}

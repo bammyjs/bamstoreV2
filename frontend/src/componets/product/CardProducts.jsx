@@ -30,7 +30,9 @@ function CardProducts({ products }) {
               let textInputs;
               if (product.quantity === 0) {
                 textInputs = "sold out";
-                bgColor = "bg-sec-color";
+                {
+                  /* bgColor = "bg-sec-color"; */
+                }
               } else if (product.quantity > 0) {
                 textInputs = "in stock";
               }

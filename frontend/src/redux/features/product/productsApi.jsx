@@ -14,12 +14,6 @@ export const productsApi = createApi({
     getAllProducts: builder.query({
       query: (page = 1) => `products?pageNumber=${page}`,
     }),
-    getProductsByCategory: builder.query({
-      query: (category, page = 1) =>
-        `products/category/${category}?pageNumber=${page}`,
-      validateStatus: (response, result) =>
-        response.status === 200 && !result.isError,
-    }),
     getSingleProduct: builder.query({
       query: (id) => `products/${id}`,
 
@@ -40,19 +34,13 @@ export const productsApi = createApi({
       // Add parameters as needed for filtering (e.g., brand)
       query: (brand) => `products?brand=${brand}`,
     }),
-    filterProductsByCategory: builder.query({
-      // Add parameters as needed for filtering (e.g., category)
-      query: (category) => `products?category=${category}`,
-    }),
   }),
 });
 
 export const {
   useGetAllProductsQuery,
-  useGetProductsByCategoryQuery,
   useGetSingleProductQuery,
   useSearchProductsQuery,
   useSortProductsQuery,
   useFilterProductsByBrandQuery,
-  useFilterProductsByCategoryQuery,
 } = productsApi;
