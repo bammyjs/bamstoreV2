@@ -11,7 +11,7 @@ import ReactStars from "react-rating-stars-component";
 import { motion } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
 
-function CardProducts({ products }) {
+function CardProducts({ products, data }) {
   console.log(products);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,9 +23,9 @@ function CardProducts({ products }) {
 
   return (
     <section className="w-full   flex flex-col items-center justify-center  ">
-      <div className="container max-w-7xl flex flex-col item-center justify-center gap-8 p-6 ">
+      <div className="container max-w-7xl flex flex-col item-center justify-center gap-8 ">
         <div className="w-full p-2">
-          <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
+          <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
             {products?.map((product, i) => {
               let textInputs;
               if (product.quantity === 0) {
@@ -46,7 +46,7 @@ function CardProducts({ products }) {
               return (
                 <div
                   key={i}
-                  className="border rounded-xl  items-baseline shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 "
+                  className="border rounded-xl  items-baseline shadow-lg hover:shadow-xl hover:transform/ hover:scale-105/ duration-300/ "
                 >
                   <div className="relative w-full bg-light   flex items-end overflow-hidden rounded-xl">
                     <Link to={`/product/${product._id}`}>

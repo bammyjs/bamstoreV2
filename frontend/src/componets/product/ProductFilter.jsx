@@ -6,8 +6,6 @@ import {
   FILTER_BY_CATEGORY,
   FILTER_BY_PRICE,
 } from "../../redux/features/product/filterSlice";
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
 import { GET_PRICE_RANGE } from "../../redux/features/product/productSlice";
 import { NavLink } from "react-router-dom";
 

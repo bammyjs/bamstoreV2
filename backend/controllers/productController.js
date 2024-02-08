@@ -54,7 +54,7 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 // Get all Products
-const getProducts = asyncHandler(async (req, res) => {
+const getProductsWithPage = asyncHandler(async (req, res) => {
   const pageSize = 8;
   const page = Number(req.query.pageNumber) || 1;
 
@@ -69,6 +69,13 @@ const getProducts = asyncHandler(async (req, res) => {
     page,
     pages: Math.ceil(count / pageSize),
   });
+});
+
+// Get all Products test 2
+
+const getProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find().sort("-createdAt");
+  res.status(200).json(products);
 });
 
 // Get single product
@@ -284,5 +291,6 @@ module.exports = {
   reviewProduct,
   deleteReview,
   updateReview,
+  getProductsWithPage,
   // filterProductsByCategory,
 };

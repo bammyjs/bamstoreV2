@@ -10,6 +10,7 @@ import {
   IoChevronDownSharp,
   IoChevronForward,
   IoChevronBack,
+  IoSearchCircleOutline,
 } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import { filters } from "./FilterData";
@@ -25,11 +26,7 @@ import ProductFilter from "./ProductFilter";
 
 export default function AllProducts() {
   const [currentPage, setCurrentPage] = useState(1);
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useGetAllProductsQuery(currentPage);
+  const { data: products, error, isLoading } = useGetAllProductsQuery();
 
   // Pagination change handler
   const handlePageClick = (event) => {
@@ -46,9 +43,6 @@ export default function AllProducts() {
       setLoading(false);
     }, 1000);
   });
-
-  const location = useLocation();
-  const navigate = useNavigate();
 
   const paginationVariants = {
     hidden: {
@@ -73,8 +67,8 @@ export default function AllProducts() {
         {/* Mobile filter dialog */}
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-          <div className="flex  justify-end gap-20 md:justify-between p-4 border-b border-gray-200 ">
-            <h3 className=" w-full text-pry-deep text-2xl text-left capitalize">
+          <div className="flex  justify-between items-center  md:justify-between p-4 border-b border-gray-200 ">
+            <h3 className=" w-full text-pry-deep text-base md:text-2xl text-left capitalize">
               All Product
             </h3>
 
@@ -90,14 +84,24 @@ export default function AllProducts() {
                   <option value="z-a">Z - A</option>
                 </select>
               </div> */}
-
-              <button
+              {/* <button
                 type="button"
                 className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
               >
-                <span className="sr-only">View grid</span>
-                <IoGridSharp style={{ fontSize: "20px" }} />
-              </button>
+                <span className="sr-only">search</span>
+                <IoSearchCircleOutline style={{ fontSize: "25px" }} />
+              </button> */}
+
+              <input
+                type="search"
+                className="relative w-44 md:w-72 input-bordered input   h-10 "
+                placeholder="Search"
+                aria-label="Search"
+                aria-describedby="button-addon3"
+                // value={searchQuery}
+                // onChange={(e) => setSearchQuery(e.target.value)}
+              />
+
               <button
                 type="button"
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -110,11 +114,7 @@ export default function AllProducts() {
           </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6 ">
-            <h2 id="products-heading" className=" sr-only">
-              Products
-            </h2>
-
-            <div className="grid  grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
+            <div className="grid  grid-cols-1  lg:grid-cols-5">
               {/* Filters */}
               <form className="hidden lg:block ">
                 <div className="flex items-center justify-between">
@@ -125,7 +125,7 @@ export default function AllProducts() {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-4 ">
+              <div className="lg:col-span-4  ">
                 {loading ? (
                   <CardSkeleton cards={4} products={products} />
                 ) : (
