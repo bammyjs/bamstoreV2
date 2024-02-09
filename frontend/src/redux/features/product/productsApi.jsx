@@ -30,10 +30,6 @@ export const productsApi = createApi({
       query: ({ sortBy, sortOrder }) =>
         `products?sortBy=${sortBy}&sortOrder=${sortOrder}`,
     }),
-    filterProductsByBrand: builder.query({
-      // Add parameters as needed for filtering (e.g., brand)
-      query: (brand) => `products?brand=${brand}`,
-    }),
   }),
 });
 

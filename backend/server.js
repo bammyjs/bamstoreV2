@@ -36,9 +36,13 @@ app.use("/api/brand", brandRoute);
 app.use("/api/filter", filterRoute);
 app.use("/api/search", searchRoute);
 
-app.get("/", (req, res) => {
-  res.send("Home page...");
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
+
+// app.get("/", (req, res) => {
+//   res.send("Home page...");
+// });
 
 // error Middleware
 app.use(errorHandler);

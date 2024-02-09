@@ -12,40 +12,35 @@ const categories = [
     id: 1,
     title: "Phones",
     image: phone,
+    link: "/phones",
   },
   {
     id: 2,
     title: "Laptops",
     image: "https://i.ibb.co/nQKLjrW/c2.jpg",
+    link: "/laptops",
   },
   {
     id: 3,
     title: "Gaming",
-    image: "https://i.ibb.co/fNkBYgr/c3.jpg",
+    image: game,
+    link: "/gaming",
   },
   {
     id: 4,
-    title: "WorkSpace",
-    image: "https://i.ibb.co/fNkBYgr/c3.jpg",
+    title: "Accessory",
+    image: accessories,
+    link: "/workspace",
   },
 ];
 
-const Category = ({ title, image }) => {
+const Category = ({ title, image, link }) => {
   return (
-    <div className="rounded-full  place-self-center bg-dark w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
+    <div className="rounded-full  place-self-center bg-gray-bk w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
       <img
         src={image}
         alt=""
         className="w-full aspect-[2/2] object-cover rounded-full "
-        style={{
-          // Custom styles for Firefox
-          MozAspectRatio: "2/2",
-
-          // Custom styles for Webkit browsers (Chrome, Safari)
-          WebkitAspectRatio: "2/2",
-          // Custom styles for other browsers if needed
-          aspectRatio: "2/2", // Standardized aspect-ratio property
-        }}
       />
       <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
         {title}
@@ -58,8 +53,11 @@ function FeaturedProduct() {
   const navigate = useNavigate();
   return (
     <>
-      <section className="w-full bg-black rounded-3xl flex flex-col justify-center place-item-center items-center py-10 ">
-        <div className="container  p-6 w-full gap-y-8 grid justify-center  items-center grid-cols-2 md:grid-cols-4    md:gap-y-8 max-w-7xl   ">
+      <section className="w-full rounded-3xl flex flex-col justify-center place-item-center items-center py-10 ">
+        <h2 className="text-center text-lg md:text-3xl text-dark capitalize font-semibold ">
+          Browse by Category
+        </h2>
+        <div className="container  p-6 w-full gap-y-8 grid justify-center  items-center grid-cols-2 md:grid-cols-4  md:gap-y-8 max-w-7xl   ">
           {categories.map((cat) => {
             return (
               <Fragment key={cat.id}>

@@ -37,6 +37,7 @@ import AdminAccessOnly from "./componets/admin/AdminAccessOnly";
 import NotFound from "./pages/NotFound";
 import EditProduct from "./componets/admin/product/EditProduct";
 import UpdateUser from "./componets/admin/user/UpdateUser";
+import AllProducts from "./pages/AllProducts";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -88,7 +89,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/products" element={<OurStore />} />
+          <Route path="/products" element={<AllProducts />} />
+          <Route path="/products/:category" element={<AllProducts />} />
           <Route path="/product/:id" element={<Product />} />
 
           <Route path="/cart" element={<CartList />} />
