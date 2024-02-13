@@ -10,6 +10,16 @@ export const filters = [
     ],
   },
   {
+    id: "brand",
+    name: "Brand",
+    options: [
+      { value: "gaming", label: "Gaming" },
+      { value: "accessories", label: "Accessories" },
+      { value: "phones", label: "Phones" },
+      { value: "laptops", label: "Laptops" },
+    ],
+  },
+  {
     id: "price",
     name: "Price",
     options: [
@@ -30,6 +40,29 @@ export const filters = [
 ];
 
 export const sortOptions = [
-  { name: "price: Low to High", query: "price_low", current: false },
-  { name: "price: High to Low", query: "price_high", current: false },
+  {
+    id: "latest",
+    name: "Latest",
+    sortFunction: (a, b) => new Date(b.date) - new Date(a.date),
+  },
+  {
+    id: "lowest-price",
+    name: "Price: Low to High",
+    sortFunction: (a, b) => a.price - b.price,
+  },
+  {
+    id: "highest-price",
+    name: "Price: High to Low",
+    sortFunction: (a, b) => b.price - a.price,
+  },
+  {
+    id: "a-z",
+    name: "A - Z",
+    sortFunction: (a, b) => a.name.localeCompare(b.name),
+  },
+  {
+    id: "z-a",
+    name: "Z - A",
+    sortFunction: (a, b) => b.name.localeCompare(a.name),
+  },
 ];

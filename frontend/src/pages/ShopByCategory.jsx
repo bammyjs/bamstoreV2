@@ -1,25 +1,57 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useGetAllProductsQuery } from "../redux/features/product/productsApi";
-import { shortenText } from "../utils";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import { addToCart } from "../redux/features/cartSlice";
-import { IoCartOutline } from "react-icons/io5";
-import ReactStars from "react-rating-stars-component";
-import { Link } from "react-router-dom";
-
 import ReactPaginate from "react-paginate";
 import CardProducts from "../componets/product/CardProducts";
+import BreadCrumb from "../componets/BreadCrumb";
+import logo from "../assets/bammylogo.png";
+import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const ShopByCategory = (props) => {
-  const [currentPage, setCurrentPage] = useState(1);
   const { data: products, error, isLoading } = useGetAllProductsQuery();
   console.log(products);
-  const dispatch = useDispatch();
+
+  const ITEMS_PER_PAGE = 6; // Set your desired items per page
+
+  // State for managing current page
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedBrand, setSelectedBrand] = useState("Show All");
+  const [brands, setBrands] = useState(["Show All"]);
+
+  useEffect(() => {
+    if (products) {
+      // Extract unique brands from products
+      const uniqueBrands = [
+        "Show All",
+        ...new Set(products.map((product) => product.brand)),
+      ];
+      setBrands(uniqueBrands);
+    }
+  }, [products]); // Depend on products to update brands
+
+  const filteredProducts =
+    products?.filter(
+      (product) =>
+        props.category === product.category &&
+        (selectedBrand === "Show All" || product.brand === selectedBrand)
+    ) || [];
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const currentProducts = filteredProducts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected + 1); // +1 because event.selected is zero-based
+  };
+  // Brand selection handler
+  const handleBrandSelect = (brand) => {
+    setSelectedBrand(brand);
+    setCurrentPage(1); // Reset to first page when brand changes
   };
 
   const showNextBtn = (currentPage) => 1;
@@ -27,10 +59,6 @@ const ShopByCategory = (props) => {
 
   const [loading, setLoading] = useState(true);
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    // navigate("/cart");
-  };
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -55,7 +83,19 @@ const ShopByCategory = (props) => {
   };
 
   return (
-    <main className="bg-gray-bk mt-20 ">
+    <main
+      id="main-content"
+      className="bg-gray-bk h-fit flex-col gap-6   md: lg:"
+    >
+      {/* <div className="mx-auto container max-w-7xl bg-gray-bk px-4 sm:px-6 lg:px-10 ">
+        <BreadCrumb
+          crumbs={[
+            { label: "Home", path: "/" },
+            { label: "OurStore", path: "/products" },
+            { label: props.category },
+          ]}
+        />
+      </div> */}
       <div className="overflow-x-scroll">
         <div className="lg:col-span-4 ">
           {loading ? (
@@ -69,27 +109,52 @@ const ShopByCategory = (props) => {
             <div>An error occurred: {error.message}</div>
           ) : (
             <>
-              <div>
-                <img src={props.banner} alt="" />
+              <div className="w-full  relative ">
+                <img
+                  className="w-full h-auto object-cover aspect-square md:aspect-[4/1]"
+                  src={props.banner}
+                  alt=""
+                />
+                <div className="absolute flex flex-col items-center  p-12 w-2/5 h-auto top-1/2 -translate-y-1/2">
+                  <img
+                    className="w-52 md:w-96 h-auto object-cover aspect-auto"
+                    src={logo}
+                    alt=""
+                  />
+                  <h3 className="text-2xl text-neutral">
+                    Shop All{" "}
+                    <span className="text-2xl text-neutral">
+                      {props.category}
+                    </span>{" "}
+                  </h3>
+                </div>
+                {/* Brand selection UI */}
+                <div className="absolute right-1/2 left-1/2 -translate-x-1/2 w-full md:max-w-5xl max-w-md  bottom-0 my-4 flex flex-wrap  justify-center gap-2">
+                  {brands.map((brand) => (
+                    <button
+                      key={brand}
+                      onClick={() => handleBrandSelect(brand)}
+                      className={`btn btn-primary ${
+                        selectedBrand === brand ? "btn-primary" : "btn-neutral"
+                      }`}
+                    >
+                      {brand}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-xl text-dark text-center mb-4 md:text-3xl font-bold">
-                {props.category}
-                <span className="text-red-700">{}</span>
-              </h3>
-              <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-                <div className="container max-w-7xl flex flex-col item-center justify-center gap-8 p-6 ">
-                  <div className="w-full p-2">
+              <section className="mx-auto max-w-7xl mt-10 px-4 sm:px-6 lg:px-10">
+                <div className="container max-w-7xl flex flex-col item-center justify-center gap-8  ">
+                  <div className="w-full md:p-2">
                     <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
-                      {products?.map((product, i) => {
-                        if (props.category === product.category) {
-                          return (
-                            <CardProducts
-                              key={i}
-                              product={product}
-                              category={product.category}
-                            />
-                          );
-                        }
+                      {currentProducts.map((product, i) => {
+                        return (
+                          <CardProducts
+                            key={i}
+                            product={product}
+                            category={product.category}
+                          />
+                        );
                       })}
                     </div>
                   </div>
@@ -120,7 +185,7 @@ const ShopByCategory = (props) => {
               ) : null
             }
             pageRangeDisplayed={5}
-            pageCount={products?.pages || 1}
+            pageCount={totalPages}
             onPageChange={handlePageClick}
             containerClassName="join gap-4 flex items-center justify-center mt-8 mb-4"
             pageClassName="btn btn-secondary"

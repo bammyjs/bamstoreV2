@@ -74,8 +74,26 @@ const getProductsWithPage = asyncHandler(async (req, res) => {
 // Get all Products test 2
 
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find().sort("-createdAt");
-  res.status(200).json(products);
+  try {
+    const { searchQuery } = req.query; // Get the search query from the request
+
+    let query = {};
+
+    if (searchQuery) {
+      // Use a regex to make a case-insensitive search across desired fields
+      query.$or = [
+        { name: { $regex: searchQuery, $options: "i" } },
+        { description: { $regex: searchQuery, $options: "i" } },
+        { brand: { $regex: searchQuery, $options: "i" } }, // Assuming 'brand' is a field
+        { category: { $regex: searchQuery, $options: "i" } }, // Assuming 'category' is a field
+        // Add more fields if necessary
+      ];
+    }
+    const products = await Product.find(query).sort("-createdAt");
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 // Get single product

@@ -25,6 +25,8 @@ import {
 import ShopByCategory from "./pages/ShopByCategory";
 import banner1 from "./assets/banner1.jpg";
 import banner2 from "./assets/workwork2.jpg";
+import banner3 from "./assets/accessory.webp";
+import banner4 from "./assets/animiphone.gif";
 import Product from "./pages/Product";
 
 import { Admin } from "./pages/Admin";
@@ -72,7 +74,7 @@ function App() {
           />
           <Route
             path="/accessories"
-            element={<ShopByCategory banner={banner2} category="Accessories" />}
+            element={<ShopByCategory banner={banner3} category="Accessories" />}
           />
           <Route
             path="/workspace"
@@ -81,7 +83,7 @@ function App() {
 
           <Route
             path="/phones"
-            element={<ShopByCategory banner={banner2} category="Phones" />}
+            element={<ShopByCategory banner={banner4} category="Phones" />}
           />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

@@ -36,7 +36,7 @@ const CartList = () => {
   return (
     <>
       <Meta title={"Cart"} />
-      <main className=" flex flex-col gap-6 mt-20  md:mt-24">
+      <main id="main-content" className=" flex flex-col gap-6 mt-20  md:mt-24">
         {/* <BreadCrumb title="Cart" /> */}
         <section className=" bg-gray-100 py-12 sm:py-16 lg:py-20">
           <div className="mx-auto px-4 sm:px-6 lg:px-8">

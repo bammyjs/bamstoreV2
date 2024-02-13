@@ -8,18 +8,18 @@ const Category = () => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.category);
 
-  const reloadCategory = () => {
-    dispatch(getCategories());
-  };
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
 
+  const reloadCategory = () => {
+    dispatch(getCategories());
+  };
   return (
     <section>
       <div className="">
         <CreateCategory reloadCategory={reloadCategory} />
-        <CategoryList />
+        <CategoryList categories={categories} />
       </div>
     </section>
   );

@@ -14,7 +14,7 @@ Recommendation;
 function Home() {
   return (
     <>
-      <main className=" flex flex-col gap-8 bg-light">
+      <main id="main-content" className=" flex flex-col gap-8 bg-light">
         <Hero />
         <Brand />
         <FeaturedProduct />

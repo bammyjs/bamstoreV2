@@ -46,7 +46,18 @@ const Product = () => {
   return (
     <>
       {/* <BreadCrumb data={data} />; */}
-      <main className="bg-gray-bk flex flex-col gap-6 items-center mt-20 md:mt-24 lg:mt-36 ">
+      <main className="bg-gray-bk flex flex-col gap-6 items-center  md:mt-28 lg:mt-32 ">
+        <div className="mx-auto container max-w-7xl bg-gray-bk px-4 sm:px-6 lg:px-10 ">
+          <BreadCrumb
+            crumbs={[
+              { label: "Home", path: "/" },
+              { label: "OurStore", path: "/products" },
+              { label: product?.category, path: "/phones" },
+              { label: product?.name },
+            ]}
+          />
+        </div>
+
         <section className="w-full  mb-10 flex flex-wrap justify-center items-center">
           <>
             {isLoading ? (
@@ -211,7 +222,7 @@ const Product = () => {
                       <div className="flex flex-col justify-start items-start w-full space-y-8">
                         <div className="flex justify-start items-start">
                           <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
-                            Reviews ({product.ratings.length})
+                            Reviews ({product?.ratings?.length})
                           </p>
                         </div>
                         {product.ratings?.map((rate, i) => {

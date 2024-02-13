@@ -13,7 +13,7 @@ const initialState = {
 
 // Create New Cat
 export const createCategory = createAsyncThunk(
-  "category/create",
+  "category/createCategory",
   async (formData, thunkAPI) => {
     try {
       return await categoryService.createCategory(formData);
@@ -32,7 +32,7 @@ export const createCategory = createAsyncThunk(
 
 // Get all Cat
 export const getCategories = createAsyncThunk(
-  "category/getAll",
+  "category/getCategories",
   async (_, thunkAPI) => {
     try {
       return await categoryService.getCategories();
@@ -51,7 +51,7 @@ export const getCategories = createAsyncThunk(
 
 // Delete a Cat
 export const deleteCategory = createAsyncThunk(
-  "category/delete",
+  "category/deleteCategory",
   async (slug, thunkAPI) => {
     try {
       return await categoryService.deleteCategory(slug);
@@ -86,7 +86,7 @@ export const createBrand = createAsyncThunk(
   }
 );
 
-// Get all Cat
+// Get all brands
 export const getBrands = createAsyncThunk(
   "category/getBrands",
   async (_, thunkAPI) => {
@@ -105,7 +105,7 @@ export const getBrands = createAsyncThunk(
   }
 );
 
-// Delete a Cat
+// Delete a brands
 export const deleteBrand = createAsyncThunk(
   "category/deleteBrand",
   async (slug, thunkAPI) => {

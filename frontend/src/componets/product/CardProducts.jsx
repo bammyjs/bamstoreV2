@@ -12,13 +12,20 @@ import { motion } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
 
 function CardProducts({ product }) {
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    // navigate("/cart");
+  };
+
   let textInputs = product.quantity === 0 ? "SOLD OUT" : "IN STOCK";
   let displayCart = product.quantity > 0;
 
   return (
     <div
       key={product._id}
-      className="bg-light rounded-xl items-baseline shadow-xl hover:shadow-xl"
+      className="bg-light min-w-[12rem] max-w-xs rounded-xl items-baseline shadow-xl hover:shadow-xl"
     >
       <div className="relative w-full bg-light flex items-end overflow-hidden rounded-xl">
         <Link
@@ -72,9 +79,9 @@ function CardProducts({ product }) {
               <span>&#8358;</span>
               {product.price}
             </p>
-            <p className="text-xs font-light text-text-gray">
-              <strike>
-                <span>&#8358;</span>
+            <p className=" font-light text-[8px] text-gray">
+              <strike className="  text-[8px] ">
+                <span className=" text-[8px] ">&#8358;</span>
                 {product?.regularPrice}
               </strike>
             </p>

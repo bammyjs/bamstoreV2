@@ -6,7 +6,6 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import {
   deleteBrand,
   getBrands,
-  getCategories,
 } from "../../../redux/features/categoryAndBrand/categorySlice";
 
 const BrandList = ({ brands }) => {

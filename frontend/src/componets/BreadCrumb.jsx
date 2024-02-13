@@ -3,19 +3,21 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useGetAllProductsQuery } from "../redux/features/product/productsApi";
 
-export default function BreadCrumb(props) {
-  const { data, error, isLoading } = useGetAllProductsQuery();
+export default function BreadCrumb({ crumbs, product }) {
+  if (!crumbs || !crumbs.length) return null;
 
   return (
-    <nav className="text-sm breadcrumbs">
+    <nav className="text-sm breadcrumbs hidden md:block">
       <ul>
-        <li>
-          <Link to={"/"}>Home</Link>
-        </li>
-        <li>
-          <Link to={"/product"}>Store</Link>
-        </li>
-        <li>{data.name}</li>
+        {crumbs.map((crumb, index) => (
+          <li key={index}>
+            {crumb.path ? (
+              <Link to={crumb.path}>{crumb.label}</Link>
+            ) : (
+              crumb.label
+            )}
+          </li>
+        ))}
       </ul>
     </nav>
   );

@@ -8,8 +8,8 @@ import {
   getCategories,
 } from "../../../redux/features/categoryAndBrand/categorySlice";
 
-const CategoryList = () => {
-  const { isLoading, categories } = useSelector((state) => state.category);
+const CategoryList = ({ categories }) => {
+  const { isLoading } = useSelector((state) => state.category);
   const dispatch = useDispatch();
 
   useEffect(() => {
