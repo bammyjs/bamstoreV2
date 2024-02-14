@@ -12,6 +12,7 @@ import {
   removeFromCart,
   itemTotalQuantity,
 } from "../redux/features/cartSlice";
+import CheckOutWhatsAppButton from "../componets/extras/CheckOutWhatsAppButton";
 
 const CartList = () => {
   const cart = useSelector((state) => state.cart);
@@ -36,11 +37,11 @@ const CartList = () => {
   return (
     <>
       <Meta title={"Cart"} />
-      <main id="main-content" className=" flex flex-col gap-6 mt-20  md:mt-24">
+      <main id="main-content" className=" flex flex-col gap-6 ">
         {/* <BreadCrumb title="Cart" /> */}
         <section className=" bg-gray-100 py-12 sm:py-16 lg:py-20">
           <div className="mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col items-center justify-center">
+            <div className="w-full flex flex-col items-center justify-center">
               <h1 className="text-2xl font-semibold text-gray-900">
                 Your Cart
               </h1>
@@ -54,8 +55,8 @@ const CartList = () => {
                   </div>
                 </div>
               ) : (
-                <div className="w-full mx-auto mt-8 max-w-2xl md:mt-12">
-                  <div className="bg-white shadow">
+                <div className="w-full mx-auto mt-8 max-w-7xl md:mt-12">
+                  <div className="">
                     <div className="px-4 py-6 sm:px-8 sm:py-10">
                       <div className="flow-root">
                         <ul className="-my-8">
@@ -63,7 +64,7 @@ const CartList = () => {
                             return (
                               <li
                                 key={cartItem.id}
-                                className="flex flex-col space-y-3 py-6 text-left sm:flex-row sm:space-x-5 sm:space-y-0"
+                                className="w-full flex flex-col space-y-3 py-6 text-left border-b sm:flex-row sm:space-x-5 sm:space-y-0"
                               >
                                 <div className="shrink-0">
                                   <img
@@ -81,18 +82,22 @@ const CartList = () => {
                                       </p>
                                       <p className="mx-0 mt-1 mb-0 text-sm text-gray-400">
                                         <span>&#8358;</span>
-                                        {cartItem.price}
+                                        {new Intl.NumberFormat("en-NG").format(
+                                          cartItem.price
+                                        )}
                                       </p>
                                     </div>
 
-                                    <div className="mt-4 flex items-end justify-between sm:mt-0 sm:items-start sm:justify-end">
+                                    <div className=" flex items-center md:items-center b w-100 justify-between md:justify-between sm:mt-0 sm:items-start sm:justify-end">
                                       <p className="shrink-0  text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right">
                                         <span>&#8358;</span>
-                                        {cartItem.price * cartItem.cartQuantity}
+                                        {new Intl.NumberFormat("en-NG").format(
+                                          cartItem.price * cartItem.cartQuantity
+                                        )}
                                       </p>
 
-                                      <div className="sm:order-1">
-                                        <div className="mx-auto flex h-8 items-stretch text-gray-600">
+                                      <div className="sm:order-1 ">
+                                        <div className="mx-auto border flex h-10 items-stretch text-gray-600">
                                           <button
                                             onClick={() =>
                                               handleDecreaseCart(cartItem)
@@ -155,7 +160,9 @@ const CartList = () => {
                           <p className="text-sm text-gray-400">Subtotal</p>
                           <p className="text-lg font-semibold text-dark">
                             <span>&#8358;</span>
-                            {cart.cartTotalAmount}
+                            {new Intl.NumberFormat("en-NG").format(
+                              cart.cartTotalAmount
+                            )}
                           </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -173,11 +180,16 @@ const CartList = () => {
                           <span className="text-xs font-normal text-gray-400">
                             <span>&#8358;</span>
                           </span>{" "}
-                          {cart.cartTotalAmount}
+                          {new Intl.NumberFormat("en-NG").format(
+                            cart.cartTotalAmount
+                          )}
                         </p>
                       </div>
 
                       <div className="mt-6 text-center">
+                        <CheckOutWhatsAppButton
+                          message={`Hello, I'm interested in the ${cart.name} priced at ${cart.price} and total of ${cart.cartTotalAmount}. Can you tell me more about it?`}
+                        />
                         <button
                           type="button"
                           className="btn btn-primary w-full"

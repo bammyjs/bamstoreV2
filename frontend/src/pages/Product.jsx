@@ -14,6 +14,7 @@ import { addToCart } from "../redux/features/cartSlice";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
+import CheckOutWhatsAppButton from "../componets/extras/CheckOutWhatsAppButton";
 
 //Get single Product
 
@@ -46,8 +47,11 @@ const Product = () => {
   return (
     <>
       {/* <BreadCrumb data={data} />; */}
-      <main className="bg-gray-bk flex flex-col gap-6 items-center  md:mt-28 lg:mt-32 ">
-        <div className="mx-auto container max-w-7xl bg-gray-bk px-4 sm:px-6 lg:px-10 ">
+      <main
+        id="main-content"
+        className="  bg-gray-bk h-fit flex-col gap-6 px-4  md:mt-10 lg:mt-10"
+      >
+        <div className="mx-auto container max-w-7xl  ">
           <BreadCrumb
             crumbs={[
               { label: "Home", path: "/" },
@@ -70,10 +74,10 @@ const Product = () => {
             ) : error ? (
               <p>An error occurred...</p>
             ) : (
-              <div className="text-dark body-font overflow-hidden ">
-                <div className="container px-5 py-24 mx-auto ">
-                  <div className=" max-w-7xl mx-auto flex flex-wrap  ">
-                    <div className="flex flex-col gap-6 lg:w-2/4 border bg-light h-fit ">
+              <div className="text-dark body-font overflow-hidden  ">
+                <div className=" py-6 mx-auto ">
+                  <div className="w-full max-w-7xl  mx-auto  flex md:justify-between flex-wrap  ">
+                    <div className=" w-full flex flex-col gap-6 lg:w-1/2   h-fit ">
                       <Zoom>
                         <img
                           src={activeImg}
@@ -82,7 +86,7 @@ const Product = () => {
                           width="500"
                         />
                       </Zoom>
-                      <div className="flex flex-row justify-between h-24 border-t py-2 ">
+                      <div className="w-full flex flex-row justify-between h-24 bg-light py-2 ">
                         {product &&
                           product.image &&
                           product.image.length > 0 &&
@@ -97,11 +101,11 @@ const Product = () => {
                           ))}
                       </div>
                     </div>
-                    <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                      <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
+                    <div className="flex flex-col gap-2 lg:w-[45%]  lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+                      <h2 className="text-dark text-3xl title-font font-medium ">
                         {product.name}
-                      </h1>
-                      <div className="flex mb-4">
+                      </h2>
+                      <div className="flex items-center gap-2">
                         <ReactStars
                           count={5}
                           // onChange={ratingChanged}
@@ -113,46 +117,56 @@ const Product = () => {
                           activeColor="#ffd700"
                           value={3}
                         />
-                        <span className="flex ml-3 pl-3 py-2 border-l-2 border-gray-200">
-                          <a className="text-gray-500">
-                            <svg
-                              fill="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              className="w-5 h-5"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
-                            </svg>
-                          </a>
-                          <a className="ml-2 text-gray-500">
-                            <svg
-                              fill="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              className="w-5 h-5"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
-                            </svg>
-                          </a>
-                          <a className="ml-2 text-gray-500">
-                            <svg
-                              fill="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              className="w-5 h-5"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path>
-                            </svg>
-                          </a>
+                        <p className=" text-base font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
+                          ({product?.ratings?.length}) Reviews
+                        </p>
+                      </div>
+                      <div className="flex gap-1 items-center">
+                        <p className="text-3xl font-bold text-dark">
+                          <span className="text-3xl font-bold text-dark">
+                            &#8358;
+                          </span>
+                          {new Intl.NumberFormat("en-NG").format(product.price)}
+                        </p>
+                        <p className=" font-light text-2xl text-gray">
+                          <strike className="  text-2xl ">
+                            <span className=" text-2xl ">&#8358;</span>
+                            {new Intl.NumberFormat("en-NG").format(
+                              product.regularPrice
+                            )}
+                          </strike>
+                        </p>
+                      </div>
+                      <div className="flex flex-col ">
+                        <h2 className="font-light text-xl">KEY FEATURES</h2>
+                        <div
+                          className="flex flex-col items-center"
+                          dangerouslySetInnerHTML={{
+                            __html: product.description,
+                          }}
+                        />
+                      </div>
+                      <div className="flex flex-col items-left gap-2 py-2 ">
+                        <p className="font-bold text-xl">Color</p>
+                        <span
+                          className="text-xl w-10 h-10 rounded-full flex items-center justify-center"
+                          style={{ backgroundColor: product.color }}
+                          title={product.color}
+                        >
+                          {/* Optionally show the color name or keep it empty */}
                         </span>
                       </div>
-                      <ul className="flex flex-col">
+                      <div className="flex flex-col items-left gap-2 py-2 ">
+                        <p className="font-bold text-xl">Brand</p>
+                        <Link
+                          to={"/"}
+                          className=" bg-light text-xl w-fit p-2 flex items-left rounded-md border hover:border-primary"
+                        >
+                          {product.brand}
+                        </Link>
+                      </div>
+
+                      {/* <ul className="flex flex-col">
                         <li className="flex justify-between py-2 border-y  border-gray">
                           <p className="font-bold text-xl">Brand:</p>
                           <span className="text-xl">{product.brand}</span>
@@ -173,22 +187,19 @@ const Product = () => {
                             {product.quantity} left
                           </span>
                         </li>
-                      </ul>
+                      </ul> */}
 
                       <div className="w-full flex justify-between mt-6">
-                        <span className="title-font font-medium text-2xl text-gray-900 rounded-lg p-4 border">
-                          <span className="text-3xl">&#8358;</span>{" "}
-                          {product.price}
-                        </span>
-                        <div className="flex gap-2 justify-between">
-                          <button className="btn btn-secondary text-neutral">
-                            Buy
-                          </button>
+                        <div className="w-full flex gap-2 justify-between">
+                          <CheckOutWhatsAppButton
+                            message={`Hello, I'm interested in the ${product.name} priced at ${product.price}. Can you tell me more about it?`}
+                          />
                           <button
-                            type="buttton"
+                            type="button"
                             onClick={() => handleAddToCart(product)}
                             className="btn bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
                           >
+                            Add to cart
                             <motion.div
                               whileHover={{ rotate: 45 }}
                               whileTap={{ scale: 1 }}
@@ -202,93 +213,78 @@ const Product = () => {
                           </button>
                         </div>
                       </div>
-                      <div className="flex mt-1 items-center pb-5 border-b-2 border-gray-200 mb-5"></div>
-
-                      <div className="flex flex-col gap-2">
-                        <p className="font-bold text-xl">
-                          Product Description:
-                        </p>
-                        <h2 className="font-light text-xl">KEY FEATURES</h2>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: product.description,
-                          }}
-                        />
-                      </div>
                     </div>
-
-                    {/* reviews */}
-                    <div className="py-12 px-4 md:px-6 2xl:px-0  flex justify-center items-center">
-                      <div className="flex flex-col justify-start items-start w-full space-y-8">
-                        <div className="flex justify-start items-start">
-                          <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
-                            Reviews ({product?.ratings?.length})
-                          </p>
-                        </div>
-                        {product.ratings?.map((rate, i) => {
-                          let ratingView;
-                          if (!product.ratings) {
-                            ratingView = false;
-                          } else if (product.ratings) {
-                            ratingView = true;
-                          }
-                          return (
-                            <>
-                              {ratingView ? (
-                                <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 p-8 border">
-                                  <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 md:px-8 py-8">
-                                    <div className="flex flex-col md:flex-row justify-between w-full">
-                                      <div className="flex flex-row justify-between items-start w-3/4 ">
-                                        <p className="text-xl md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
-                                          {rate?.review}
-                                        </p>
-                                      </div>
-                                      <ReactStars
-                                        count={5}
-                                        // onChange={ratingChanged}
-                                        edit={false}
-                                        size={24}
-                                        isHalf={true}
-                                        emptyIcon={
-                                          <i className="far fa-star"></i>
-                                        }
-                                        halfIcon={
-                                          <i className="fa fa-star-half-alt"></i>
-                                        }
-                                        fullIcon={
-                                          <i className="fa fa-star"></i>
-                                        }
-                                        activeColor="#ffd700"
-                                        value={rate?.star}
-                                      />
+                  </div>
+                  <div className="flex mt-1 items-center pb-5 border-b-2 border-gray-200 mb-5"></div>
+                  {/* reviews */}
+                  <div className="py-12 px-4 md:px-6 2xl:px-0  flex justify-center items-center">
+                    <div className="flex flex-col justify-start items-start w-full space-y-8">
+                      <div className="flex justify-start items-start">
+                        <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
+                          Reviews ({product?.ratings?.length})
+                        </p>
+                      </div>
+                      {product.ratings?.map((rate, i) => {
+                        let ratingView;
+                        if (!product.ratings) {
+                          ratingView = false;
+                        } else if (product.ratings) {
+                          ratingView = true;
+                        }
+                        return (
+                          <>
+                            {ratingView ? (
+                              <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 p-8 border">
+                                <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 md:px-8 py-8">
+                                  <div className="flex flex-col md:flex-row justify-between w-full">
+                                    <div className="flex flex-row justify-between items-start w-3/4 ">
+                                      <p className="text-xl md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
+                                        {rate?.review}
+                                      </p>
                                     </div>
-                                    <div id="menu2" className="">
-                                      <div className="mt-6 flex justify-start items-center flex-row space-x-2.5">
-                                        <div>
-                                          <img
-                                            src="https://i.ibb.co/RCTGZTc/Mask-Group-1.png"
-                                            alt="girl-avatar"
-                                          />
-                                        </div>
-                                        <div className="flex flex-col justify-start items-start space-y-2">
-                                          <p className="text-base font-medium leading-none text-gray-800 dark:text-white">
-                                            {rate?.name}
-                                          </p>
-                                          <p className="text-sm leading-none text-gray-600 dark:text-white">
-                                            {rate?.reviewDate}
-                                          </p>
-                                        </div>
+                                    <ReactStars
+                                      count={5}
+                                      // onChange={ratingChanged}
+                                      edit={false}
+                                      size={24}
+                                      isHalf={true}
+                                      emptyIcon={
+                                        <i className="far fa-star"></i>
+                                      }
+                                      halfIcon={
+                                        <i className="fa fa-star-half-alt"></i>
+                                      }
+                                      fullIcon={<i className="fa fa-star"></i>}
+                                      activeColor="#ffd700"
+                                      value={rate?.star}
+                                    />
+                                  </div>
+                                  <div id="menu2" className="">
+                                    <div className="mt-6 flex justify-start items-center flex-row space-x-2.5">
+                                      <div>
+                                        <img
+                                          src="https://i.ibb.co/RCTGZTc/Mask-Group-1.png"
+                                          alt="girl-avatar"
+                                        />
+                                      </div>
+                                      <div className="flex flex-col justify-start items-start space-y-2">
+                                        <p className="text-base font-medium leading-none text-gray-800 dark:text-white">
+                                          {rate?.name}
+                                        </p>
+                                        <p className="text-sm leading-none text-gray-600 dark:text-white">
+                                          {rate?.reviewDate}
+                                        </p>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              ) : (
-                                <p>no review yet</p>
-                              )}
-                            </>
-                          );
-                        })}
-                      </div>
+                              </div>
+                            ) : (
+                              <p>no review yet</p>
+                            )}
+                          </>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

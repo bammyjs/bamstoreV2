@@ -88,7 +88,7 @@ const GetProducts = () => {
   }, [products, search, dispatch]);
 
   return (
-    <div className="product-list ">
+    <div id="main-content" className="product-list ">
       <div className="w-full overflow-x-auto">
         <div className="flex flex-col justify-between ">
           <span>

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-    <div className=" bg-pry-deep  w-full flex justify-center items-center    mt-10 md:mt-16 ">
+    <div className=" bg-pry-deep  w-full flex justify-center items-center     ">
       <div className="container     md:pt-10 w-full max-w-7xl  place-items-center  grid md:grid-cols-2 md:px-6">
         <motion.picture
           initial={{ x: "2rem", opacity: 0 }}

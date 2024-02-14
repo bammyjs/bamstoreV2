@@ -77,12 +77,12 @@ function CardProducts({ product }) {
           <div className="flex gap-1 items-center">
             <p className="text-base font-bold text-pry-deep">
               <span>&#8358;</span>
-              {product.price}
+              {new Intl.NumberFormat("en-NG").format(product.price)}
             </p>
             <p className=" font-light text-[8px] text-gray">
               <strike className="  text-[8px] ">
                 <span className=" text-[8px] ">&#8358;</span>
-                {product?.regularPrice}
+                {new Intl.NumberFormat("en-NG").format(product?.regularPrice)}
               </strike>
             </p>
           </div>
