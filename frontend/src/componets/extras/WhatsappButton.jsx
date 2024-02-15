@@ -21,7 +21,7 @@ const WhatsappButton = () => {
         color: "green",
       }}
     >
-      <IoLogoWhatsapp style={{}} />
+      <IoLogoWhatsapp style={{ width: "60px", height: "60px" }} />
     </a>
   );
 };

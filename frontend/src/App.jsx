@@ -40,6 +40,7 @@ import NotFound from "./pages/NotFound";
 import EditProduct from "./componets/admin/product/EditProduct";
 import UpdateUser from "./componets/admin/user/UpdateUser";
 import AllProducts from "./pages/AllProducts";
+import CheckOut from "./pages/CheckOut";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -96,6 +97,8 @@ function App() {
           <Route path="/product/:id" element={<Product />} />
 
           <Route path="/cart" element={<CartList />} />
+          <Route path="/checkout" element={<CheckOut />} />
+
           {/* <Route path="/createProduct" element={<CreateProduct />} /> */}
           <Route
             path="/admin"

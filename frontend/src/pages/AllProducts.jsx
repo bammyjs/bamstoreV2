@@ -1,6 +1,10 @@
 import { useState, useEffect, Fragment } from "react";
 
-import { IoChevronForward, IoChevronBack } from "react-icons/io5";
+import {
+  IoChevronForward,
+  IoChevronBack,
+  IoLogoWhatsapp,
+} from "react-icons/io5";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 
 import CardProducts from "../componets/product/CardProducts";
@@ -260,6 +264,7 @@ export default function AllProducts() {
             { label: "All products" },
           ]}
         />
+
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog
             as="div"

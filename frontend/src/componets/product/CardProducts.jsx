@@ -92,11 +92,7 @@ function CardProducts({ product }) {
               onClick={() => handleAddToCart(product)}
               className="flex items-center space-x-1.5 rounded-full bg-dark p-2 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
             >
-              <motion.div
-                whileHover={{ rotate: 45 }}
-                whileTap={{ scale: 1 }}
-                to="/"
-              >
+              <motion.div whileHover={{ rotate: 45 }} whileTap={{ scale: 1 }}>
                 <IoCartOutline
                   style={{ fontSize: "20px" }}
                   className="text-2xl"

@@ -47,29 +47,6 @@ function CreateProduct() {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   createProduct(productDetails)
-  //     .unwrap()
-  //     .then((payload) => {
-  //       console.log("Product created successfully", payload);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Failed to create the product", error);
-  //     });
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await createProduct(productDetails).unwrap();
-  //     console.log("Product created successfully", payload);
-  //     // Handle success, e.g., showing a success message, clearing the form, etc.
-  //   } catch (error) {
-  //     console.error("Failed to create the product", error);
-  //     // Handle error, e.g., showing an error message
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
