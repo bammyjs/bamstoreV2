@@ -287,13 +287,10 @@ const Product = () => {
 
                     <div className="w-full flex justify-between mt-6">
                       <div className="w-full flex gap-2 justify-between">
-                        <CheckOutWhatsAppButton
-                          message={`Hello, I'm interested in the ${product.name} priced at ${product.price}. Can you tell me more about it?`}
-                        />
                         <button
                           type="button"
                           onClick={() => handleAddToCart(product)}
-                          className="btn bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
+                          className=" w-full btn bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
                         >
                           Add to cart
                           <motion.div

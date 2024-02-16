@@ -96,3 +96,17 @@ body {
   transition: max-height 0.5s ease-in, opacity 0.5s ease-in;
   overflow: hidden;
 }
+
+.country {
+  flex: 1 0 8rem;
+}
+.name {
+  flex: 1 0 4rem;
+}
+.address {
+  flex: 1 0 8rem;
+}
+
+.state {
+  flex: 1 0 4rem;
+}

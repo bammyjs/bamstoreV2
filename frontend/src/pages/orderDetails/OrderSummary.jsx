@@ -2,7 +2,7 @@ import React from "react";
 
 const OrderSummary = ({ cart, shipRate }) => {
   return (
-    <div className="w-full bg-gray-bk px-4 py-6 sm:px-8 sm:py-10">
+    <div className="w-full  bg-gray-bk px-4 py-6 sm:px-8 sm:py-10">
       <div className="flow-root">
         <ul className="flex flex-col gap-2">
           {cart.cartItems?.map((cartHistory) => {

@@ -13,6 +13,7 @@ import {
   itemTotalQuantity,
 } from "../redux/features/cartSlice";
 import CheckOutWhatsAppButton from "../componets/extras/CheckOutWhatsAppButton";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const CartList = () => {
   const cart = useSelector((state) => state.cart);
@@ -167,8 +168,8 @@ const CartList = () => {
                         </div>
                         <div className="flex items-center justify-between">
                           <p className="text-sm text-gray-400">Shipping</p>
-                          <p className="text-lg font-semibold text-gray-900">
-                            Free
+                          <p className="text-sm  text-gray-900">
+                            Calculated at checkout
                           </p>
                         </div>
                       </div>
@@ -178,7 +179,7 @@ const CartList = () => {
                         </p>
                         <p className="text-2xl font-semibold text-gray-900">
                           <span className="text-xs font-normal text-gray-400">
-                            <span>&#8358;</span>
+                            <span className="text-2xl text-dark">&#8358;</span>
                           </span>{" "}
                           {new Intl.NumberFormat("en-NG").format(
                             cart.cartTotalAmount
@@ -187,18 +188,20 @@ const CartList = () => {
                       </div>
 
                       <div className="mt-6 text-center">
-                        <CheckOutWhatsAppButton
-                          message={`Hello, I'm interested in the ${cart.name} priced at ${cart.price} and total of ${cart.cartTotalAmount}. Can you tell me more about it?`}
-                        />
-                        <button
+                        <Link
+                          to="/checkout"
                           type="button"
-                          className="btn btn-primary w-full"
+                          className="btn btn-primary w-full hover:btn-accent"
                         >
                           Checkout
-                        </button>
+                        </Link>
                       </div>
-                      <Link to="/products">
-                        <p className="text-right mt-4">continue Shopping</p>
+                      <Link
+                        to="/products"
+                        className="text-sec-color flex items-center gap-4 py-4 cursor-pointer hover:text-sec-light-color"
+                      >
+                        <IoArrowBackOutline />
+                        <p className=" ">continue Shopping</p>
                       </Link>
                     </div>
                   </div>

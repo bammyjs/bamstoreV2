@@ -136,10 +136,36 @@ function Footer() {
                 </a>
               </li>
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <a
+                  className="text-gray-500 cursor-pointer hover:text-sec-light-color"
+                  onClick={() =>
+                    document.getElementById("my_modal_3").showModal()
+                  }
+                >
                   Refund Policy
                 </a>
+                <dialog id="my_modal_3" className="modal">
+                  <div className="modal-box bg-neutral text-gray max-w-4xl">
+                    <form method="dialog">
+                      {/* if there is a button in form, it will close the modal */}
+                      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                        ✕
+                      </button>
+                    </form>
+                    <h3 className="font-bold text-lg text-dark">
+                      Refund policy
+                    </h3>
+                    <p className="py-4 font-normal ">
+                      Orders may be canceled within 24 hours (Does not apply to
+                      rushed orders) or returned only with NEF Technologies'
+                      prior written consent. NEF Technologies reserves the right
+                      to charge a cancellation or restocking fee on canceled or
+                      returned orders.
+                    </p>
+                  </div>
+                </dialog>
               </li>
+
               <li className="mt-3">
                 <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Warranty
