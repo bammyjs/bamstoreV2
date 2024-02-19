@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 const Order = require("../models/orderModel");
 const { calculateTotalPrice } = require("../utils");
 const Product = require("../models/productModel");
-const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 const axios = require("axios");
 const User = require("../models/userModel");
 // const Transaction = require("../models/transactionModel");
@@ -30,7 +29,7 @@ const createOrder = asyncHandler(async (req, res) => {
   // console.log("updated product", updatedProduct);
 
   // Create Order
-  await Order.create({
+  const order = await Order.create({
     user: req.user.id,
     orderDate,
     orderTime,
@@ -41,7 +40,7 @@ const createOrder = asyncHandler(async (req, res) => {
     paymentMethod,
   });
 
-  res.status(201).json({ message: "Order Created" });
+  res.status(201).json({ message: "Order Created", data: order });
 });
 
 // Get all Orders
@@ -104,46 +103,6 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
 });
 
 // Pay with stripe
-const payWithStripe = asyncHandler(async (req, res) => {
-  const { items, shipping, description, coupon } = req.body;
-  const products = await Product.find();
-
-  let orderAmount;
-  orderAmount = calculateTotalPrice(products, items);
-  if (coupon !== null && coupon?.name !== "nil") {
-    let totalAfterDiscount =
-      orderAmount - (orderAmount * coupon.discount) / 100;
-    orderAmount = totalAfterDiscount;
-  }
-
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: orderAmount,
-    currency: "usd",
-    automatic_payment_methods: {
-      enabled: true,
-    },
-    description,
-    shipping: {
-      address: {
-        line1: shipping.line1,
-        line2: shipping.line2,
-        city: shipping.city,
-        country: shipping.country,
-        postal_code: shipping.postal_code,
-      },
-      name: shipping.name,
-      phone: shipping.phone,
-    },
-    // receipt_email: customerEmail
-  });
-
-  // console.log(paymentIntent);
-
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
-});
 
 // Verify FLW Payment
 const verifyFlwPayment = asyncHandler(async (req, res) => {
@@ -326,7 +285,6 @@ module.exports = {
   getOrders,
   getOrder,
   updateOrderStatus,
-  payWithStripe,
   verifyFlwPayment,
   payWithFlutterwave,
 };

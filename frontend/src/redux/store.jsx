@@ -1,26 +1,28 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "../redux/features/auth/authSlice";
 import cartReducer, { getTotals } from "./features/cartSlice";
-import filterReducer from "../redux/features/product/filterSlice";
 import productReducer from "../redux/features/product/productSlice";
 import { productsApi } from "./features/product/productsApi";
 import { userApi } from "./features/user/usersApi";
-import categoryReducer from "./features/categoryAndBrand/categorySlice";
+
+import orderReducer from "./features/product/orderSlice";
+import { ordersApi } from "./features/order/ordersApi";
 
 export const store = configureStore({
   reducer: {
     [userApi.reducerPath]: userApi.reducer,
     auth: authReducer,
     cart: cartReducer,
-    filter: filterReducer,
-    category: categoryReducer,
     product: productReducer,
+    orders: orderReducer,
     [productsApi.reducerPath]: productsApi.reducer,
+    [ordersApi.reducerPath]: ordersApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(
       productsApi.middleware,
-      userApi.middleware
+      userApi.middleware,
+      ordersApi.middleware
     );
   },
 });

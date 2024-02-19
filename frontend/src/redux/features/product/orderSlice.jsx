@@ -3,8 +3,8 @@ import orderService from "./orderService";
 import { toast } from "react-toastify";
 
 const initialState = {
-  order: null,
   orders: [],
+  order: null,
   totalOrderAmount: 0,
   isError: false,
   isSuccess: false,
@@ -25,7 +25,6 @@ export const createOrder = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      console.log(message);
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -89,7 +88,7 @@ export const updateOrderStatus = createAsyncThunk(
 );
 
 const orderSlice = createSlice({
-  name: "order",
+  name: "orders",
   initialState,
   reducers: {
     CALC_TOTAL_ORDER_AMOUNT(state, action) {
@@ -113,6 +112,7 @@ const orderSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
+        state.orders.push(action.payload);
         console.log(action.payload);
         toast.success(action.payload);
       })
@@ -146,7 +146,7 @@ const orderSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.order = action.payload;
-        // console.log(action.payload);
+        console.log(action.payload);
       })
       .addCase(getOrder.rejected, (state, action) => {
         state.isLoading = false;

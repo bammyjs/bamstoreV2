@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getOrder } from "../../redux/features/product/orderSlice";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { Spinner } from "../../components/loader/Loader";
 
 const Order = () => {
   const pdfRef = useRef();

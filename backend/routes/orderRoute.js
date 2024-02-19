@@ -6,7 +6,6 @@ const {
   getOrders,
   getOrder,
   updateOrderStatus,
-  payWithStripe,
   payWithFlutterwave,
   verifyFlwPayment,
 } = require("../controllers/orderController");
@@ -18,7 +17,6 @@ router.patch("/:id", protect, adminOnly, updateOrderStatus);
 router.get("/", protect, getOrders);
 router.get("/:id", protect, getOrder);
 
-router.post("/create-payment-intent", payWithStripe);
 router.post("/payWithFlutterwave", payWithFlutterwave);
 
 module.exports = router;

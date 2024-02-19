@@ -1,6 +1,5 @@
 import logo from "../../assets/bammylogo.png";
-import NavLink from "./NavLink";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Popover } from "@headlessui/react";
 import { debounce } from "lodash";
@@ -16,6 +15,7 @@ import {
   IoLogoFacebook,
   IoLogoTwitter,
   IoLogoInstagram,
+  IoNotificationsOutline,
 } from "react-icons/io5";
 import { TECollapse, TERipple } from "tw-elements-react";
 import { useEffect, useRef, useState } from "react";
@@ -37,6 +37,13 @@ function Header() {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+  const toggleOpen = () => setOpen(!open);
+
+  const [show, setShow] = useState(false);
+
+  const toggleShow = () => setShow(!show);
+  const { cartTotalQuantity } = useSelector((state) => state.cart);
 
   // Debounce input value
   useEffect(() => {
@@ -68,14 +75,6 @@ function Header() {
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
-
-  const { cartTotalQuantity } = useSelector((state) => state.cart);
-  const [open, setOpen] = useState(false);
-  const toggleOpen = () => setOpen(!open);
-
-  const [show, setShow] = useState(false);
-
-  const toggleShow = () => setShow(!show);
 
   useEffect(() => {
     if (show || open) {
@@ -168,16 +167,70 @@ function Header() {
               />
             </Link>
             <div className="flex md:hidden items-base justify-center gap-4">
-              <ShowOnLogout>
-                <Link to={"login"}>
-                  <IoPersonOutline style={{ fontSize: "20px" }} />
-                </Link>
-              </ShowOnLogout>
-              <ShowOnLogin>
-                <Link to={"profile"}>
-                  <IoPerson style={{ fontSize: "20px" }} />
-                </Link>
-              </ShowOnLogin>
+              <div className="flex-none gap-2">
+                <div className="dropdown dropdown-end">
+                  <ShowOnLogout>
+                    <Link to={"login"}>
+                      <IoPersonOutline style={{ fontSize: "20px" }} />
+                    </Link>
+                  </ShowOnLogout>
+                  <ShowOnLogin>
+                    <Link>
+                      <IoPerson style={{ fontSize: "20px" }} />
+                    </Link>
+                  </ShowOnLogin>
+                  <ul
+                    tabIndex={0}
+                    className="mt-3 z-[1] p-4 flex flex-col gap-2 shadow menu menu-sm dropdown-content bg-light rounded-box w-52"
+                  >
+                    <NavLink
+                      to={"/profile"}
+                      className={({ isActive }) =>
+                        isActive
+                          ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                          : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                      }
+                    >
+                      Profile
+                    </NavLink>
+                    <NavLink
+                      to={"/orders"}
+                      className={({ isActive }) =>
+                        isActive
+                          ? " flex  justify-between text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                          : "flex  justify-between hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                      }
+                    >
+                      Orders<span className="badge">New</span>
+                    </NavLink>
+                    <ShowOnLogin>
+                      <NavLink
+                        onClick={logoutUser}
+                        className={({ isActive }) =>
+                          isActive
+                            ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                            : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                        }
+                      >
+                        Logout
+                      </NavLink>
+                    </ShowOnLogin>
+                    <ShowOnLogout>
+                      <NavLink
+                        to={"/login"}
+                        className={({ isActive }) =>
+                          isActive
+                            ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                            : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                        }
+                      >
+                        Login
+                      </NavLink>
+                    </ShowOnLogout>
+                  </ul>
+                </div>
+              </div>
+
               <IoSearchOutline
                 style={{ fontSize: "20px" }}
                 onClick={toggleShow}
@@ -193,18 +246,71 @@ function Header() {
             </div>
           </div>
           <ul className="md:relative md:flex flex-wrap md:pl-2 w-full  md:ml-4 hidden justify-start items-center gap-2">
-            <NavList />
+            <NavList dropdownRef={dropdownRef} />
             <div className="md:flex w-[40] h-[40] place-items-end place-content-end absolute right-0 items-center  gap-4  ">
-              <ShowOnLogout>
-                <Link to={"login"}>
-                  <IoPersonOutline style={{ fontSize: "20px" }} />
-                </Link>
-              </ShowOnLogout>
-              <ShowOnLogin>
-                <Link to={"profile"}>
-                  <IoPerson style={{ fontSize: "20px" }} />
-                </Link>
-              </ShowOnLogin>
+              <div className="flex-none gap-2">
+                <div className="dropdown dropdown-end">
+                  <ShowOnLogout>
+                    <Link to={"login"}>
+                      <IoPersonOutline style={{ fontSize: "20px" }} />
+                    </Link>
+                  </ShowOnLogout>
+                  <ShowOnLogin>
+                    <Link>
+                      <IoPerson style={{ fontSize: "20px" }} />
+                    </Link>
+                  </ShowOnLogin>
+                  <ul
+                    tabIndex={0}
+                    className="mt-3 z-[1] p-4 flex flex-col gap-2 shadow menu menu-sm dropdown-content bg-light rounded-box w-52"
+                  >
+                    <NavLink
+                      to={"/profile"}
+                      className={({ isActive }) =>
+                        isActive
+                          ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                          : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                      }
+                    >
+                      Profile
+                    </NavLink>
+                    <NavLink
+                      to={"/orders"}
+                      className={({ isActive }) =>
+                        isActive
+                          ? " flex  justify-between text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                          : "flex  justify-between hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                      }
+                    >
+                      Orders<span className="badge">New</span>
+                    </NavLink>
+                    <ShowOnLogin>
+                      <NavLink
+                        onClick={logoutUser}
+                        className={({ isActive }) =>
+                          isActive
+                            ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                            : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                        }
+                      >
+                        Logout
+                      </NavLink>
+                    </ShowOnLogin>
+                    <ShowOnLogout>
+                      <NavLink
+                        to={"/login"}
+                        className={({ isActive }) =>
+                          isActive
+                            ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                            : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                        }
+                      >
+                        Login
+                      </NavLink>
+                    </ShowOnLogout>
+                  </ul>
+                </div>
+              </div>
               <IoSearchOutline
                 style={{ fontSize: "20px" }}
                 onClick={toggleShow}
@@ -235,7 +341,7 @@ function Header() {
                 }
                 `}
           >
-            <NavList />
+            <NavList toggleOpen={toggleOpen} />
           </ul>
         </nav>
         <TECollapse show={show}>

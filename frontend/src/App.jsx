@@ -41,6 +41,9 @@ import EditProduct from "./componets/admin/product/EditProduct";
 import UpdateUser from "./componets/admin/user/UpdateUser";
 import AllProducts from "./pages/AllProducts";
 import CheckOut from "./pages/CheckOut";
+import { OrderPage } from "./pages/orderDetails/OrderPage";
+import CheckoutSuccess from "./pages/CheckOutSuccess";
+import { OrderPreview } from "./pages/orderDetails/OrderPreview";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -98,6 +101,10 @@ function App() {
 
           <Route path="/cart" element={<CartList />} />
           <Route path="/checkout" element={<CheckOut />} />
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
+
+          <Route path="/orders" element={<OrderPage />} />
+          <Route path="/order-preview/:id" element={<OrderPreview />} />
 
           {/* <Route path="/createProduct" element={<CreateProduct />} /> */}
           <Route

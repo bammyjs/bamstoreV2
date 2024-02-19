@@ -36,6 +36,14 @@ const cartSlice = createSlice({
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       toast.error(`${action.payload.name} removed from cart`);
     },
+    clearCart(state, action) {
+      state.cartItems = [];
+      toast.info(`Cart cleared`, {
+        position: "top-left",
+      });
+
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+    },
     decreaseCart(state, action) {
       const itemIndex = state.cartItems.findIndex(
         (cartItem) => cartItem._id == action.payload._id
@@ -86,6 +94,7 @@ export const {
   removeFromCart,
   decreaseCart,
   itemTotalQuantity,
+  clearCart,
   getTotals,
 } = cartSlice.actions;
 
