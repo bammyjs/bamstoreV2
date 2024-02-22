@@ -65,7 +65,7 @@ const CartList = () => {
                             return (
                               <li
                                 key={cartItem.id}
-                                className="w-full flex flex-col space-y-3 py-6 text-left border-b sm:flex-row sm:space-x-5 sm:space-y-0"
+                                className="w-full flex  space-y-3 py-6 text-left border-b flex-row sm:space-x-5 sm:space-y-0"
                               >
                                 <div className="shrink-0">
                                   <img
@@ -107,7 +107,7 @@ const CartList = () => {
                                           >
                                             -
                                           </button>
-                                          <div className="flex w-full items-center justify-center bg-gray-400 px-4 text-xs uppercase transition">
+                                          <div className="flex w-full items-center justify-center bg-dark px-4 text-xs uppercase transition">
                                             {cartItem.cartQuantity}
                                           </div>
                                           <button
@@ -156,11 +156,13 @@ const CartList = () => {
                         </ul>
                       </div>
 
-                      <div className="mt-6 border-t border-b py-2">
+                      <div className="mt-6  border-b py-2">
                         <div className="flex items-center justify-between">
                           <p className="text-sm text-gray-400">Subtotal</p>
                           <p className="text-lg font-semibold text-dark">
-                            <span>&#8358;</span>
+                            <span className="text-lg font-semibold text-dark">
+                              &#8358;
+                            </span>
                             {new Intl.NumberFormat("en-NG").format(
                               cart.cartTotalAmount
                             )}

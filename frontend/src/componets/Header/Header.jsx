@@ -32,18 +32,33 @@ const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 const API_URL = `${BACKEND_URL}/api/products/`;
 
 function Header() {
+  const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+
   const toggleOpen = () => setOpen(!open);
 
-  const [show, setShow] = useState(false);
+  const toggleProfileOpen = () => setProfileOpen(!profileOpen);
 
   const toggleShow = () => setShow(!show);
+
   const { cartTotalQuantity } = useSelector((state) => state.cart);
+  const getNavLinkClassName = (isActive) =>
+    isActive
+      ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+      : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group";
+
+  const logoutUser = async () => {
+    await dispatch(logout());
+    await dispatch(RESET_AUTH());
+    navigate("/login");
+  };
 
   // Debounce input value
   useEffect(() => {
@@ -72,10 +87,6 @@ function Header() {
     }
   }, [debouncedValue]);
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
   useEffect(() => {
     if (show || open) {
       // Apply the classes to disable scrolling and blur the background
@@ -95,53 +106,55 @@ function Header() {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShow(false);
         setOpen(false);
+        setProfileOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dropdownRef]);
 
-  const dispatch = useDispatch();
-
-  const logoutUser = async () => {
-    await dispatch(logout());
-    await dispatch(RESET_AUTH());
-    navigate("/login");
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
   };
 
   return (
     <>
-      <div id="main-content" className="border-b border-slate-200 bg-slate-100">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-4 gap-6 py-2 px-6 text-sm text-slate-500 md:grid-cols-8 lg:max-w-5xl lg:grid-cols-12 xl:max-w-7xl ">
+      <div
+        id="main-content"
+        className="border-b border-slate-200 bg-pry-deep px-4"
+      >
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-4 gap-6 py-2 px-text-sec-light-color md:grid-cols-8 lg:max-w-5xl lg:grid-cols-12 xl:max-w-7xl ">
           <div className="col-span-2 items-center md:col-span-4 lg:col-span-6">
-            <a
-              href="javascript:void(0)"
-              className="flex items-center gap-2 transition-colors duration-300 hover:text-emerald-500"
+            <Link
+              to=""
+              className="flex items-center gap-2 transition-colors duration-300 hover:text-sec-light-color"
             >
               <IoPhonePortraitOutline />
-              +2348139647915
-            </a>
+              +2349063897173
+            </Link>
           </div>
           <div className="col-span-2 items-center justify-end gap-6 md:col-span-4 lg:col-span-6">
             <div className="flex items-center justify-end gap-4">
-              <a
-                href="javascript:void(0)"
-                className="transition-colors duration-300 hover:text-emerald-500"
+              <Link
+                to={""}
+                className="transition-colors duration-300 hover:text-sec-light-color"
               >
                 <IoLogoFacebook />
-              </a>
-              <a
+              </Link>
+              <Link
+                to={""}
                 href="javascript:void(0)"
-                className="transition-colors duration-300 hover:text-emerald-500"
+                className="transition-colors duration-300 hover:text-sec-light-color"
               >
                 <IoLogoTwitter />
-              </a>
-              <a
+              </Link>
+              <Link
+                to={""}
                 href="javascript:void(0)"
-                className="transition-colors duration-300 hover:text-emerald-500"
+                className="transition-colors duration-300 hover:text-sec-light-color"
               >
                 <IoLogoInstagram />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -183,33 +196,32 @@ function Header() {
                     tabIndex={0}
                     className="mt-3 z-[1] p-4 flex flex-col gap-2 shadow menu menu-sm dropdown-content bg-light rounded-box w-52"
                   >
-                    <NavLink
-                      to={"/profile"}
-                      className={({ isActive }) =>
-                        isActive
-                          ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
-                          : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
-                      }
-                    >
-                      Profile
-                    </NavLink>
-                    <NavLink
-                      to={"/orders"}
-                      className={({ isActive }) =>
-                        isActive
-                          ? " flex  justify-between text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
-                          : "flex  justify-between hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
-                      }
-                    >
-                      Orders<span className="badge">New</span>
-                    </NavLink>
+                    {[
+                      { to: "/profile", label: "Profile" },
+                      { to: "/orders", label: "Orders" },
+                    ].map((link) => (
+                      <NavLink
+                        key={link.to}
+                        to={link.to}
+                        onClick={toggleProfileOpen}
+                        className={({ isActive }) =>
+                          getNavLinkClassName(isActive)
+                        }
+                      >
+                        {link.label}
+                      </NavLink>
+                    ))}
+
                     <ShowOnLogin>
                       <NavLink
                         onClick={logoutUser}
                         className={({ isActive }) =>
+                          `text-dark hover:text-sec-light-color transition duration-150 ease-linear  py-1  group
+                        ${
                           isActive
-                            ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
-                            : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                            ? "  text-dark hover:bg-white/10 "
+                            : " hover:text-sec-light-color "
+                        }`
                         }
                       >
                         Logout
@@ -262,35 +274,34 @@ function Header() {
                   </ShowOnLogin>
                   <ul
                     tabIndex={0}
-                    className="mt-3 z-[1] p-4 flex flex-col gap-2 shadow menu menu-sm dropdown-content bg-light rounded-box w-52"
+                    className="mt-3 z-[6] p-4 flex flex-col gap-2 shadow menu menu-sm dropdown-content bg-light rounded-box w-52"
                   >
-                    <NavLink
-                      to={"/profile"}
-                      className={({ isActive }) =>
-                        isActive
-                          ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
-                          : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
-                      }
-                    >
-                      Profile
-                    </NavLink>
-                    <NavLink
-                      to={"/orders"}
-                      className={({ isActive }) =>
-                        isActive
-                          ? " flex  justify-between text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
-                          : "flex  justify-between hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
-                      }
-                    >
-                      Orders<span className="badge">New</span>
-                    </NavLink>
+                    {[
+                      { to: "/profile", label: "Profile" },
+                      { to: "/orders", label: "Orders" },
+                    ].map((link) => (
+                      <NavLink
+                        key={link.to}
+                        to={link.to}
+                        onClick={toggleProfileOpen}
+                        className={({ isActive }) =>
+                          getNavLinkClassName(isActive)
+                        }
+                      >
+                        {link.label}
+                      </NavLink>
+                    ))}
+
                     <ShowOnLogin>
                       <NavLink
                         onClick={logoutUser}
                         className={({ isActive }) =>
+                          `text-dark hover:text-sec-light-color transition duration-150 ease-linear  py-1  group
+                        ${
                           isActive
-                            ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
-                            : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                            ? "  text-dark hover:bg-white/10 "
+                            : " hover:text-sec-light-color "
+                        }`
                         }
                       >
                         Logout

@@ -14,16 +14,12 @@ import {
   updateOrderStatus,
 } from "../../redux/features/product/orderSlice";
 
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  useGetOrderQuery,
-  useGetOrdersQuery,
-} from "../../redux/features/order/ordersApi";
+import { useGetOrdersQuery } from "../../redux/features/order/ordersApi";
 
 export const OrderPage = () => {
   const navigate = useNavigate();
+  const shipRate = 5000;
   const { data: orders, error, isLoading } = useGetOrdersQuery();
 
   return (
@@ -36,7 +32,7 @@ export const OrderPage = () => {
           Your orders<span className="text-red-700">{}</span>
         </h3>
         <div className="overflow-x-scroll">
-          <table className="table table-pin-rows   w-full  ">
+          <table className="table z-0 table-pin-rows   w-full  ">
             {isLoading ? (
               <div className="flex  justify-center ">
                 <span className="loading loading-ball loading-xs"></span>
@@ -80,7 +76,7 @@ export const OrderPage = () => {
                           {order._id}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {order.orderAmount}
+                          {order.orderAmount + shipRate}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {order.orderStatus}

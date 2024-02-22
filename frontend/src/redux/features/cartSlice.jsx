@@ -63,7 +63,7 @@ const cartSlice = createSlice({
     },
 
     itemTotalQuantity(state, action) {
-      state.totalItems = cartItem;
+      state.totalItems = cartItems;
     },
 
     getTotals(state, action) {

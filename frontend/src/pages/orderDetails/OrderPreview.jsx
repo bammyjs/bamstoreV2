@@ -30,24 +30,40 @@ export const OrderPreview = () => {
 
   const downloadPDF = () => {
     const input = pdfRef.current;
-    html2canvas(input).then((canvas) => {
+    html2canvas(input, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4", true);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imageWidth = canvas.width;
-      const imageHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imageWidth, pdfHeight / imageHeight);
-      const imgX = (pdfWidth - imageWidth * ratio) / 2;
-      const imgY = 30;
-      pdf.addImage(
-        imgData,
-        "PNG",
-        imgX,
-        imgY,
-        imageWidth * ratio,
-        imageHeight * ratio
-      );
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+
+      let position = 0; // Initial vertical position
+
+      // Add the image to PDF
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // Watermark text settings
+      const watermark = "Bamstore Receipt";
+      pdf.setFontSize(60);
+      pdf.setTextColor(150);
+      // pdf.setOpacity(0.1);
+      pdf.text(watermark, 35, pdf.internal.pageSize.getHeight() / 2, {
+        angle: -45,
+      });
+
+      // Reset opacity to fully opaque for any further text or elements
+      // pdf.setOpacity(1);
+
+      // Save the PDF
       pdf.save(`BamstoreNG.pdf`);
     });
   };
@@ -78,7 +94,7 @@ export const OrderPreview = () => {
               <p className="text-xl font-semibold text-gray-900">
                 <span className="text-xl font-semibold text-dark">&#8358;</span>
                 {new Intl.NumberFormat("en-NG").format(
-                  cart.cartTotalAmount + shipRate
+                  order?.orderAmount + shipRate
                 )}
               </p>
             </div>
@@ -97,7 +113,7 @@ export const OrderPreview = () => {
               <p className="text-xl font-semibold text-gray-900">
                 <span className="text-xl font-semibold text-dark">&#8358;</span>
                 {new Intl.NumberFormat("en-NG").format(
-                  cart.cartTotalAmount + shipRate
+                  order?.orderAmount + shipRate
                 )}
               </p>
             </div>
@@ -173,7 +189,7 @@ export const OrderPreview = () => {
                           &#8358;
                         </span>
                         {new Intl.NumberFormat("en-NG").format(
-                          cart.cartTotalAmount
+                          order?.orderAmount
                         )}
                       </p>
                     </div>
@@ -194,7 +210,7 @@ export const OrderPreview = () => {
                         &#8358;
                       </span>
                       {new Intl.NumberFormat("en-NG").format(
-                        cart.cartTotalAmount + shipRate
+                        order?.orderAmount + shipRate
                       )}
                     </p>
                   </div>
@@ -203,14 +219,15 @@ export const OrderPreview = () => {
             </div>
           </div>
         </div>
-        <div className="w-full flex items-center justify-center  ">
-          <img
-            className="logo w-[100px] md:cursor-pointer"
-            src={logo}
-            alt="Bamstore Logo"
-          />
-        </div>
+
         <div className="md:max-w-xl mx-auto mb-4  p-4 bg-light ">
+          <div className="w-full flex items-center  justify-center my-4  ">
+            <img
+              className="logo w-[100px] md:cursor-pointer"
+              src={logo}
+              alt="Bamstore Logo"
+            />
+          </div>
           <div className=" flex flex-col items-center gap-4  text-dark">
             <h2 className="text-dark text-3xl">Order Details</h2>
             <div className="w-full border-2 border-dark p-4 my-2 text-xl text-dark font-bold text-center ">
@@ -296,7 +313,7 @@ export const OrderPreview = () => {
                         &#8358;
                       </span>
                       {new Intl.NumberFormat("en-NG").format(
-                        order?.orderAmount
+                        order?.orderAmount + shipRate
                       )}
                     </p>
                   </div>
@@ -395,9 +412,7 @@ export const OrderPreview = () => {
                     <span className="text-lg font-semibold text-dark">
                       &#8358;
                     </span>
-                    {new Intl.NumberFormat("en-NG").format(
-                      cart.cartTotalAmount
-                    )}
+                    {new Intl.NumberFormat("en-NG").format(order?.orderAmount)}
                   </p>
                 </div>
                 <div className="flex items-center justify-between">
@@ -417,7 +432,7 @@ export const OrderPreview = () => {
                     &#8358;
                   </span>
                   {new Intl.NumberFormat("en-NG").format(
-                    cart.cartTotalAmount + shipRate
+                    order?.orderAmount + shipRate
                   )}
                 </p>
               </div>

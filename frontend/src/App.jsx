@@ -44,6 +44,8 @@ import CheckOut from "./pages/CheckOut";
 import { OrderPage } from "./pages/orderDetails/OrderPage";
 import CheckoutSuccess from "./pages/CheckOutSuccess";
 import { OrderPreview } from "./pages/orderDetails/OrderPreview";
+import AllOrders from "./componets/admin/order/AllOrders";
+import OrderDetails from "./componets/admin/order/OrderDetails";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -119,7 +121,8 @@ function App() {
             <Route path="products" element={<AvailableProducts />} />
             <Route path="createProduct" element={<AddProduct />} />
             <Route path="editProduct/:id" element={<EditProduct />} />
-            <Route path="orders" element={<Orders />} />
+            <Route path="all-orders" element={<AllOrders />} />
+            <Route path="order-details/:id" element={<OrderDetails />} />
             <Route path="users" element={<DisplayUsers />} />
             <Route path="updateUser/:id" element={<UpdateUser />} />
           </Route>

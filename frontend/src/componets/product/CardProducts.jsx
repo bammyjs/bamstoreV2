@@ -20,12 +20,12 @@ function CardProducts({ product }) {
   };
 
   let textInputs = product.quantity === 0 ? "SOLD OUT" : "IN STOCK";
-  let displayCart = product.quantity > 0;
+  let displayCart = product.quantity > 0 ? true : false;
 
   return (
     <div
       key={product._id}
-      className="bg-light min-w-[12rem] max-w-xs rounded-xl items-baseline shadow-xl hover:shadow-xl"
+      className="bg-light min-w-[10rem] max-w-xs rounded-xl items-baseline shadow-xl hover:shadow-xl"
     >
       <div className="relative w-full bg-light flex items-end overflow-hidden rounded-xl">
         <Link
@@ -86,11 +86,24 @@ function CardProducts({ product }) {
               </strike>
             </p>
           </div>
-          {displayCart && (
+          {displayCart ? (
             <button
               type="button"
               onClick={() => handleAddToCart(product)}
               className="flex items-center space-x-1.5 rounded-full bg-dark p-2 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
+            >
+              <motion.div whileHover={{ rotate: 45 }} whileTap={{ scale: 1 }}>
+                <IoCartOutline
+                  style={{ fontSize: "20px" }}
+                  className="text-2xl"
+                />
+              </motion.div>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => handleAddToCart(product)}
+              className="btn-disabled flex items-center space-x-1.5 rounded-full bg-dark p-2 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
             >
               <motion.div whileHover={{ rotate: 45 }} whileTap={{ scale: 1 }}>
                 <IoCartOutline

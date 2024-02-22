@@ -100,10 +100,10 @@ const Product = () => {
           ) : error ? (
             <p>An error occurred...</p>
           ) : (
-            <div className="text-dark body-font overflow-hidden  ">
+            <div className="text-dark body-font   ">
               <div className=" py-6 mx-auto ">
                 <div className="w-full max-w-7xl  mx-auto  flex md:justify-between flex-wrap  ">
-                  <div className=" w-full flex flex-col gap-6 lg:w-1/2   h-fit ">
+                  <div className=" w-full flex flex-col gap-6 lg:w-1/2 md:sticky top-6  h-fit ">
                     <Zoom>
                       <img
                         src={activeImg}

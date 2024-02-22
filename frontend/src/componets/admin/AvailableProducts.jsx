@@ -175,7 +175,7 @@ const AvailableProducts = () => {
             <>
               <AllProducts
                 products={products}
-                key={products._id}
+                // key={products._id}
                 {...products}
               />
             </>

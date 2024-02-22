@@ -3,7 +3,6 @@ import { getTotals } from "../redux/features/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import OrderSummary from "./orderDetails/OrderSummary";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { Link, useNavigate } from "react-router-dom";
 import { getUser } from "../redux/features/auth/authSlice";
 import { createOrder } from "../redux/features/product/orderSlice";
@@ -14,9 +13,7 @@ import { formToJSON } from "axios";
 const CheckOut = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cart = useSelector((state) => state.cart);
-  const user = useSelector((state) => state.auth);
-  const { isSuccess, isError, message } = useSelector((state) => state.orders);
+
   const [isLoading, setIsLoading] = useState(false); // Add loading state
   const [expand, setExpand] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -47,6 +44,11 @@ const CheckOut = () => {
 
   const [useShippingForBilling, setUseShippingForBilling] = useState(false);
   const [saveInfo, setSaveInfo] = useState(false);
+  const shipRate = 5000;
+
+  const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.auth);
+  const { isSuccess, isError, message } = useSelector((state) => state.orders);
 
   useEffect(() => {
     if (isError) {
@@ -81,7 +83,7 @@ const CheckOut = () => {
     const formData = {
       orderDate: new Date().toLocaleDateString(),
       orderTime: new Date().toLocaleTimeString(),
-      orderAmount: cart.cartTotalAmount + shipRate, // Implement this function based on your logic
+      orderAmount: cart.cartTotalAmount, // Implement this function based on your logic
       orderStatus: "pending", // Assuming you have user context
       cartItems: cart.cartItems, // Assuming you have cart context
       shippingAddress: shippingDetails,
@@ -110,7 +112,7 @@ const CheckOut = () => {
     // Simulate API call
     setTimeout(() => {
       setIsSubmitted(true); // Update state to indicate submission
-      // window.history.replaceState(null, "", "/checkout-success");
+      window.history.replaceState(null, "", "/checkout-success");
     }, 2000); // Simulate a delay for the API call
 
     dispatch(createOrder(formData))
@@ -151,6 +153,7 @@ const CheckOut = () => {
   }, [useShippingForBilling]);
 
   const saveContactDetails = localStorage.getItem("contactDetails");
+
   const handleCheckboxEmail = (e) => {
     setContactDetails(e.target.checked);
     saveContactDetails();
@@ -208,8 +211,6 @@ const CheckOut = () => {
       state: state,
     }));
   };
-
-  const shipRate = 5000;
 
   const onExpandView = () => {
     setExpand(!expand);
@@ -295,7 +296,7 @@ const CheckOut = () => {
             isLoading={isLoading}
           />
         ) : (
-          <CheckoutSuccess />
+          <CheckoutSuccess shipRate={shipRate} />
         )}
 
         {/* desktop order summary view */}

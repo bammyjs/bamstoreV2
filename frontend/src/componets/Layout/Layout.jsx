@@ -5,6 +5,7 @@ import Hero from "../home/Hero";
 import Footer from "../home/Footer";
 import { ToastContainer } from "react-toastify";
 import WhatsappButton from "../extras/WhatsappButton";
+import { MobileNavFooter } from "../home/MobileNavFooter";
 
 function Layout() {
   return (
@@ -14,6 +15,7 @@ function Layout() {
       <WhatsappButton />
       <Outlet />
       <Footer />
+      <MobileNavFooter />
     </>
   );
 }

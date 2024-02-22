@@ -19,14 +19,14 @@ const EditProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoading = useSelector(selectIsLoading);
-
   const productEdit = useSelector(selectProduct);
   const [files, setFiles] = useState([]);
   const [product, setProduct] = useState(productEdit);
   const [productImage, setProductImage] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
   const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { categories, brands } = useSelector((state) => state.category);
 
   useEffect(() => {
@@ -88,8 +88,13 @@ const EditProduct = () => {
     console.log(formData);
 
     await dispatch(updateProduct({ id, formData }));
-    // await dispatch(getProducts());
-    navigate("/admin/all-products");
+    setIsLoading(true); // Start loading
+
+    setTimeout(() => {
+      setIsSubmitted(true); // Update state to indicate submission
+
+      navigate("/admin/products");
+    }, 2000);
   };
 
   return (
@@ -119,6 +124,7 @@ const EditProduct = () => {
         categories={categories}
         filteredBrands={filteredBrands}
         isEditing={true}
+        isLoading={isLoading}
       />
     </div>
   );

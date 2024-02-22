@@ -39,23 +39,6 @@ function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const getToken = () => {
-  //   const tokenString = document.cookie
-  //     .split("; ")
-  //     .find((row) => row.startsWith("token="));
-  //   return tokenString ? tokenString.split("=")[1] : null;
-  // };
-
-  // useEffect(() => {
-  //   const token = getToken();
-  //   if (!token) {
-  //     // Handle the absence of token, e.g., redirect to login
-  //     navigate("/login");
-  //   } else if (user === null) {
-  //     dispatch(getUser());
-  //   }
-  // }, [dispatch, user, navigate]);
-
   useEffect(() => {
     if (user === null) {
       dispatch(getUser());
@@ -117,7 +100,7 @@ function Profile() {
       <Meta title={"Profile"} />
       <section
         id="main-content"
-        className="bg-gray-bk mt-20 flex flex-col gap-6 items-center md:mt-24"
+        className="bg-gray-bk mt-10 flex flex-col gap-6 items-center md:mt-24"
       >
         {/* <BreadCrumb title="Profile" /> */}
         <h3 className="text-dark text-center text-lg md:text-3xl md:my-10  font-bold">
@@ -137,7 +120,7 @@ function Profile() {
             <form
               onSubmit={saveProfile}
               action=""
-              className="w-full container   px-6  bg-light py-6 rounded-lg max-w-md gap-6 flex flex-col shadow-2xl"
+              className="w-full container   px-6  bg-light py-6 rounded-lg max-w-md gap-2 flex flex-col shadow-2xl"
             >
               {/*    <!-- Component: Rounded basic input  --> */}
               <label htmlFor="">FirstName</label>

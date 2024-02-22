@@ -5,11 +5,10 @@ import { clearCart, itemTotalQuantity } from "../redux/features/cartSlice";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import Confetti from "react-confetti";
 
-const CheckoutSuccess = () => {
+const CheckoutSuccess = ({ shipRate }) => {
   // Define state variables for the order details
   const [contactDetails, setContactDetails] = useState({});
   const [shippingDetails, setShippingDetails] = useState({});
-  const [useShippingForBilling, setUseShippingForBilling] = useState({});
   const [totalCartAmount, setTotalCartAmount] = useState(0);
   const dispatch = useDispatch();
 
@@ -20,22 +19,20 @@ const CheckoutSuccess = () => {
       // Now you can use orderDetails as needed, for example:
       setContactDetails(orderDetails.contactDetails);
       setShippingDetails(orderDetails.shippingDetails);
-      setUseShippingForBilling(orderDetails.useShippingForBilling);
       setTotalCartAmount(orderDetails.totalCartAmount);
     }
   }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(clearCart());
+    // Optionally, clear cart and item total quantity if needed
+  };
   // Component logic...
 
-  // Optionally, clear cart and item total quantity if needed
-  // useEffect(() => {
-  //   dispatch(clearCart());
-  //   dispatch(itemTotalQuantity());
-  // }, [dispatch]);
-
   return (
-    <>
+    <section className="w-full">
       <Confetti />
-
       <div className="md:max-w-xl mx-auto mb-4  p-4 bg-light ">
         <div className=" flex flex-col items-center gap-4  text-dark">
           <h2 className="text-dark text-3xl">Checkout Successful</h2>
@@ -115,35 +112,15 @@ const CheckoutSuccess = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col  items-start gap-1">
-                <h4 className="text font-semibold">Billing Address</h4>
-                <p>
-                  {useShippingForBilling?.firstName} {""}{" "}
-                  {useShippingForBilling?.lastName}
-                </p>
-
-                <p>{useShippingForBilling?.address}</p>
-
-                <p>
-                  {useShippingForBilling?.city} {","}{" "}
-                  {useShippingForBilling?.state}
-                </p>
-
-                <p>{useShippingForBilling?.zipCode}</p>
-
-                <p>{useShippingForBilling?.country}</p>
-
-                <p>{useShippingForBilling?.phone}</p>
-              </div>
             </div>
           </div>
 
-          <button className="btn btn-primary w-full">
+          <button onClick={handleSubmit} className="btn btn-primary w-full">
             <Link to="/orders">View Order Status</Link>
           </button>
         </div>
       </div>
-    </>
+    </section>
   );
 };
 

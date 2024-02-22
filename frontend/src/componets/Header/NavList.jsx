@@ -1,81 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { Fragment } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export const NavList = ({ toggleOpen }) => {
+  const getNavLinkClassName = (isActive) =>
+    isActive
+      ? "py-4 md:py-2 w-full md:w-fit border-b border-gray md:border-0 text-sec-color hover:bg-white/10 transition duration-150 ease-linear group"
+      : "py-4  md:py-2 w-full md:w-fit border-b border-gray md:border-0 hover:text-sec-light-color transition duration-150 ease-linear  group";
+
   return (
     <>
-      <ul className="w-full text-lg font-medium md:max-w-2xl flex flex-col items-start  py-4 md:py-0 md:flex-row justify-between md:items-center md:gap-4 ">
-        <NavLink
-          to="/phones"
-          onClick={toggleOpen}
-          className={({ isActive }) =>
-            isActive
-              ? " py-4 w-full border-b border-gray md:border-0 text-sec-color hover:bg-white/10 transition duration-150 ease-linear   group"
-              : "py-4 w-full border-b border-gray md:border-0 hover:text-sec-light-color transition duration-150 ease-linear rounded-lg group"
-          }
-        >
-          Phones
-        </NavLink>
-
-        <NavLink
-          to="/laptop"
-          onClick={toggleOpen}
-          className={({ isActive }) =>
-            isActive
-              ? " py-4 w-full border-b border-gray md:border-0 text-sec-color hover:bg-white/10 transition duration-150 ease-linear   group"
-              : "py-4 w-full border-b border-gray md:border-0 hover:text-sec-light-color transition duration-150 ease-linear rounded-lg group"
-          }
-        >
-          Laptops
-        </NavLink>
-
-        <NavLink
-          to="/gaming"
-          onClick={toggleOpen}
-          className={({ isActive }) =>
-            isActive
-              ? " py-4 w-full border-b border-gray md:border-0 text-sec-color hover:bg-white/10 transition duration-150 ease-linear   group"
-              : "py-4 w-full border-b border-gray md:border-0 hover:text-sec-light-color transition duration-150 ease-linear rounded-lg group"
-          }
-        >
-          Gaming
-        </NavLink>
-
-        <NavLink
-          to="/workspace"
-          onClick={toggleOpen}
-          className={({ isActive }) =>
-            isActive
-              ? " py-4 w-full border-b border-gray md:border-0 text-sec-color hover:bg-white/10 transition duration-150 ease-linear   group"
-              : "py-4 w-full border-b border-gray md:border-0 hover:text-sec-light-color transition duration-150 ease-linear rounded-lg group"
-          }
-        >
-          WorkSpace
-        </NavLink>
-
-        <NavLink
-          to="/products"
-          onClick={toggleOpen}
-          className={({ isActive }) =>
-            isActive
-              ? " py-4 w-full border-b border-gray md:border-0 text-sec-color hover:bg-white/10 transition duration-150 ease-linear   group"
-              : "py-4 w-full border-b border-gray md:border-0 hover:text-sec-light-color transition duration-150 ease-linear rounded-lg group"
-          }
-        >
-          All Products
-        </NavLink>
-        <NavLink
-          to="/accessories"
-          onClick={toggleOpen}
-          className={({ isActive }) =>
-            isActive
-              ? " py-4 w-full border-b border-gray md:border-0 text-sec-color hover:bg-white/10 transition duration-150 ease-linear   group"
-              : "py-4 w-full border-b border-gray md:border-0 hover:text-sec-light-color transition duration-150 ease-linear rounded-lg group"
-          }
-        >
-          Accessories
-        </NavLink>
+      <ul className="w-full text-base lg:text-lg font-medium md:max-w-3xl flex flex-col gap-2 items-start py-4 md:py-0 md:flex-row justify-between md:justify-start md:items-center ">
+        {[
+          { to: "/phones", label: "Phones" },
+          { to: "/laptop", label: "Laptops" },
+          { to: "/gaming", label: "Gaming" },
+          { to: "/workspace", label: "WorkSpace" },
+          { to: "/products", label: "All Products" },
+          { to: "/accessories", label: "Accessories" },
+        ].map((link) => (
+          <NavLink
+            key={link.to}
+            to={link.to}
+            onClick={toggleOpen}
+            className={({ isActive }) =>
+              ` px-4 hover:border-2  border-sec-color ${getNavLinkClassName(
+                isActive
+              )}`
+            }
+          >
+            {link.label}
+          </NavLink>
+        ))}
       </ul>
     </>
   );

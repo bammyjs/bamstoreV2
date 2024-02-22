@@ -33,17 +33,36 @@ const TabList = () => {
   const [files, setFiles] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
   const [description, setDescription] = useState("");
+  const [filteredBrands, setFilteredBrands] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const isLoading = useSelector((state) => state.selectIsLoading);
+  // const isLoading = useSelector((state) => state.selectIsLoading);
+  const { categories, brands } = useSelector((state) => state.category);
 
   const { name, category, brand, price, quantity, color, regularPrice } =
     product;
-  const { categories, brands } = useSelector((state) => state.category);
 
+  function filterBrands(selectedCategoryName) {
+    const newBrands = brands.filter(
+      (brand) => brand.category === selectedCategoryName
+    );
+    setFilteredBrands(newBrands);
+  }
   useEffect(() => {
     dispatch(getCategories());
     dispatch(getBrands());
   }, [dispatch]);
+
+  useEffect(() => {
+    filterBrands(category);
+    console.log(filteredBrands);
+  }, [category]);
+
+  const [tabSelected, setTabSelected] = useState({
+    currentTab: 1,
+    noTabs: 3,
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -79,26 +98,14 @@ const TabList = () => {
     console.log(formData);
 
     await dispatch(createProduct(formData));
+    setIsLoading(true); // Start loading
 
-    navigate("/admin/products");
+    setTimeout(() => {
+      setIsSubmitted(true); // Update state to indicate submission
+
+      navigate("/admin/products");
+    }, 2000); // Simulate a delay for the API call
   };
-  const [filteredBrands, setFilteredBrands] = useState([]);
-  function filterBrands(selectedCategoryName) {
-    const newBrands = brands.filter(
-      (brand) => brand.category === selectedCategoryName
-    );
-    setFilteredBrands(newBrands);
-  }
-
-  useEffect(() => {
-    filterBrands(category);
-    console.log(filteredBrands);
-  }, [category]);
-
-  const [tabSelected, setTabSelected] = useState({
-    currentTab: 1,
-    noTabs: 3,
-  });
 
   const wrapperRef = useRef(null);
 
@@ -235,6 +242,7 @@ const TabList = () => {
           categories={categories}
           filteredBrands={filteredBrands}
           isEditing={false}
+          isLoading={isLoading}
         />
       </div>
       <div

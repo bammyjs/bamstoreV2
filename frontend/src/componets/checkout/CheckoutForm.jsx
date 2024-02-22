@@ -3,6 +3,7 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import OrderSummary from "../../pages/orderDetails/OrderSummary";
 import { Link } from "react-router-dom";
 import { LoadingButton } from "../extras/LoadingButton";
+import { ShowOnLogout } from "../hiddenLink/hiddenLink";
 
 export const CheckoutForm = ({
   handleBillingInputChange,
@@ -25,12 +26,15 @@ export const CheckoutForm = ({
 }) => {
   return (
     <form onSubmit={handleSubmit} className=" md:max-w-xl mx-auto mb-4 px-4">
-      <p className="text-center text-gray py-4 ">
-        Have an account?{" "}
-        <Link to={"/login"} className="text-dark">
-          Log in
-        </Link>
-      </p>
+      <ShowOnLogout>
+        <p className="text-center text-gray py-4 ">
+          Have an account?{" "}
+          <Link to={"/login"} className="text-dark">
+            Log in
+          </Link>
+        </p>
+      </ShowOnLogout>
+
       <div className=" py-4 ">
         <h2 className="text-2xl text-dark font-semibold mb-5">Contact</h2>
 
