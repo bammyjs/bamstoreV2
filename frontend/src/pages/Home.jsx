@@ -9,25 +9,26 @@ import GamingFun from "../componets/home/GamingFun";
 import GamingProduct from "../componets/home/GamingProduuct";
 import Recommendation from "../componets/home/Recommendations";
 import ProductCategory from "../componets/product/ProductCategory";
+import WorkSpaceProducts from "../componets/home/WorkSpaceProducts";
 Recommendation;
 
 function Home() {
   return (
     <>
-      <main id="main-content" className=" flex flex-col gap-8 bg-light">
+      <main id="main-content" className=" flex flex-col bg-gray-bk ">
         <Hero />
-        <Brand />
+        {/* <Brand /> */}
         <FeaturedProduct />
         <BestSelling />
-        {/* <ProductCategory /> */}
+        <NewProducts />
         <Workspace />
+        <WorkSpaceProducts />
 
         {/* <GamingProduct /> */}
-        {/*replace with workspace products}
-        {/* <NewProducts /> */}
+
         <GamingFun />
-        {/* <GamingProduct /> */}
-        <Recommendation />
+        <GamingProduct />
+        {/* <Recommendation /> */}
       </main>
     </>
   );

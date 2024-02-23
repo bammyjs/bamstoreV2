@@ -4,6 +4,7 @@ const {
   loginUser,
   logoutUser,
   getUser,
+  getUsersLast7Days,
   getLoginStatus,
   updateUser,
   updatePhoto,
@@ -18,6 +19,7 @@ router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 router.get("/", getUsers);
 router.get("/getUser", protect, getUser);
+router.get("/getUsers7days", getUsersLast7Days);
 router.get("/getLoginStatus", getLoginStatus);
 router.delete("/:id", protect, adminOnly, deleteUser);
 router.patch("/updateUser", protect, updateUser);

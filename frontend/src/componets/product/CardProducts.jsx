@@ -59,7 +59,7 @@ function CardProducts({ product }) {
         <div
           className="mt-1 text-base font-normal text-slate-400"
           dangerouslySetInnerHTML={{
-            __html: shortenText(product.description, 50),
+            __html: shortenText(product?.features, 20),
           }}
         />
         <ReactStars
@@ -79,9 +79,9 @@ function CardProducts({ product }) {
               <span>&#8358;</span>
               {new Intl.NumberFormat("en-NG").format(product.price)}
             </p>
-            <p className=" font-light text-[8px] text-gray">
-              <strike className="  text-[8px] ">
-                <span className=" text-[8px] ">&#8358;</span>
+            <p className=" font-light text-base text-gray">
+              <strike className="  text-base ">
+                <span className=" text-base ">&#8358;</span>
                 {new Intl.NumberFormat("en-NG").format(product?.regularPrice)}
               </strike>
             </p>

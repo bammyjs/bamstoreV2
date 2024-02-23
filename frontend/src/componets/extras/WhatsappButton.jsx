@@ -15,7 +15,7 @@ const WhatsappButton = () => {
       rel="noopener noreferrer"
       style={{
         position: "fixed",
-        bottom: "20px",
+        bottom: "70px",
         right: "20px",
         zIndex: "100",
         color: "green",

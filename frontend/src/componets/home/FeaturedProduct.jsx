@@ -1,10 +1,12 @@
 import React, { Fragment } from "react";
 import pad from "../../assets/controller.svg";
-// import iphone from "../assets/iphone.svg"
-import accessories from "../../assets/accessories.svg";
-import game from "../../assets/game.svg";
-import phone from "../../assets/14pro.svg";
+import iphone from "../../assets/14pro.svg";
+import accessories from "../../assets/earphones_1366689.png";
+import game from "../../assets/5570568.png";
+import phone from "../../assets/iphone_644458.png";
+import laptop from "../../assets/laptop_5512018.png";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // "https://i.ibb.co/5GVkd3m/c1.jpg"
 const categories = [
@@ -17,7 +19,7 @@ const categories = [
   {
     id: 2,
     title: "Laptops",
-    image: "https://i.ibb.co/nQKLjrW/c2.jpg",
+    image: laptop,
     link: "/laptops",
   },
   {
@@ -36,15 +38,17 @@ const categories = [
 
 const Category = ({ title, image, link }) => {
   return (
-    <div className="rounded-full  place-self-center bg-gray-bk w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
-      <img
-        src={image}
-        alt=""
-        className="w-full aspect-[2/2] object-cover rounded-full "
-      />
-      <span className="absolute -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
-        {title}
-      </span>
+    <div className="rounded-full  p-1 place-self-center bg-light w-[120px] h-[120px] md:w-[190px] md:h-[190px] relative">
+      <Link to={link}>
+        <img
+          src={image}
+          alt=""
+          className="w-full aspect-[2/2] h-auto object-contain scale-50 hover:scale-110 transition-all duration-400  "
+        />
+        <span className="absolute cursor-pointer -bottom-5 w-full flex justify-center rounded-full bg-light p-1 md:p-3 font-bold text-base mb-3 text-dark transition duration-200 box-shadow-2">
+          {title}
+        </span>
+      </Link>
     </div>
   );
 };
@@ -54,14 +58,14 @@ function FeaturedProduct() {
   return (
     <>
       <section className="w-full rounded-3xl flex flex-col justify-center place-item-center items-center py-10 ">
-        <h2 className="text-center text-lg md:text-3xl text-dark capitalize font-semibold ">
+        <h2 className="  text-dark text-left font-bold text-2xl md:text-5xl">
           Browse by Category
         </h2>
-        <div className="container  p-6 w-full gap-y-8 grid justify-center  items-center grid-cols-2 md:grid-cols-4  md:gap-y-8 max-w-7xl   ">
+        <div className="container mt-4 p-6 w-full gap-y-8 grid justify-center  items-center grid-cols-2 md:grid-cols-4  md:gap-y-8 max-w-7xl   ">
           {categories.map((cat) => {
             return (
               <Fragment key={cat.id}>
-                <Category title={cat.title} image={cat.image} />
+                <Category title={cat.title} image={cat.image} link={cat.link} />
               </Fragment>
             );
           })}
@@ -110,7 +114,7 @@ function FeaturedProduct() {
               </button>
             </div>
             <img
-              src={phone}
+              src={iphone}
               alt=""
               className="object-contain w-full h-auto max-w-[]  rounded-3xl"
             />

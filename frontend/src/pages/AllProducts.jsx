@@ -32,14 +32,6 @@ import BreadCrumb from "../componets/BreadCrumb";
 import MobileProductFilter from "../componets/product/MobileProductFilter";
 
 export default function AllProducts() {
-  const {
-    data: products,
-    isError,
-    error,
-    isLoading,
-  } = useGetAllProductsQuery();
-  const ITEMS_PER_PAGE = 12; // Set desired items per page
-
   // State for managing current page
   const [currentPage, setCurrentPage] = useState(1);
   const [priceRange, setPriceRange] = useState({ min: 50, max: 1500000 }); // Default price range
@@ -55,6 +47,13 @@ export default function AllProducts() {
   const [totalPages, setTotalPages] = useState([]);
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const {
+    data: products,
+    isError,
+    error,
+    isLoading,
+  } = useGetAllProductsQuery();
+  const ITEMS_PER_PAGE = 12; // Set desired items per page
 
   // Effect to organize products into categories once they are fetched
   useEffect(() => {

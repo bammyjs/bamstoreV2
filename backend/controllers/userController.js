@@ -150,6 +150,17 @@ const getUser = asyncHandler(async (req, res) => {
   }
 });
 
+const getUsersLast7Days = asyncHandler(async (req, res) => {
+  const today = new Date();
+  const last7Days = new Date(today.setDate(today.getDate() - 7));
+
+  const userCount = await User.countDocuments({
+    createdAt: { $gte: last7Days },
+  });
+
+  res.json({ totalNewUsers: userCount });
+});
+
 //get login status
 const getLoginStatus = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
@@ -211,6 +222,7 @@ module.exports = {
   logoutUser,
   getUsers,
   getUser,
+  getUsersLast7Days,
   deleteUser,
   getLoginStatus,
   updateUser,

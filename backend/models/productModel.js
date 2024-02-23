@@ -54,6 +54,16 @@ const productSchema = new mongoose.Schema(
       required: [true, "Please add a description"],
       trim: true,
     },
+    features: {
+      type: String,
+      required: [true, "Please add a features"],
+      trim: true,
+    },
+    salesCount: {
+      type: Number,
+      default: 0,
+      trim: true,
+    },
     image: {
       type: [Object],
     },

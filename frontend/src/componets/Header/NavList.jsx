@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 export const NavList = ({ toggleOpen }) => {
   const getNavLinkClassName = (isActive) =>
     isActive
-      ? "py-4 md:py-2 w-full md:w-fit border-b border-gray md:border-0 text-sec-color hover:bg-white/10 transition duration-150 ease-linear group"
+      ? "py-4 md:py-2 w-full md:w-fit border-2 border-gray md:border-2 text-sec-color hover:bg-white/10 transition duration-150 ease-linear group"
       : "py-4  md:py-2 w-full md:w-fit border-b border-gray md:border-0 hover:text-sec-light-color transition duration-150 ease-linear  group";
 
   return (

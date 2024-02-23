@@ -161,7 +161,7 @@ function Header() {
       </div>
       <header
         ref={dropdownRef}
-        className=" text-base-100  bg-light w-full px-2 py-4 md:px-4 md:py-4 flex justify-center items-center    "
+        className=" text-base-100  bg-light w-full px-2 py-4 h-20 md:px-4 md:py-4 flex justify-center items-center    "
       >
         <nav className="container max-w-7xl  p-1 flex   font-medium justify-between  w-full  items-center">
           <div className="   md:w-auto w-full flex justify-between items-center">
@@ -347,7 +347,7 @@ function Header() {
 
           <ul
             className={`
-                md:hidden mt-10 z-40 bg-light pt-24 flex flex-col items-start pr-6 font-bold  absolute  w-[90%] h-screen bottom-0  pl-4 duration-500 ${
+                md:hidden  z-40 bg-light pt-24 flex flex-col items-start pr-6 font-bold  absolute  w-[90%] h-screen bottom-0  pl-4 duration-500 ${
                   open ? "left-0" : "left-[-100%]"
                 }
                 `}

@@ -6,7 +6,7 @@ import { FeedbackData } from "../../datas/testimonyData";
 
 const Recommendation = () => {
   return (
-    <section className="w-full  flex flex-col items-center gap-8">
+    <section className="w-full bg-slate-500  flex flex-col items-center ">
       <h2 className=" max-w-3xl w-full text-dark text-center font-bold text-2xl md:text-5xl">
         Recommended By
       </h2>

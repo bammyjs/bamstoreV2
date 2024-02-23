@@ -16,7 +16,8 @@ function Workspace() {
             Workspace Setup
           </h2>
           <p className="text-[#afb2aa] text-center text-base md:text-3xl font-bold  mb-2 md:md-4">
-            All You Need in One Place
+            The secret to a tidy desk? Don't get rid of anything, just put it in
+            really really nice looking containers.
           </p>
           <Link
             to={"/ourStore"}

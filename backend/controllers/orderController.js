@@ -25,8 +25,14 @@ const createOrder = asyncHandler(async (req, res) => {
     throw new Error("Order data missing!!!");
   }
 
-  const updatedProduct = await updateProductQuantity(cartItems);
-  // console.log("updated product", updatedProduct);
+  // Update each product's salesCount
+  await Promise.all(
+    cartItems.map(async (item) => {
+      await Product.findByIdAndUpdate(item._id, {
+        $inc: { salesCount: item.cartQuantity },
+      });
+    })
+  );
 
   // Create Order
   const order = await Order.create({
@@ -72,6 +78,24 @@ const getOrder = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
   res.status(200).json(order);
+});
+
+const getOrdersLast7Days = asyncHandler(async (req, res) => {
+  const today = new Date();
+  const last7Days = new Date(today.setDate(today.getDate() - 7));
+
+  const orders = await Order.aggregate([
+    { $match: { createdAt: { $gte: last7Days } } },
+    {
+      $group: {
+        _id: null,
+        totalIncome: { $sum: "$orderAmount" },
+        totalOrders: { $count: {} },
+      },
+    },
+  ]);
+
+  res.json(orders);
 });
 
 // Update Product
@@ -284,6 +308,7 @@ module.exports = {
   createOrder,
   getOrders,
   getOrder,
+  getOrdersLast7Days,
   updateOrderStatus,
   verifyFlwPayment,
   payWithFlutterwave,

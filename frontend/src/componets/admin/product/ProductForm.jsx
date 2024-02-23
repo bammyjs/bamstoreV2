@@ -10,13 +10,11 @@ const ProductForm = ({
   files,
   setFiles,
   product,
-  productImage,
-  imagePreview,
-  setImagePreview,
   description,
+  features,
+  setFeatures,
   setDescription,
   handleInputChange,
-  handleImageChange,
   saveProduct,
   categories,
   filteredBrands,
@@ -194,7 +192,30 @@ const ProductForm = ({
                 className="input  text-neutral input-bordered w-full max-w-xs"
               />
             </label>
+
+            {/* <label className="form-control w-full max-w-xs">
+              <div className="label">
+                <span className="label-text">Product features:</span>
+              </div>
+              <input
+                placeholder="Product features"
+                name="features"
+                value={product?.features}
+                onChange={handleInputChange}
+                type="text"
+                className="input text-neutral input-bordered w-full max-w-xs"
+              />
+            </label> */}
           </div>
+          <label>Product features:</label>
+          {/* <div dangerouslySetInnerHTML={{ __html: description }} /> */}
+          <ReactQuill
+            theme="snow"
+            value={features}
+            onChange={setFeatures}
+            modules={ProductForm.modules}
+            formats={ProductForm.formats}
+          />
           <label>Product Description:</label>
           {/* <div dangerouslySetInnerHTML={{ __html: description }} /> */}
           <ReactQuill

@@ -8,6 +8,8 @@ import "tw-elements-react/dist/css/tw-elements-react.min.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Provider>
 );

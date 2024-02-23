@@ -430,12 +430,6 @@ export const CheckoutForm = ({
 
       {/* Repeat similar blocks for other fields like address, city, and zipCode */}
       <LoadingButton isLoading={isLoading}>Confirm Order</LoadingButton>
-      {/* <button
-        type="submit"
-        className="mb-6 btn btn-primary w-full hover:btn-accent "
-      >
-        Confirm Order
-      </button> */}
     </form>
   );
 };

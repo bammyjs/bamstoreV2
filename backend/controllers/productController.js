@@ -18,6 +18,7 @@ const createProduct = asyncHandler(async (req, res) => {
       image,
       regularPrice,
       color,
+      features,
     } = req.body;
 
     //   Validation
@@ -39,6 +40,7 @@ const createProduct = asyncHandler(async (req, res) => {
       image,
       regularPrice,
       color,
+      features,
     });
 
     res.status(201).json(product);
@@ -110,8 +112,6 @@ const getProduct = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-//get by category
-
 // const filterProductsByCategory = asyncHandler(async (req, res) => {
 //   const pageSize = 8;
 //   const page = Number(req.query.pageNumber) || 1;
@@ -166,6 +166,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     image,
     regularPrice,
     color,
+    features,
   } = req.body;
   const { id } = req.params;
 
@@ -190,6 +191,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       image,
       regularPrice,
       color,
+      features,
     },
     {
       new: true,

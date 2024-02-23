@@ -33,6 +33,7 @@ const TabList = () => {
   const [files, setFiles] = useState([]);
   const [imagePreview, setImagePreview] = useState([]);
   const [description, setDescription] = useState("");
+  const [features, setFeatures] = useState("");
   const [filteredBrands, setFilteredBrands] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -92,6 +93,7 @@ const TabList = () => {
       regularPrice: regularPrice,
       price: price,
       description: description,
+      features: features,
       image: files,
     };
 
@@ -236,6 +238,8 @@ const TabList = () => {
           imagePreview={imagePreview}
           setImagePreview={setImagePreview}
           description={description}
+          features={features}
+          setFeatures={setFeatures}
           setDescription={setDescription}
           handleInputChange={handleInputChange}
           saveProduct={saveProduct}

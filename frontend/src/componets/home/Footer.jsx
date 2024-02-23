@@ -10,9 +10,9 @@ function Footer() {
     <footer className="w-full text-gray-bk bg-pry-deep ">
       <div className="container w-full max-w-7xl flex flex-col justify-between px-5 py-24 mx-auto  md:items-center lg:items-start md:flex-row md:flex-no-wrap ">
         <div className="flex-shrink-0 w-64 mx-auto text-center md:mx-0 md:text-left">
-          <a className="flex items-center justify-center font-medium text-light md:justify-start">
+          <Link className="flex items-center justify-center font-medium text-light md:justify-start">
             <img src={logo} alt="" className="w-28  grayscale" />
-          </a>
+          </Link>
           <p className="mt-2 text-sm text-gray-500">
             Our Address: <br /> No. 12 Car Street Junction,
             <br /> Arakale, Akure <br /> Ondo State,NGR <br /> +234 9063897173!

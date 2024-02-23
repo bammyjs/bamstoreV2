@@ -27,6 +27,7 @@ export const store = configureStore({
       ordersApi.middleware
     );
   },
+  devTools: false,
 });
 
 // store.dispatch(productsFetch());

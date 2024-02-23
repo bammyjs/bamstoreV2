@@ -235,7 +235,7 @@ const Product = () => {
                         <div
                           className="flex flex-col "
                           dangerouslySetInnerHTML={{
-                            __html: product.description,
+                            __html: product?.features,
                           }}
                         />
                       </div>

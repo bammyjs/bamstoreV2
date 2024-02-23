@@ -2,15 +2,14 @@ import { useGetAllProductsQuery } from "../../redux/features/product/productsApi
 import { Fragment, useEffect, useState } from "react";
 import CardProducts from "../product/CardProducts";
 import { Link } from "react-router-dom";
-import { NewProductCard } from "../product/NewProductCard";
 
-function GamingProduct() {
+function WorkSpaceProducts() {
   const [loading, setLoading] = useState(true);
   const { data: products, error, isLoading } = useGetAllProductsQuery();
   console.log(products);
 
-  const gamingProducts =
-    products?.filter((product) => product.category === "Gaming") || [];
+  const workspaceProducts =
+    products?.filter((product) => product.category === "WorkSpace") || [];
 
   useEffect(() => {
     setTimeout(() => {
@@ -39,7 +38,7 @@ function GamingProduct() {
               <div className="  flex flex-col item-center justify-center gap-8  ">
                 <div className="w-full md:p-2">
                   <div className="grid  justify-between   grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
-                    {gamingProducts.slice(0, 4).map((product) => {
+                    {workspaceProducts.slice(0, 4).map((product) => {
                       return (
                         <NewProductCard
                           key={product._id}
@@ -65,4 +64,4 @@ function GamingProduct() {
   );
 }
 
-export default GamingProduct;
+export default WorkSpaceProducts;
