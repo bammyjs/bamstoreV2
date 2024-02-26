@@ -8,8 +8,6 @@ const productRoute = require("./routes/productRoute");
 const orderRoute = require("./routes/orderRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
-const filterRoute = require("./routes/filterRoute");
-const searchRoute = require("./routes/searchRoute");
 const errorHandler = require("./middleware/errorMiddleware");
 
 const app = express();
@@ -22,7 +20,11 @@ app.use(express.urlencoded({ extended: false }));
 // CORS middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5000"],
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://localhost:5000",
+    ],
     credentials: true,
   })
 );
@@ -33,8 +35,6 @@ app.use("/api/products", productRoute);
 app.use("/api/order", orderRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/brand", brandRoute);
-app.use("/api/filter", filterRoute);
-app.use("/api/search", searchRoute);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));

@@ -48,7 +48,7 @@ function NewProducts() {
           <div>An error occurred: {error.message}</div>
         ) : (
           <>
-            <section className="w-full  mx-auto mt-10 px-4 sm:px-6 lg:px-10">
+            <section className="w-full  mx-auto mt-10 sm:px-6 lg:px-10">
               <div className="flex flex-col item-center justify-center gap-8">
                 <div className="w-full md:p-2">
                   <div className="grid pb-8 justify-between grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4">
@@ -64,7 +64,7 @@ function NewProducts() {
               </div>
             </section>
             <Link
-              className="btn btn-secondary px-10 md:place-self-end"
+              className="btn btn-primary px-10 md:place-self-end"
               to={"/products"}
             >
               Shop more

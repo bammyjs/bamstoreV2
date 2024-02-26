@@ -32,6 +32,20 @@ const updateProduct = async (id, formData) => {
   return response.data;
 };
 
+// Updated to include token
+// const reviewProduct = async (id, formData, token) => {
+//   const config = {
+//     headers: {
+//       Authorization: `Bearer ${token}`, // Include the token in the authorization header
+//     },
+//   };
+//   const response = await axios.patch(
+//     `${API_URL}review/${id}`,
+//     formData,
+//     config
+//   );
+//   return response.data;
+// };
 // Review Product
 const reviewProduct = async (id, formData) => {
   const response = await axios.patch(`${API_URL}review/${id}`, formData);

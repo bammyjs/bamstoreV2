@@ -22,7 +22,16 @@ const createProduct = asyncHandler(async (req, res) => {
     } = req.body;
 
     //   Validation
-    if (!name || !category || !brand || !quantity || !price || !description) {
+    if (
+      !name ||
+      !category ||
+      !brand ||
+      !quantity ||
+      !price ||
+      !description ||
+      !features ||
+      !regularPrice
+    ) {
       res.status(400);
       throw new Error("Please fill in all fields");
     }
@@ -203,40 +212,36 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 
 // Review Product
+
 const reviewProduct = asyncHandler(async (req, res) => {
-  // star, review
-  const { star, review, reviewDate } = req.body;
+  const { star, review } = req.body;
   const { id } = req.params;
 
-  // validation
-  if (star < 1 || !review) {
+  if (!star || !review) {
     res.status(400);
-    throw new Error("Please add star and review");
+    throw new Error("Star rating and review text are required.");
   }
 
   const product = await Product.findById(id);
 
-  // if product doesn't exist
-  if (!product) {
-    res.status(404);
-    throw new Error("Product not found");
-  }
   if (!product) {
     res.status(404);
     throw new Error("Product not found");
   }
 
-  // Update Product
-  product.ratings.push({
+  const reviewEntry = {
     star,
     review,
-    reviewDate,
+    reviewDate: new Date(),
     name: req.user.firstName,
     userID: req.user._id,
-  });
-  product.save();
+  };
 
-  res.status(200).json({ message: "Product review added." });
+  product.ratings.push(reviewEntry);
+
+  await product.save();
+
+  res.status(200).json({ message: "Review added successfully" });
 });
 
 // Delete Product

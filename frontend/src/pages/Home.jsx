@@ -23,9 +23,6 @@ function Home() {
         <NewProducts />
         <Workspace />
         <WorkSpaceProducts />
-
-        {/* <GamingProduct /> */}
-
         <GamingFun />
         <GamingProduct />
         {/* <Recommendation /> */}

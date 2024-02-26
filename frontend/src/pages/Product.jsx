@@ -346,8 +346,8 @@ const Product = () => {
                 <div className="flex mt-1 items-center pb-5 border-b border-gray mb-5"></div>
 
                 {/* reviews */}
-                <div className="py-12 px-4 md:px-6 2xl:px-0  flex justify-center items-center">
-                  <div className="flex flex-col justify-start items-start w-full space-y-8">
+                <div className="w-full py-12  px-4 md:px-6   md:flex justify-center items-center">
+                  <div className="bg-slate-500 container flex flex-col justify-start items-start w-full space-y-8">
                     <div className="flex justify-start items-start">
                       <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
                         Reviews ({product?.ratings?.length})
@@ -366,8 +366,8 @@ const Product = () => {
                             <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 p-8 border">
                               <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 md:px-8 py-8">
                                 <div className="flex flex-col md:flex-row justify-between w-full">
-                                  <div className="flex flex-row justify-between items-start w-3/4 ">
-                                    <p className="text-xl md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
+                                  <div className="flex flex-row justify-between items-start  ">
+                                    <p className="text-xl max-w-80 md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
                                       {rate?.review}
                                     </p>
                                   </div>

@@ -1,5 +1,4 @@
 export const url = "http://localhost:5000/api";
-// export const url2 = "https://bamstore-store.onrender.com";
 
 export const setHeaders = () => {
   const headers = {
@@ -9,3 +8,5 @@ export const setHeaders = () => {
   };
   return headers;
 };
+
+// export const url2 = "https://bamstore-store.onrender.com";

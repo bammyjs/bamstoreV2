@@ -17,9 +17,9 @@ function Footer() {
             Our Address: <br /> No. 12 Car Street Junction,
             <br /> Arakale, Akure <br /> Ondo State,NGR <br /> +234 9063897173!
           </p>
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <span className="inline-flex justify-center mt-2 sm:ml-auto sm:mt-0 sm:justify-start">
-              <a className="text-gray-500 cursor-pointer hover:text-gray-700">
+              <Link className="text-gray-500 cursor-pointer hover:text-gray-700">
                 <svg
                   fill="currentColor"
                   stroke-linecap="round"
@@ -30,8 +30,8 @@ function Footer() {
                 >
                   <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
                 </svg>
-              </a>
-              <a className="ml-3 text-gray-500 cursor-pointer hover:text-gray-700">
+              </Link>
+              <Link className="ml-3 text-gray-500 cursor-pointer hover:text-gray-700">
                 <svg
                   fill="currentColor"
                   stroke-linecap="round"
@@ -42,8 +42,8 @@ function Footer() {
                 >
                   <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
                 </svg>
-              </a>
-              <a className="ml-3 text-gray-500 cursor-pointer hover:text-gray-700">
+              </Link>
+              <Link className="ml-3 text-gray-500 cursor-pointer hover:text-gray-700">
                 <svg
                   fill="none"
                   stroke="currentColor"
@@ -56,8 +56,8 @@ function Footer() {
                   <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
                   <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
                 </svg>
-              </a>
-              <a className="ml-3 text-gray-500 cursor-pointer hover:text-gray-700">
+              </Link>
+              <Link className="ml-3 text-gray-500 cursor-pointer hover:text-gray-700">
                 <svg
                   fill="currentColor"
                   stroke="currentColor"
@@ -73,9 +73,9 @@ function Footer() {
                   ></path>
                   <circle cx="4" cy="4" r="2" stroke="none"></circle>
                 </svg>
-              </a>
+              </Link>
             </span>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-wrap flex-grow mt-10 -mb-10 text-center md:pl-20 md:mt-0 md:text-left">
           <div className="w-full px-4 lg:w-1/4 md:w-1/2">
@@ -84,29 +84,29 @@ function Footer() {
             </h2>
             <nav className="mb-10 list-none">
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Phones
-                </a>
+                </Link>
               </li>
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Laptop
-                </a>
+                </Link>
               </li>
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Screen Protectors
-                </a>
+                </Link>
               </li>
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Protective Cases
-                </a>
+                </Link>
               </li>
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Stands
-                </a>
+                </Link>
               </li>
             </nav>
           </div>
@@ -116,38 +116,38 @@ function Footer() {
             </h2>
             <nav className="mb-10 list-none">
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Contact Support
-                </a>
+                </Link>
               </li>
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Help Resources
-                </a>
+                </Link>
               </li>
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Shipping Policy
-                </a>
+                </Link>
               </li>
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li className="mt-3">
-                <a
+                <Link
                   className="text-gray-500 cursor-pointer hover:text-sec-light-color"
                   onClick={() =>
                     document.getElementById("my_modal_3").showModal()
                   }
                 >
                   Refund Policy
-                </a>
+                </Link>
                 <dialog id="my_modal_3" className="modal">
                   <div className="modal-box bg-neutral text-gray max-w-4xl">
                     <form method="dialog">
-                      {/* if there is a button in form, it will close the modal */}
+                      {/* if there is Link button in form, it will close the modal */}
                       <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                         ✕
                       </button>
@@ -159,17 +159,17 @@ function Footer() {
                       Orders may be canceled within 24 hours (Does not apply to
                       rushed orders) or returned only with NEF Technologies'
                       prior written consent. NEF Technologies reserves the right
-                      to charge a cancellation or restocking fee on canceled or
-                      returned orders.
+                      to charge Link cancellation or restocking fee on canceled
+                      or returned orders.
                     </p>
                   </div>
                 </dialog>
               </li>
 
               <li className="mt-3">
-                <a className="text-gray-500 cursor-pointer hover:text-sec-light-color">
+                <Link className="text-gray-500 cursor-pointer hover:text-sec-light-color">
                   Warranty
-                </a>
+                </Link>
               </li>
             </nav>
           </div>

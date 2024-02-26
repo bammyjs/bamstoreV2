@@ -97,16 +97,11 @@ body {
   overflow: hidden;
 }
 
-.country {
-  flex: 1 0 8rem;
-}
-.name {
-  flex: 1 0 4rem;
-}
-.address {
-  flex: 1 0 8rem;
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-.state {
-  flex: 1 0 4rem;
+/* Hide scrollbar for Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
 }

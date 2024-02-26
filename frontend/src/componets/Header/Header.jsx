@@ -91,11 +91,9 @@ function Header() {
     if (show || open) {
       // Apply the classes to disable scrolling and blur the background
       document.body.classList.add("no-scroll");
-      document.getElementById("main-content").classList.add("blur");
     } else {
       // Remove the classes when the menu is closed
       document.body.classList.remove("no-scroll");
-      document.getElementById("main-content").classList.remove("blur");
     }
   }, [show, open]);
 
@@ -161,11 +159,11 @@ function Header() {
       </div>
       <header
         ref={dropdownRef}
-        className=" text-base-100  bg-light w-full px-2 py-4 h-20 md:px-4 md:py-4 flex justify-center items-center    "
+        className="z-30 text-base-100 sticky top-0  bg-light w-full px-2 py-4 h-14 md:h-20 md:px-4 md:py-4 flex justify-center items-center    "
       >
         <nav className="container max-w-7xl  p-1 flex   font-medium justify-between  w-full  items-center">
           <div className="   md:w-auto w-full flex justify-between items-center">
-            <div className=" md:hidden block z-50 " onClick={toggleOpen}>
+            <div className=" md:hidden  z-50 " onClick={toggleOpen}>
               {open ? (
                 <IoCloseOutline style={{ fontSize: "25px" }} />
               ) : (
@@ -180,7 +178,7 @@ function Header() {
               />
             </Link>
             <div className="flex md:hidden items-base justify-center gap-4">
-              <div className="flex-none gap-2">
+              <div className="flex-none gap-2 hidden md:block">
                 <div className="dropdown dropdown-end">
                   <ShowOnLogout>
                     <Link to={"login"}>
@@ -347,32 +345,81 @@ function Header() {
 
           <ul
             className={`
-                md:hidden  z-40 bg-light pt-24 flex flex-col items-start pr-6 font-bold  absolute  w-[90%] h-screen bottom-0  pl-4 duration-500 ${
-                  open ? "left-0" : "left-[-100%]"
+                md:hidden  z-40 bg-light pt-24 flex flex-col justify-between  items-start pr-6 font-bold  absolute  w-[90%] h-screen  pl-4 duration-500 ${
+                  open ? "left-0 -top-16 pb-20 " : "left-[-100%]"
                 }
                 `}
           >
             <NavList toggleOpen={toggleOpen} />
+            <ShowOnLogin>
+              <div className="flex flex-col font-normal">
+                <span className={"flex items-center gap-2 "}>
+                  <IoPerson style={{ fontSize: "20px" }} />
+                  <NavLink
+                    onClick={toggleOpen}
+                    to={"/orders"}
+                    className={({ isActive }) =>
+                      `text-dark hover:text-sec-light-color transition duration-150 ease-linear  py-1  group
+                        ${
+                          isActive
+                            ? "  text-dark hover:bg-white/10 "
+                            : " hover:text-sec-light-color "
+                        }`
+                    }
+                  >
+                    Orders
+                  </NavLink>
+                </span>
+                <span className="flex items-center gap-2 ">
+                  <IoPerson style={{ fontSize: "20px" }} />
+                  <NavLink
+                    onClick={logoutUser}
+                    className={({ isActive }) =>
+                      `text-dark hover:text-sec-light-color transition duration-150 ease-linear  py-1  group
+                        ${
+                          isActive
+                            ? "  text-dark hover:bg-white/10 "
+                            : " hover:text-sec-light-color "
+                        }`
+                    }
+                  >
+                    Logout
+                  </NavLink>
+                </span>
+              </div>
+            </ShowOnLogin>
+            <ShowOnLogout>
+              <span className="flex items-center gap-2 font-normal">
+                <IoPersonOutline style={{ fontSize: "20px" }} />
+                <NavLink
+                  to={"/login"}
+                  className={({ isActive }) =>
+                    isActive
+                      ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
+                      : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
+                  }
+                >
+                  Login
+                </NavLink>
+              </span>
+            </ShowOnLogout>
           </ul>
         </nav>
         <TECollapse show={show}>
-          <div className="absolute z-50 bg-light p-6 top-20 md:top-32  left-0 w-full mb-3  mx-auto">
-            <div className=" input bg-light  container max-w-7xl relative  left-0 right-0 m-auto mb-4 flex w-full flex-wrap items-center">
+          <div className="absolute  border-0  z-40 bg-light p-4 top-10 md:top-20  left-0 w-full   mx-auto">
+            <div className=" input bg-light  container max-w-7xl relative  left-0 right-0 m-auto  flex w-full flex-wrap items-center">
               <span className="">
                 <IoSearchOutline style={{ fontSize: "20px" }} />
               </span>
               <input
                 type="search"
-                className="input-ghost  m-0 -mr-0.5  block w-[1px]  flex-auto rounded-lg   bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-tra focus:text-neutral-700  focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-200 "
+                className="input-ghost  m-0 -mr-0.5  block w-[1px]  flex-auto rounded-lg   bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-transparent focus:text-neutral-700  focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-200 "
                 placeholder="Search for..."
                 aria-label="Search"
                 aria-describedby="button-addon3"
                 value={inputValue}
                 onChange={handleInputChange}
               />
-              <span onClick={toggleShow} className="">
-                <IoCloseOutline style={{ fontSize: "20px" }} />
-              </span>
             </div>
             {isLoading && (
               <div className="flex  justify-center ">
@@ -382,20 +429,24 @@ function Header() {
                 <span className="loading loading-ball loading-lg"></span>
               </div>
             )}
-            {error && <p>Error loading search results.</p>}
+            {error && (
+              <p className="text-center">Error loading search results.</p>
+            )}
 
             {searchResults ? (
-              <div className="w-full flex  text-gray-400  justify-between items-center   py-4 active:border-y  border-gray-200 ">
+              <div className="w-full flex  text-gray-400  justify-between items-center   active:border-y  border-gray-200 ">
                 <div className="w-full flex flex-col gap-4 items-center justify-center">
-                  <h3 className="text-center text-xl md:text-2xl">
-                    Product(s) found({searchResults.length})
-                  </h3>
-                  <ul className="flex w-full max-w-7xl  items-center  gap-2 overflow-x-scroll">
+                  <ul className="flex w-full max-w-7xl  items-center  gap-2 overflow-x-scroll hide-scrollbar ">
                     {searchResults.map((result) => (
-                      <li key={result.id}>
-                        <CardProducts product={result} />
-                      </li>
+                      <div className="flex flex-col items-center  gap-10">
+                        <li className=" px-4 py-8" key={result.id}>
+                          <CardProducts product={result} />
+                        </li>
+                      </div>
                     ))}
+                    {/* <h3 className="text-center text-xl md:text-2xl">
+                      Product(s) found({searchResults.length})
+                    </h3> */}
                   </ul>
                 </div>
               </div>

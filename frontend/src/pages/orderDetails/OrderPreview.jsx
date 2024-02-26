@@ -12,6 +12,7 @@ import {
 } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import logo from "../../assets/bammylogo.png";
+import ProductReview from "../../componets/product/ProductReview";
 
 export const OrderPreview = () => {
   const pdfRef = useRef();
@@ -19,10 +20,21 @@ export const OrderPreview = () => {
   console.log(id);
   const shipRate = 5000;
   const [expand, setExpand] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
   const cart = useSelector((state) => state.cart);
 
   const { data: order, error, isLoading } = useGetOrderQuery(id);
   console.log("current order:", order);
+
+  const handleReviewClick = (productId) => {
+    setSelectedProductId(productId);
+    document.getElementById("my_modal_3").showModal();
+  };
+
+  const handleReviewBigClick = (productId) => {
+    setSelectedProductId(productId);
+    document.getElementById("my_modal_4").showModal();
+  };
 
   const onExpandView = () => {
     setExpand(!expand);
@@ -174,7 +186,31 @@ export const OrderPreview = () => {
                                 </div>
                               </div>
                             </div>
-                            {/* <span className="bg-black w-full h-1"></span> */}
+                            <button
+                              data-html2canvas-ignore
+                              className="btn btn-secondary"
+                              onClick={() => handleReviewClick(cartHistory._id)}
+                            >
+                              Review Product
+                            </button>
+                            <dialog id="my_modal_3" className="modal">
+                              <div className="modal-box bg-neutral text-gray max-w-4xl">
+                                <form method="dialog">
+                                  {/* if there is Link button in form, it will close the modal */}
+                                  <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                    ✕
+                                  </button>
+                                </form>
+                                <h3 className="font-bold text-lg text-dark">
+                                  Review {""} {cartHistory.name}
+                                </h3>
+                                {selectedProductId && (
+                                  <ProductReview
+                                    productId={selectedProductId}
+                                  />
+                                )}
+                              </div>
+                            </dialog>
                           </li>
                         );
                       })}
@@ -340,14 +376,15 @@ export const OrderPreview = () => {
               </div> */}
               </div>
             </div>
-
-            <button
-              data-html2canvas-ignore
-              className="btn btn-primary w-full"
-              onClick={downloadPDF}
-            >
-              Download as PDF
-            </button>
+            <div className="w-full flex items-center justify-between gap-3">
+              <button
+                data-html2canvas-ignore
+                className="btn btn-primary "
+                onClick={downloadPDF}
+              >
+                Download as PDF
+              </button>
+            </div>
           </div>
         </div>
         <div className="bg-gray-bk w-full p-4 sticky  flex-col hidden  md:block  text-dark">
@@ -398,6 +435,29 @@ export const OrderPreview = () => {
                             </div>
                           </div>
                         </div>
+                        <button
+                          data-html2canvas-ignore
+                          className="btn btn-secondary"
+                          onClick={() => handleReviewBigClick(cartHistory._id)}
+                        >
+                          Review Product
+                        </button>
+                        <dialog id="my_modal_4" className="modal">
+                          <div className="modal-box bg-neutral text-gray max-w-4xl">
+                            <form method="dialog">
+                              {/* if there is Link button in form, it will close the modal */}
+                              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                ✕
+                              </button>
+                            </form>
+                            <h3 className="font-bold text-lg text-dark">
+                              Review {""} {cartHistory.name}
+                            </h3>
+                            {selectedProductId && (
+                              <ProductReview productId={selectedProductId} />
+                            )}
+                          </div>
+                        </dialog>
                         {/* <span className="bg-black w-full h-1"></span> */}
                       </li>
                     );

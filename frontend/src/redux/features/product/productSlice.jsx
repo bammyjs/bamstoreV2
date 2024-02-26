@@ -127,7 +127,7 @@ export const reviewProduct = createAsyncThunk(
     }
   }
 );
-// Review product
+// delete product
 export const deleteReview = createAsyncThunk(
   "products/deleteReview",
   async ({ id, formData }, thunkAPI) => {

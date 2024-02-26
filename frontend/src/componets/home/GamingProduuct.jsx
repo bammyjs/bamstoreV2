@@ -53,7 +53,7 @@ function GamingProduct() {
               </div>
             </section>
             <Link
-              className="btn btn-secondary  px-10 md:place-self-end"
+              className="btn btn-primary  px-10 md:place-self-end"
               to={"/products/gaming"}
             >
               Shop More
