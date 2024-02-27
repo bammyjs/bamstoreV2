@@ -47,20 +47,26 @@ const updateProduct = async (id, formData) => {
 //   return response.data;
 // };
 // Review Product
-const reviewProduct = async (id, formData) => {
-  const response = await axios.patch(`${API_URL}review/${id}`, formData);
+const reviewProduct = async (productId, formData) => {
+  const response = await axios.patch(`${API_URL}review/${productId}`, formData);
   return response.data.message;
 };
 
 // Review Product
-const deleteReview = async (id, formData) => {
-  const response = await axios.patch(`${API_URL}deleteReview/${id}`, formData);
+const deleteReview = async (productId, userId) => {
+  const response = await axios.delete(`${API_URL}deleteReview/${productId}`, {
+    userId,
+  });
   return response.data.message;
 };
 
 // Review Product
-const updateReview = async (id, formData) => {
-  const response = await axios.patch(`${API_URL}updateReview/${id}`, formData);
+const updateReview = async (productId, reviewId, formData) => {
+  const response = await axios.patch(
+    `${API_URL}updateReview/${productId}`,
+    reviewId,
+    formData
+  );
   return response.data.message;
 };
 

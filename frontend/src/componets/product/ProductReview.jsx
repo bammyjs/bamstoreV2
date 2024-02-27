@@ -11,14 +11,20 @@ import {
 } from "../../redux/features/product/productSlice";
 
 const ProductReview = ({ productId }) => {
-  console.log("ProductReview:", productId);
+  //   const { id } = useParams();
   const dispatch = useDispatch();
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [existingReview, setExistingReview] = useState(null);
   const { product, error } = useSelector((state) => state.product);
   const { user } = useSelector((state) => state.auth);
+  console.log(
+    "Submitting review for product ID:",
+    productId,
+    "by user ID:",
+    user._id
+  );
 
   useEffect(() => {
     if (productId) {
@@ -27,40 +33,37 @@ const ProductReview = ({ productId }) => {
   }, [dispatch, productId]);
 
   useEffect(() => {
-    const existingReview = product?.ratings?.find(
-      (rev) => rev.userID === user._id
-    );
-    if (existingReview) {
-      setRating(existingReview.star);
-      setReviewText(existingReview.review);
+    const review = product?.ratings?.find((r) => r.userID === user._id);
+    if (review) {
+      setRating(review.star);
+      setReviewText(review.review);
       setIsEditing(true);
-      setEditingReviewId(existingReview._id);
+      setExistingReview(review);
     }
-  }, [product, user]);
+  }, [product, user._id]);
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (rating <= 0 || reviewText.trim() === "") {
-      toast.error("Please provide both a rating and a review.");
-      return;
-    }
-
-    const reviewData = {
+    const formData = {
       star: rating,
       review: reviewText,
-      reviewDate: new Date().toISOString(),
+      userID: user._id, // Ensure to include userID in formData
     };
 
-    if (isEditing && editingReviewId) {
+    if (isEditing) {
       dispatch(
         updateReview({
-          id: editingReviewId,
-          formData: { ...reviewData, userID: user._id },
+          productId,
+          reviewId: existingReview?._id, // Use review ID for update operation
+          formData: {
+            star: rating,
+            review: reviewText,
+            userID: user._id,
+          },
         })
       )
         .unwrap()
@@ -69,35 +72,37 @@ const ProductReview = ({ productId }) => {
           setIsEditing(false);
           dispatch(getProduct(productId));
         })
-        .catch((error) => toast.error(error.message));
+        .catch((error) => toast.error(error || "Failed to update review"));
     } else {
-      dispatch(reviewProduct({ id: productId, formData: reviewData }))
+      dispatch(reviewProduct({ productId, formData }))
         .unwrap()
         .then(() => {
           toast.success("Review added successfully");
-          dispatch(getProduct(productId));
+          setIsEditing(false); // Reset editing state
+          dispatch(getProduct(productId)); // Reload product to get the latest reviews
         })
-        .catch((error) => toast.error(error.message));
+        .catch((error) => toast.error(error || "Failed to add review"));
     }
 
-    setRating(0);
+    // Clear form
+    setRating(5);
     setReviewText("");
   };
 
-  const handleDelete = async () => {
-    if (editingReviewId) {
-      dispatch(
-        deleteReview({ id: editingReviewId, formData: { userID: user._id } })
-      )
-        .unwrap()
-        .then(() => {
-          toast.success("Review deleted successfully");
-          setIsEditing(false);
-          setEditingReviewId(null);
-          dispatch(getProduct(productId));
-        })
-        .catch((error) => toast.error(error.message));
-    }
+  const handleDelete = () => {
+    dispatch(
+      deleteReview({
+        productId,
+        reviewId: existingReview?._id, // Provide review ID for deletion
+      })
+    )
+      .unwrap()
+      .then(() => {
+        toast.success("Review deleted successfully");
+        setIsEditing(false); // Reset form
+        dispatch(getProduct(productId)); // Reload product to refresh reviews
+      })
+      .catch((error) => toast.error(error || "Failed to delete review"));
   };
 
   return (

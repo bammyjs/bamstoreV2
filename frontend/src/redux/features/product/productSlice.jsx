@@ -94,9 +94,9 @@ export const getProduct = createAsyncThunk(
 // Update product
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  async ({ id, formData }, thunkAPI) => {
+  async ({ productId, reviewId, formData }, thunkAPI) => {
     try {
-      return await productService.updateProduct(id, formData);
+      return await productService.updateProduct(productId, reviewId, formData);
     } catch (error) {
       const message =
         (error.response &&
@@ -112,9 +112,12 @@ export const updateProduct = createAsyncThunk(
 // Review product
 export const reviewProduct = createAsyncThunk(
   "products/reviewProduct",
-  async ({ id, formData }, thunkAPI) => {
+  async ({ productId, formData }, thunkAPI) => {
     try {
-      return await productService.reviewProduct(id, formData);
+      // const state = thunkAPI.getState();
+      // Access the token from your auth state, adjust according to your store structure
+      // const token = state.auth.token;
+      return await productService.reviewProduct(productId, formData);
     } catch (error) {
       const message =
         (error.response &&
@@ -130,9 +133,9 @@ export const reviewProduct = createAsyncThunk(
 // delete product
 export const deleteReview = createAsyncThunk(
   "products/deleteReview",
-  async ({ id, formData }, thunkAPI) => {
+  async ({ productId, userId }, thunkAPI) => {
     try {
-      return await productService.deleteReview(id, formData);
+      return await productService.deleteReview(productId, userId);
     } catch (error) {
       const message =
         (error.response &&

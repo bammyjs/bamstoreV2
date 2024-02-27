@@ -215,96 +215,88 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 const reviewProduct = asyncHandler(async (req, res) => {
   const { star, review } = req.body;
-  const { id } = req.params;
+  const productId = req.params.id;
+  const userId = req.user._id; // Assuming you have the user's ID available here
 
   if (!star || !review) {
     res.status(400);
     throw new Error("Star rating and review text are required.");
   }
 
-  const product = await Product.findById(id);
-
+  const product = await Product.findById(productId);
   if (!product) {
     res.status(404);
     throw new Error("Product not found");
+  }
+
+  // Check if the user already reviewed the product
+  const alreadyReviewed = product.ratings.find((r) => r.userID.equals(userId));
+  if (alreadyReviewed) {
+    res.status(400);
+    throw new Error("Product already reviewed by this user");
   }
 
   const reviewEntry = {
     star,
     review,
-    reviewDate: new Date(),
-    name: req.user.firstName,
-    userID: req.user._id,
+    name: req.user.firstName, // Assuming you have user's name available
+    userID: userId,
   };
 
   product.ratings.push(reviewEntry);
-
   await product.save();
 
-  res.status(200).json({ message: "Review added successfully" });
+  res.status(201).json({ message: "Review added" });
 });
 
 // Delete Product
 const deleteReview = asyncHandler(async (req, res) => {
-  const { userID } = req.body;
+  const productId = req.params.id;
+  const userId = req.user._id; // Assuming you have the user's ID available here
 
-  const product = await Product.findById(req.params.id);
-  // if product doesnt exist
+  const product = await Product.findById(productId);
   if (!product) {
     res.status(404);
     throw new Error("Product not found");
   }
 
-  const newRatings = product.ratings.filter((rating) => {
-    return rating.userID.toString() !== userID.toString();
-  });
-  console.log(newRatings);
-  product.ratings = newRatings;
-  product.save();
-  res.status(200).json({ message: "Product rating deleted!!!." });
+  // Remove the review from the ratings array
+  product.ratings = product.ratings.filter((r) => !r.userID.equals(userId));
+  await product.save();
+
+  res.status(200).json({ message: "Review deleted" });
 });
 
-// Edit Review
+// Update a review
 const updateReview = asyncHandler(async (req, res) => {
-  const { star, review, reviewDate, userID } = req.body;
-  const { id } = req.params;
+  const { star, review } = req.body;
+  const productId = req.params.id;
+  const userId = req.user._id; // Assuming you have the user's ID available here
 
-  // validation
-  if (star < 1 || !review) {
+  if (!star || !review) {
     res.status(400);
-    throw new Error("Please add star and review");
+    throw new Error("Star rating and review text are required.");
   }
 
-  const product = await Product.findById(id);
-
-  // if product doesnt exist
+  const product = await Product.findById(productId);
   if (!product) {
     res.status(404);
     throw new Error("Product not found");
   }
-  // Match user to review
-  if (req.user._id.toString() !== userID) {
-    res.status(401);
-    throw new Error("User not authorized");
+
+  const reviewIndex = product.ratings.findIndex((r) => r.userID.equals(userId));
+  if (reviewIndex === -1) {
+    res.status(404);
+    throw new Error("Review not found");
   }
 
-  // Update Product review
-  const updatedReview = await Product.findOneAndUpdate(
-    { _id: product._id, "ratings.userID": mongoose.Types.ObjectId(userID) },
-    {
-      $set: {
-        "ratings.$.star": Number(star),
-        "ratings.$.review": review,
-        "ratings.$.reviewDate": reviewDate,
-      },
-    }
-  );
+  // Update the review details
+  product.ratings[reviewIndex].star = star;
+  product.ratings[reviewIndex].review = review;
 
-  if (updatedReview) {
-    res.status(200).json({ message: "Product review updated." });
-  } else {
-    res.status(400).json({ message: "Product review NOT updated." });
-  }
+  await product.save();
+
+  res.status(200).json({ message: "Review updated" });
 });
 
 module.exports = {
