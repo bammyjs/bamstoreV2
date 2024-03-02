@@ -55,6 +55,11 @@ const createOrder = asyncHandler(async (req, res) => {
     orderStatus,
     orderDate,
     order.shippingAddress.address,
+    order.shippingAddress.city,
+    order.shippingAddress.state,
+    order.shippingAddress.zipCode,
+    order.shippingAddress.country,
+    order.shippingAddress.phone,
     orderAmount
   );
   const subject = "Bamstore Order Placed";

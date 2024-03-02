@@ -16,7 +16,7 @@ const sendEmail = async (subject, send_to, template) => {
   });
 
   const mailGenerator = new MailGen({
-    theme: "neopolitan",
+    theme: "default",
     product: {
       color: "#3869D4",
       name: "Bamstore NG",
@@ -28,7 +28,7 @@ const sendEmail = async (subject, send_to, template) => {
   console.log(mailGenerator);
 
   const emailBody = mailGenerator.generate(template);
-  require("fs").writeFileSync("preview.html", emailBody, "utf8");
+  // require("fs").writeFileSync("preview.html", emailBody, "utf8");
 
   const mailOptions = {
     from: process.env.EMAIL_USER, // sender address
