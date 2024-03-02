@@ -17,19 +17,25 @@ const Login = () => {
   const [formData, setFormData] = useState(initialState);
   const { email, password } = formData;
   const [isLoading, setIsLoading] = useState(false); // Add loading state
-  const [expand, setExpand] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const { isLoggedIn, isSuccess } = useSelector((state) => state.auth);
+  const [showPassword, setShowPassword] = useState(false);
+  const { user, isLoggedIn, isSuccess, isError } = useSelector(
+    (state) => state.auth
+  );
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  // Adjust useEffect to navigate on success, no need to manually toggle loading state here
+  useEffect(() => {
+    if (isSuccess && user) {
+      navigate("/");
+      // Reset any auth state if needed here
+    }
+
+    // This is likely not needed directly after dispatch, it can be part of the login action itself
+    dispatch(RESET_AUTH());
+  }, [user, isSuccess, isLoggedIn, navigate, dispatch]);
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -51,22 +57,25 @@ const Login = () => {
 
     setIsLoading(true);
 
-    await dispatch(login(userData));
-
-    setIsLoading(false);
+    try {
+      await dispatch(login(userData)).unwrap();
+      navigate("/"); // Navigate to dashboard or home page
+    } catch (error) {
+      if (error.message === "Please verify your email before logging in.") {
+        toast.error("Please verify your email before logging in.");
+      } else {
+        toast.error("Login failed. Please check your credentials.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Adjust useEffect to navigate on success, no need to manually toggle loading state here
-  useEffect(() => {
-    if (isSuccess && isLoggedIn) {
-      navigate("/");
-      // Reset any auth state if needed here
-    }
-    // This is likely not needed directly after dispatch, it can be part of the login action itself
-    dispatch(RESET_AUTH());
-  }, [isSuccess, isLoggedIn, navigate, dispatch]);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-  const [showPassword, setShowPassword] = useState(false);
   return (
     <main
       id="main-content"

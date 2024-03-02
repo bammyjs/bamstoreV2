@@ -46,6 +46,7 @@ import CheckoutSuccess from "./pages/CheckOutSuccess";
 import { OrderPreview } from "./pages/orderDetails/OrderPreview";
 import AllOrders from "./componets/admin/order/AllOrders";
 import OrderDetails from "./componets/admin/order/OrderDetails";
+import EmailVerification from "./pages/EmailVerification";
 
 function App() {
   const location = useLocation();
@@ -99,12 +100,12 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/products" element={<AllProducts />} />
         <Route path="/products/:category" element={<AllProducts />} />
         <Route path="/product/:id" element={<Product />} />
-
         <Route path="/cart" element={<CartList />} />
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/checkout-success" element={<CheckoutSuccess />} />

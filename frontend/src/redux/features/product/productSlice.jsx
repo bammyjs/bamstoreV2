@@ -94,9 +94,9 @@ export const getProduct = createAsyncThunk(
 // Update product
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  async ({ productId, reviewId, formData }, thunkAPI) => {
+  async ({ id, formData }, thunkAPI) => {
     try {
-      return await productService.updateProduct(productId, reviewId, formData);
+      return await productService.updateProduct(id, formData);
     } catch (error) {
       const message =
         (error.response &&
@@ -152,9 +152,9 @@ export const deleteReview = createAsyncThunk(
 // Update Review
 export const updateReview = createAsyncThunk(
   "products/updateReview",
-  async ({ id, formData }, thunkAPI) => {
+  async ({ productId, reviewId, formData }, thunkAPI) => {
     try {
-      return await productService.updateReview(id, formData);
+      return await productService.updateReview(productId, reviewId, formData);
     } catch (error) {
       const message =
         (error.response &&

@@ -6,7 +6,8 @@ const axios = require("axios");
 const User = require("../models/userModel");
 // const Transaction = require("../models/transactionModel");
 const { orderSuccessEmail } = require("../emailTemplates/orderTemplate");
-// const sendEmail = require("../utils/sendEmail");
+const sendEmail = require("../utils/sendEmail");
+const { orderUpdateEmail } = require("../emailTemplates/orderUpdate");
 
 const createOrder = asyncHandler(async (req, res) => {
   const {
@@ -45,6 +46,21 @@ const createOrder = asyncHandler(async (req, res) => {
     shippingAddress,
     paymentMethod,
   });
+
+  const user = await User.findById(req.user._id).select("-password");
+
+  const emailContent = orderSuccessEmail(
+    user.firstName,
+    cartItems,
+    orderStatus,
+    orderDate,
+    order.shippingAddress.address,
+    orderAmount
+  );
+  const subject = "Bamstore Order Placed";
+  const send_to = user.email;
+  // Send order receipt email
+  await sendEmail(subject, send_to, emailContent);
 
   res.status(201).json({ message: "Order Created", data: order });
 });
@@ -104,6 +120,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const order = await Order.findById(id);
+  const user = await User.findById(req.user._id).select("-password");
 
   // if product doesnt exist
   if (!order) {
@@ -111,17 +128,24 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     throw new Error("Order not found");
   }
 
-  // Update Product
-  await Order.findByIdAndUpdate(
-    { _id: id },
-    {
-      orderStatus: orderStatus,
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
+  const updatedOrder = await Order.findByIdAndUpdate(
+    id,
+    { orderStatus },
+    { new: true, runValidators: true }
   );
+
+  const emailContent = orderUpdateEmail(
+    user.firstName,
+    updatedOrder.orderStatus,
+    new Date(updatedOrder.orderDate).toLocaleDateString("en-US"),
+    updatedOrder.orderAmount,
+    updatedOrder.shippingAddress.address
+    // `http://localhost:5173/order-preview/${updatedOrder._id}`
+  );
+  const subject = "Bamstore Order update";
+  const send_to = user.email;
+  // Send order receipt email
+  await sendEmail(subject, send_to, emailContent);
 
   res.status(200).json({ message: "Order status updated" });
 });
@@ -264,16 +288,6 @@ const payWithFlutterwave = async (req, res) => {
 //   // Update Product quantity
 //   const updatedProduct = await updateProductQuantity(cartItems);
 //   // console.log("updated product", updatedProduct);
-
-//   // Send Order Email to the user
-//   const subject = "Shopito Order Placed";
-//   const send_to = user.email;
-//   // const send_to = "zinotrust@gmail.com";
-//   const template = orderSuccessEmail(user.name, cartItems);
-//   const reply_to = "donaldzee.ng@gmail.com";
-//   // const cc = "donaldzee.ng@gmail.com";
-
-//   await sendEmail(subject, send_to, template, reply_to);
 
 //   if (newTransaction && newBalance && newOrder) {
 //     return res.status(200).json({

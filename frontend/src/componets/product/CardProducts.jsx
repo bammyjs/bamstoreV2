@@ -10,9 +10,22 @@ import { shortenText } from "../../utils";
 import ReactStars from "react-rating-stars-component";
 import { motion } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function CardProducts({ product }) {
   const dispatch = useDispatch();
+
+  const [averageRating, setAverageRating] = useState();
+
+  useEffect(() => {
+    if (product?.ratings?.length > 0) {
+      const sum = product.ratings.reduce((acc, curr) => acc + curr.star, 0);
+      const newAverage = sum / product.ratings.length;
+      setAverageRating(newAverage);
+    } else {
+      setAverageRating(0); // Handle the case with no ratings
+    }
+  }, [product]);
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
@@ -30,16 +43,11 @@ function CardProducts({ product }) {
       <div className="relative w-full bg-light flex items-end overflow-hidden rounded-xl">
         <Link
           to={`/product/${product._id}`}
-          className="bg-slate-500 w-full h-auto relative"
+          className=" w-full h-auto relative"
         >
           <img
-            className="w-full absolute h-auto aspect-[2/2] hover:hidden hover:transform duration-300 object-cover"
+            className="w-full  h-auto aspect-[2/2]  hover:transform scale-75 hover:scale-100 duration-3000 ease-in-out object-cover"
             src={product.image?.[0]}
-            alt={product.name}
-          />
-          <img
-            className="w-full h-auto aspect-[2/2] object-cover"
-            src={product.image?.[1]}
             alt={product.name}
           />
         </Link>
@@ -55,36 +63,53 @@ function CardProducts({ product }) {
       </div>
 
       <div className="mt-1 p-4">
-        <h2 className="text-slate-700 text-lg font-semibold">{product.name}</h2>
+        <h2 className="text-slate-700 text-lg font-semibold">
+          {shortenText(product?.name, 20)}
+        </h2>
         <div
           className="mt-1 text-base font-normal text-slate-400"
           dangerouslySetInnerHTML={{
             __html: shortenText(product?.features, 20),
           }}
         />
-        <ReactStars
-          count={5}
-          size={24}
-          isHalf={true}
-          emptyIcon={<i className="far fa-star"></i>}
-          halfIcon={<i className="fa fa-star-half-alt"></i>}
-          fullIcon={<i className="fa fa-star"></i>}
-          activeColor="#ffd700"
-          value={3}
-        />
+        {averageRating > 0 ? (
+          <ReactStars
+            count={5}
+            size={24}
+            isHalf={true}
+            emptyIcon={<i className="far fa-star"></i>}
+            halfIcon={<i className="fa fa-star-half-alt"></i>}
+            fullIcon={<i className="fa fa-star"></i>}
+            activeColor="#ffd700"
+            value={averageRating}
+          />
+        ) : (
+          <ReactStars
+            count={5}
+            size={24}
+            isHalf={true}
+            emptyIcon={<i className="far fa-star"></i>}
+            halfIcon={<i className="fa fa-star-half-alt"></i>}
+            fullIcon={<i className="fa fa-star"></i>}
+            activeColor="#ffd700"
+            value={3}
+          />
+        )}
 
         <div className="flex items-end justify-between">
-          <div className="flex gap-1 items-center">
-            <p className="text-base font-bold text-pry-deep">
-              <span>&#8358;</span>
+          <div className="flex flex-col  items-center">
+            <p className="text-base md:text-xl font-bold text-pry-deep">
+              <span className="text-base md:text-xl font-bold text-pry-deep">
+                &#8358;
+              </span>
               {new Intl.NumberFormat("en-NG").format(product.price)}
             </p>
-            <p className=" font-light text-base text-gray">
-              <strike className="  text-base ">
-                <span className=" text-base ">&#8358;</span>
+            {/* <p className=" font-light text-base text-gray">
+              <strike className="text-xs  md:text-base  ">
+                <span className=" text-xs  md:text-base ">&#8358;</span>
                 {new Intl.NumberFormat("en-NG").format(product?.regularPrice)}
               </strike>
-            </p>
+            </p> */}
           </div>
           {displayCart ? (
             <button

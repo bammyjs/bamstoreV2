@@ -25,6 +25,7 @@ const EditProduct = () => {
   const [productImage, setProductImage] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
   const [description, setDescription] = useState("");
+  const [features, setFeatures] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { categories, brands } = useSelector((state) => state.category);
@@ -60,6 +61,10 @@ const EditProduct = () => {
     setDescription(
       productEdit && productEdit.description ? productEdit.description : ""
     );
+
+    setFeatures(
+      productEdit && productEdit.features ? productEdit.features : ""
+    );
   }, [productEdit]);
 
   const handleInputChange = (e) => {
@@ -82,6 +87,7 @@ const EditProduct = () => {
       regularPrice: product?.regularPrice,
       price: product?.price,
       description: description,
+      features: features,
       image: files,
     };
 
@@ -119,6 +125,8 @@ const EditProduct = () => {
         setImagePreview={setImagePreview}
         description={description}
         setDescription={setDescription}
+        features={features}
+        setFeatures={setFeatures}
         handleInputChange={handleInputChange}
         saveProduct={saveProduct}
         categories={categories}

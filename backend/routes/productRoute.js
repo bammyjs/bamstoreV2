@@ -19,6 +19,6 @@ router.delete("/:id", protect, adminOnly, deleteProduct);
 router.patch("/:id", protect, adminOnly, updateProduct);
 router.patch("/review/:id", protect, reviewProduct);
 router.delete("/deleteReview/:id", protect, deleteReview);
-router.patch("/updateReview/:id", protect, updateReview);
+router.patch("/updateReview/:productId/:reviewId", protect, updateReview);
 
 module.exports = router;

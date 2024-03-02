@@ -26,6 +26,7 @@ import CartList from "../../pages/CartList";
 import CartModal from "../product/CartModal";
 import CardProducts from "../product/CardProducts";
 import axios from "axios"; // or use fetch
+import SearchProducts from "../product/SearchProducts";
 // import { motion } from "framer-motion";
 const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
@@ -159,7 +160,7 @@ function Header() {
       </div>
       <header
         ref={dropdownRef}
-        className="z-30 text-base-100 sticky top-0  bg-light w-full px-2 py-4 h-14 md:h-20 md:px-4 md:py-4 flex justify-center items-center    "
+        className="z-30 overlay text-base-100 sticky top-0  bg-light w-full px-2 py-4 h-14 md:h-20 md:px-4 md:py-4 flex justify-center items-center    "
       >
         <nav className="container max-w-7xl  p-1 flex   font-medium justify-between  w-full  items-center">
           <div className="   md:w-auto w-full flex justify-between items-center">
@@ -434,19 +435,22 @@ function Header() {
             )}
 
             {searchResults ? (
-              <div className="w-full flex  text-gray-400  justify-between items-center   active:border-y  border-gray-200 ">
+              <div className="w-full flex overlayChild z-50  text-gray-400  justify-between items-center my-4  focus:border-y  border-gray-200  ">
                 <div className="w-full flex flex-col gap-4 items-center justify-center">
-                  <ul className="flex w-full max-w-7xl  items-center  gap-2 overflow-x-scroll hide-scrollbar ">
-                    {searchResults.map((result) => (
-                      <div className="flex flex-col items-center  gap-10">
-                        <li className=" px-4 py-8" key={result.id}>
-                          <CardProducts product={result} />
-                        </li>
-                      </div>
-                    ))}
-                    {/* <h3 className="text-center text-xl md:text-2xl">
-                      Product(s) found({searchResults.length})
-                    </h3> */}
+                  <ul className="flex flex-col w-full max-w-7xl  py-6 items-center h-auto  gap-2 overflow-y-auto hide-scrollbar ">
+                    <li className="grid  justify-between overflow-auto w-full  grid-cols-1 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 hide-scrollbar">
+                      {searchResults.map((result) => (
+                        <SearchProducts
+                          toggleShow={toggleShow}
+                          product={result}
+                          key={result.id}
+                        />
+                      ))}
+
+                      {/* <button className="btn btn-primary w-[90%]">
+                        View all search result
+                      </button> */}
+                    </li>
                   </ul>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import BreadCrumb from "../componets/BreadCrumb";
 
@@ -13,6 +13,9 @@ import {
   IoChevronDown,
   IoChevronUp,
   IoFlagOutline,
+  IoPerson,
+  IoPersonCircleOutline,
+  IoPersonOutline,
 } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../redux/features/product/productsApi";
@@ -24,7 +27,7 @@ import {
 } from "../redux/features/cartSlice";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
-import CheckOutWhatsAppButton from "../componets/extras/CheckOutWhatsAppButton";
+import { getProduct } from "../redux/features/product/productSlice";
 
 //Get single Product
 
@@ -33,18 +36,31 @@ const Product = () => {
 
   // Logging the ID to the console for debugging
   console.log("Product ID:", id);
-
-  const { data: product, error, isLoading } = useGetSingleProductQuery(id);
+  const dispatch = useDispatch();
 
   const [activeImg, setActiveImage] = useState("");
   const [expand, setExpand] = useState(false);
+  const [averageRating, setAverageRating] = useState(0);
 
   const cart = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
+  const { data: product, error, isLoading } = useGetSingleProductQuery(id);
+  console.log(product);
 
   useEffect(() => {
     dispatch(getTotals());
   }, [cart, dispatch]);
+
+  useEffect(() => {
+    if (product?.ratings?.length > 0) {
+      const sum = product.ratings.reduce((acc, curr) => acc + curr.star, 0);
+      const newAverage = sum / product.ratings.length;
+      setAverageRating(newAverage);
+    } else {
+      setAverageRating(0); // Handle the case with no ratings
+    }
+  }, [product]);
+
+  console.log("averageRating:", averageRating);
 
   useEffect(() => {
     if (product && product.image && product.image.length > 0) {
@@ -62,6 +78,9 @@ const Product = () => {
 
   // Find the specific cart item for the current product
   const cartItem = cart.cartItems.find((item) => item._id === product?._id);
+
+  // let textInputs = product.quantity === 0 ? "SOLD OUT" : "IN STOCK";
+  // let displayCart = product.quantity > 0 ? true : false;
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
@@ -82,7 +101,7 @@ const Product = () => {
           crumbs={[
             { label: "Home", path: "/" },
             { label: "OurStore", path: "/products" },
-            { label: product?.category, path: "/phones" },
+            { label: product?.category, path: `/${product?.category}` },
             { label: product?.name },
           ]}
         />
@@ -103,7 +122,7 @@ const Product = () => {
             <div className="text-dark body-font   ">
               <div className=" py-6 mx-auto ">
                 <div className="w-full max-w-7xl  mx-auto  flex md:justify-between flex-wrap  ">
-                  <div className=" w-full flex flex-col gap-6 lg:w-1/2 md:sticky top-6  h-fit ">
+                  <div className=" w-full flex flex-col gap-6 lg:w-1/2 md:sticky top-24  h-fit ">
                     <Zoom>
                       <img
                         src={activeImg}
@@ -132,17 +151,19 @@ const Product = () => {
                       {product.name}
                     </h2>
                     <div className="flex items-center gap-2">
-                      <ReactStars
-                        count={5}
-                        // onChange={ratingChanged}
-                        size={24}
-                        isHalf={true}
-                        emptyIcon={<i className="far fa-star"></i>}
-                        halfIcon={<i className="fa fa-star-half-alt"></i>}
-                        fullIcon={<i className="fa fa-star"></i>}
-                        activeColor="#ffd700"
-                        value={3}
-                      />
+                      {averageRating > 0 && (
+                        <ReactStars
+                          count={5}
+                          edit={false}
+                          size={24}
+                          isHalf={true}
+                          emptyIcon={<i className="far fa-star"></i>}
+                          halfIcon={<i className="fa fa-star-half-alt"></i>}
+                          fullIcon={<i className="fa fa-star"></i>}
+                          activeColor="#ffd700"
+                          value={averageRating}
+                        />
+                      )}
                       <p className=" text-base font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
                         ({product?.ratings?.length}) Reviews
                       </p>
@@ -210,12 +231,22 @@ const Product = () => {
                             <div className="flex w-full items-center justify-center border-x px-4 text-xs uppercase transition">
                               {"0"}
                             </div>
-                            <button
-                              onClick={() => handleAddToCart(product)}
-                              className="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-primary hover:text-white"
-                            >
-                              +
-                            </button>
+                            {product.quantity > 0 ? (
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                className="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-primary hover:text-white"
+                              >
+                                +
+                              </button>
+                            ) : (
+                              <button
+                                disabled
+                                onClick={() => handleAddToCart(product)}
+                                className="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-primary hover:text-white"
+                              >
+                                +
+                              </button>
+                            )}
                           </div>
                         )}
                       </div>
@@ -287,23 +318,42 @@ const Product = () => {
 
                     <div className="w-full flex justify-between mt-6">
                       <div className="w-full flex gap-2 justify-between">
-                        <button
-                          type="button"
-                          onClick={() => handleAddToCart(product)}
-                          className=" w-full btn bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
-                        >
-                          Add to cart
-                          <motion.div
-                            whileHover={{ rotate: 45 }}
-                            whileTap={{ scale: 1 }}
-                            to="/"
+                        {product.quantity > 0 ? (
+                          <button
+                            type="button"
+                            onClick={() => handleAddToCart(product)}
+                            className="w-full btn bg-pry-deep px-4 py-1.5 text-white duration-100 hover:bg-neutral hover:text-pry-deep"
                           >
-                            <IoCartOutline
-                              style={{ fontSize: "15px" }}
-                              className="text-2xl"
-                            />
-                          </motion.div>
-                        </button>
+                            Add to cart
+                            <motion.div
+                              whileHover={{ rotate: 45 }}
+                              whileTap={{ scale: 1 }}
+                            >
+                              <IoCartOutline
+                                style={{ fontSize: "15px" }}
+                                className="text-2xl"
+                              />
+                            </motion.div>
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled
+                            onClick={() => handleAddToCart(product)}
+                            className="w-full  p-3 rounded-xl  bg-error  "
+                          >
+                            Out of Stock
+                            {/* <motion.div
+                              whileHover={{ rotate: 45 }}
+                              whileTap={{ scale: 1 }}
+                            >
+                              <IoCartOutline
+                                style={{ fontSize: "15px", color: "black" }}ck" }}
+                                className="text-2xl"
+                              />
+                            </motion.div> */}
+                          </button>
+                        )}
                       </div>
                     </div>
                     <div className="flex  items-center  border-b border-gray "></div>
@@ -334,9 +384,9 @@ const Product = () => {
                 <div className="flex flex-col items-center    gap-2 p-2">
                   <p className="font-bold text-xl md:text-3xl">Full Details</p>
 
-                  <div className="max-w-7xl">
+                  <div className="max-w-7xl flex flex-col items-center ">
                     <div
-                      className=" "
+                      className="flex flex-col items-center "
                       dangerouslySetInnerHTML={{
                         __html: product.description,
                       }}
@@ -346,11 +396,11 @@ const Product = () => {
                 <div className="flex mt-1 items-center pb-5 border-b border-gray mb-5"></div>
 
                 {/* reviews */}
-                <div className="w-full py-12  px-4 md:px-6   md:flex justify-center items-center">
-                  <div className="bg-slate-500 container flex flex-col justify-start items-start w-full space-y-8">
-                    <div className="flex justify-start items-start">
-                      <p className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800 dark:text-white ">
-                        Reviews ({product?.ratings?.length})
+                <div className="w-full py-6   px-4 md:px-6   md:flex justify-center items-center">
+                  <div className="  flex flex-col justify-start items-start w-full space-y-8">
+                    <div className="flex  justify-start items-start">
+                      <p className="text-2xl lg:text-3xl font-semibold leading-7 lg:leading-9 text-gray-800 ">
+                        Customer Reviews ({product?.ratings?.length})
                       </p>
                     </div>
                     {product.ratings?.map((rate, i) => {
@@ -361,55 +411,56 @@ const Product = () => {
                         ratingView = true;
                       }
                       return (
-                        <>
+                        <Fragment key={i}>
                           {ratingView ? (
-                            <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 p-8 border">
-                              <div className="w-full flex justify-start items-start flex-col bg-gray-50 dark:bg-gray-800 md:px-8 py-8">
-                                <div className="flex flex-col md:flex-row justify-between w-full">
-                                  <div className="flex flex-row justify-between items-start  ">
-                                    <p className="text-xl max-w-80 md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
-                                      {rate?.review}
+                            <div className="w-full flex gap-4 items-start flex-col pb-6  border-b border-gray">
+                              <div className="flex items-center md:flex-row justify-between w-full">
+                                <ReactStars
+                                  count={5}
+                                  edit={false}
+                                  size={24}
+                                  isHalf={true}
+                                  emptyIcon={<i className="far fa-star"></i>}
+                                  halfIcon={
+                                    <i className="fa fa-star-half-alt"></i>
+                                  }
+                                  fullIcon={<i className="fa fa-star"></i>}
+                                  activeColor="#ffd700"
+                                  value={rate?.star}
+                                />
+                                <p className="text-sm leading-none text-gray-600 dark:text-white">
+                                  {new Date(
+                                    rate?.reviewDate
+                                  ).toLocaleDateString("en-GB")}
+                                </p>
+                              </div>
+                              <div id="menu2" className="">
+                                <div className=" flex justify-start items-start flex-row space-x-2.5">
+                                  <span className="p-1 bg-gray-400">
+                                    <IoPersonOutline
+                                      style={{ fontSize: "30" }}
+                                    />
+                                  </span>
+                                  <div className="flex flex-col justify-start items-start space-y-2">
+                                    <p className="text-base font-medium leading-none text-gray-800 dark:text-white">
+                                      {rate?.name}{" "}
+                                      <span className="bg-black text-xs text-white p-1">
+                                        Verified
+                                      </span>
                                     </p>
                                   </div>
-                                  <ReactStars
-                                    count={5}
-                                    // onChange={ratingChanged}
-                                    edit={false}
-                                    size={24}
-                                    isHalf={true}
-                                    emptyIcon={<i className="far fa-star"></i>}
-                                    halfIcon={
-                                      <i className="fa fa-star-half-alt"></i>
-                                    }
-                                    fullIcon={<i className="fa fa-star"></i>}
-                                    activeColor="#ffd700"
-                                    value={rate?.star}
-                                  />
                                 </div>
-                                <div id="menu2" className="">
-                                  <div className="mt-6 flex justify-start items-center flex-row space-x-2.5">
-                                    <div>
-                                      <img
-                                        src="https://i.ibb.co/RCTGZTc/Mask-Group-1.png"
-                                        alt="girl-avatar"
-                                      />
-                                    </div>
-                                    <div className="flex flex-col justify-start items-start space-y-2">
-                                      <p className="text-base font-medium leading-none text-gray-800 dark:text-white">
-                                        {rate?.name}
-                                      </p>
-                                      <p className="text-sm leading-none text-gray-600 dark:text-white">
-                                        {rate?.reviewDate}
-                                      </p>
-                                    </div>
-                                  </div>
+                                <div className="flex flex-row justify-between items-start  ">
+                                  <p className="text-lg max-w-80 md:text-2xl font-medium leading-normal text-gray-800 dark:text-white">
+                                    {rate?.review}
+                                  </p>
                                 </div>
                               </div>
                             </div>
                           ) : (
                             <p>no review yet</p>
                           )}
-                        </>
+                        </Fragment>
                       );
                     })}
                   </div>

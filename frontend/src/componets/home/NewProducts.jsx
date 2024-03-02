@@ -9,6 +9,7 @@ import { useGetAllProductsQuery } from "../../redux/features/product/productsApi
 import CardProducts from "../product/CardProducts";
 import { ProductCard } from "./ProductCard";
 import { NewProductCard } from "../product/NewProductCard";
+import CardSkeleton from "../product/CardSkeleton";
 
 function NewProducts() {
   const [loading, setLoading] = useState(true);
@@ -38,11 +39,8 @@ function NewProducts() {
         </h2>
         {/* <Carousel /> */}
         {isLoading ? (
-          <div className="flex justify-center">
-            <span className="loading loading-ball loading-xs"></span>
-            <span className="loading loading-ball loading-sm"></span>
-            <span className="loading loading-ball loading-md"></span>
-            <span className="loading loading-ball loading-lg"></span>
+          <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
+            <CardSkeleton cards={4} products={products} />
           </div>
         ) : error ? (
           <div>An error occurred: {error.message}</div>

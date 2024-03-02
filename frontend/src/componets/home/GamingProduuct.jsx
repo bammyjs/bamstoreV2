@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import CardProducts from "../product/CardProducts";
 import { Link } from "react-router-dom";
 import { NewProductCard } from "../product/NewProductCard";
+import CardSkeleton from "../product/CardSkeleton";
 
 function GamingProduct() {
   const [loading, setLoading] = useState(true);
@@ -25,17 +26,14 @@ function GamingProduct() {
           Gaming
         </h2>
         {loading ? (
-          <div className="flex  justify-center ">
-            <span className="loading loading-ball loading-xs"></span>
-            <span className="loading loading-ball loading-sm"></span>
-            <span className="loading loading-ball loading-md"></span>
-            <span className="loading loading-ball loading-lg"></span>
+          <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
+            <CardSkeleton cards={4} products={products} />
           </div>
         ) : error ? (
           <div>An error occurred: {error.message}</div>
         ) : (
           <>
-            <section className=" px-4 sm:px-6 lg:px-10">
+            <section className=" ">
               <div className="  flex flex-col item-center justify-center gap-8  ">
                 <div className="w-full md:p-2">
                   <div className="grid  justify-between   grid-cols-2 gap-2 md:gap-2 md:grid-cols-3 lg:grid-cols-4 ">
@@ -54,7 +52,7 @@ function GamingProduct() {
             </section>
             <Link
               className="btn btn-primary  px-10 md:place-self-end"
-              to={"/products/gaming"}
+              to={"/gaming"}
             >
               Shop More
             </Link>

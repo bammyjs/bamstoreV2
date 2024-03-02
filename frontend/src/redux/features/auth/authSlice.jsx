@@ -9,6 +9,8 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  token: null,
+  isVerified: false,
 };
 
 //Register user
@@ -18,6 +20,24 @@ export const register = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       return await authService.register(userData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+//Verify email address
+export const verifyEmail = createAsyncThunk(
+  "auth/verifyEmail",
+  async (emailToken, thunkAPI) => {
+    try {
+      return await authService.verifyEmail(emailToken);
     } catch (error) {
       const message =
         (error.response &&
@@ -77,7 +97,29 @@ const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.user = null;
-        toast.success(action.payload);
+        toast.error(action.payload);
+      })
+
+      //verify email address
+      .addCase(verifyEmail.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(verifyEmail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isLoggedIn = true;
+        state.token = action.payload.token;
+        state.isVerified = action.payload.isVerified;
+        state.user = action.payload;
+        toast.success("Email successfully verified");
+      })
+      .addCase(verifyEmail.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.user = null;
+        toast.error(action.payload);
+        console.error(error);
       })
 
       //login user
@@ -96,7 +138,7 @@ const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.user = null;
-        toast.success(action.payload);
+        toast.error(action.payload);
       })
 
       //logout user
@@ -107,14 +149,16 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isLoggedIn = false;
+        state.isError = false;
+        state.message = false;
         state.user = null;
-        toast.success(action.payload);
+        toast.success("Logged out successfully");
       })
       .addCase(logout.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        toast.success(action.payload);
+        toast.error(action.payload);
       })
 
       //get login status

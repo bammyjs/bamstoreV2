@@ -2,6 +2,11 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
+const crypto = require("crypto");
+const sendEmail = require("../utils/sendEmail");
+const {
+  sendVerificationMail,
+} = require("../emailTemplates/sendVerificationMail");
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -36,75 +41,133 @@ const registerUser = asyncHandler(async (req, res) => {
     lastName,
     email,
     password,
+    emailToken: crypto.randomBytes(64).toString("hex"),
   });
-  // generate token
-  const token = generateToken(user._id);
+  // Await the sending of the verification email
+  // const cc = "bayodegbenga@gmail.com@gmail.com";
 
   if (user) {
-    const { _id, firstName, lastName, email, role, address } = user;
-    res.cookie("token", token, {
-      path: "/",
-      httpOnly: true,
-      expires: new Date(Date.now() + 1000 * 86400),
-      //   secure: true,
-      sameSite: none,
-    });
+    try {
+      const emailContent = sendVerificationMail(
+        user.firstName,
+        user.emailToken
+      );
+      const subject = "Veriy your Email";
+      const send_to = user.email;
+      // Send verification email
+      await sendEmail(subject, send_to, emailContent);
+      // Generate token
+      const token = generateToken(user._id);
 
-    // send user info
-    res.status(201).json({
-      _id,
-      firstName,
-      lastName,
-      email,
-      role,
-      token,
-      address,
-    });
+      // Send user info along with cookie
+      res.cookie("token", token, {
+        path: "/",
+        httpOnly: true,
+        expires: new Date(Date.now() + 1000 * 86400),
+        // secure: true, // Uncomment this in production if using HTTPS
+        sameSite: "None", // Make sure this is capitalized correctly
+      });
+
+      res.status(201).json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        token, // Include token in the JSON response
+      });
+    } catch (error) {
+      // Handle any errors that occur during the email sending process
+      console.error("Failed to send verification email:", error);
+      res.status(500).json({ message: "Failed to send verification email." });
+    }
   } else {
-    res.status(400);
-    throw new Error("Invalid user date");
+    res.status(400).throw(new Error("Invalid user data."));
   }
-
-  res.send("Register User...");
 });
 
+//verify email address
+
+const verifyEmail = asyncHandler(async (req, res) => {
+  try {
+    const { emailToken } = req.body;
+    if (!emailToken)
+      return res.status(400).json({ message: "Invalid email token" });
+
+    const user = await User.findOne({ emailToken: emailToken });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "Email verification failed, invalid token!" });
+
+    user.emailToken = null;
+    user.isVerified = true;
+    await user.save();
+
+    console.log("Received token:", emailToken);
+
+    const token = generateToken(user._id);
+    res.status(200).json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+      token,
+      isVerified: user.isVerified,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+//Login user
 //Login user
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  //validate request
+  // Validate request
   if (!email || !password) {
     res.status(400);
-    throw new Error("Add email and Password to Login");
+    throw new Error("Please provide both email and password to login.");
   }
-  // check if user exit
+
+  // Check if user exists
   const user = await User.findOne({ email });
   if (!user) {
     res.status(400);
-    throw new Error("User does not exist");
+    throw new Error("User does not exist.");
+  }
+  console.log(`User verified status: ${user.isVerified}`);
+  // Ensure the user has verified their email
+  if (!user.isVerified) {
+    res.status(401); // 401 Unauthorized is more suitable for login failures
+    throw new Error("Please verify your email before logging in.");
   }
 
-  // check if password is correct
+  // Check if password is correct
   const passwordIsCorrect = await bcrypt.compare(password, user.password);
-
-  //Generate Token
-
-  const token = generateToken(user._id);
-  if (user && passwordIsCorrect) {
-    const newUser = await User.findOne({ email }).select("-password");
-    res.cookie("token", token, {
-      path: "/",
-      httpOnly: true,
-      expires: new Date(Date.now() + 1000 * 86400),
-      //   secure: true,
-      //   sameSite: none,
-    });
-    // send user info
-    res.status(201).json(newUser);
-  } else {
-    res.status(400);
-    throw new Error("Invalid Email or password");
+  if (!passwordIsCorrect) {
+    res.status(401);
+    throw new Error("Invalid email or password.");
   }
+
+  // Generate Token
+  const token = generateToken(user._id);
+  // Note: Since you're using httpOnly cookies, ensure your frontend can handle this appropriately
+  res.cookie("token", token, {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 86400), // 1 day
+    // Secure and SameSite attributes should be set based on your requirements and environment
+    // secure: true,
+    // sameSite: 'None',
+  });
+
+  // Send user info (excluding password)
+  const newUser = await User.findById(user._id).select("-password");
+  res.status(200).json(newUser);
 });
 
 // logout user
@@ -227,4 +290,5 @@ module.exports = {
   getLoginStatus,
   updateUser,
   updatePhoto,
+  verifyEmail,
 };

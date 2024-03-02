@@ -12,23 +12,20 @@ export const ProductCard = ({ product }) => {
       <div className="h-45 w-45 rounded-full bg-gray-bk border-2 border-white flex items-center justify-center text-white text-base mb-3 md:mb-5 overflow-hidden relative">
         <img
           src={product.image[0]}
-          className="object-contain aspect-square w-full h-auto scale-75 group-hover:scale-110 transition-all duration-400"
+          className="object-contain aspect-square w-full bg-blend-exclusion h-auto scale-75 group-hover:scale-110 transition-all duration-400"
           alt={product.name}
         />
       </div>
       <div className="w-full flex flex-col gap-2 items-start ">
-        <Link
-          to={`/products/${product._id}`}
-          className="block text-dark font-bold text-left hover:text-primary transition-colors duration-150 text-lg md:text-xl "
-        >
-          {shortenText(product?.name, 20)}
-        </Link>
-        <div
+        <h3 className="text-xl text-dark font-medium">
+          {shortenText(product?.name, 15)}
+        </h3>
+        {/* <div
           className=" text-base font-normal text-slate-400"
           dangerouslySetInnerHTML={{
             __html: shortenText(product?.features, 20),
           }}
-        />
+        /> */}
         <div className="w-full flex items-center justify-between ">
           <p className="text-base font-bold text-pry-deep">
             <span>&#8358;</span>
@@ -39,7 +36,7 @@ export const ProductCard = ({ product }) => {
             whileTap={{ scale: 1 }}
             className="rounded-full bg-pry-color px-5 py-2.5 text-sm font-medium text-white transition duration-200 hover:bg-blue-900 active:bg-blue-950"
           >
-            <Link to={`/products/${product._id}`}>Buy Now</Link>
+            <Link to={`/product/${product._id}`}>Buy Now</Link>
           </motion.div>
         </div>
       </div>

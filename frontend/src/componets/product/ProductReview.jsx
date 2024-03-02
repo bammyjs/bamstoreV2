@@ -26,6 +26,8 @@ const ProductReview = ({ productId }) => {
     user._id
   );
 
+  console.log("existingReview:", existingReview);
+
   useEffect(() => {
     if (productId) {
       dispatch(getProduct(productId));
@@ -41,6 +43,7 @@ const ProductReview = ({ productId }) => {
       setExistingReview(review);
     }
   }, [product, user._id]);
+  console.log("review:", product);
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
@@ -108,13 +111,15 @@ const ProductReview = ({ productId }) => {
   return (
     <div class="w-full  p-6 flex flex-col justify-center ">
       <div class="py-3  sm:mx-auto">
-        <div class="bg-gray-bk min-w-1xl flex flex-col rounded-xl shadow-lg">
-          <div class="px-12 py-5">
-            <h2>{isEditing ? "Edit Your Review" : "Write a Review"}</h2>
+        <div class="bg-gray-bk flex flex-col rounded-xl ">
+          <div class="py-5 bg-pry-deep">
+            <h2 className="text-center text-white">
+              {isEditing ? "Edit Your Review" : "Write a Review"}
+            </h2>
           </div>
           <form
             onSubmit={handleSubmit}
-            class="bg-gray-200 w-full flex flex-col items-center"
+            class="bg-gray-200  w-full flex flex-col items-center"
           >
             <div class="w-full flex flex-col items-center py-6 space-y-3">
               <span className="text-lg text-gray-800">
@@ -131,7 +136,7 @@ const ProductReview = ({ productId }) => {
                 value={rating}
               />
             </div>
-            <div class="w-3/4 flex flex-col">
+            <div class="w-full p-4  flex gap-4 flex-col">
               <textarea
                 required
                 value={reviewText}
@@ -142,16 +147,13 @@ const ProductReview = ({ productId }) => {
               >
                 Leave a message, if you want
               </textarea>
-              <div className="w-full flex items-center justify-center gap-4">
-                <button
-                  className="p-3 my-8 text-lg bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl text-white"
-                  type="submit"
-                >
+              <div className="w-full flex items-center justify-between gap-4">
+                <button className="btn btn-primary" type="submit">
                   {isEditing ? "Update Review" : "Submit Review"}
                 </button>
                 {isEditing && (
                   <button
-                    className="p-3 my-8 text-lg bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl text-white"
+                    className="btn btn-error"
                     type="button"
                     onClick={handleDelete}
                   >

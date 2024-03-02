@@ -35,7 +35,8 @@ body {
 
 .box-shadow-2 {
   background: var(--white, #fcfcfc);
-  box-shadow: 0px 2.7006633282px 2.7006633282px 0.675165832px rgba(0, 0, 0, 0.23);
+  box-shadow: 0px 2.7006633282px 2.7006633282px 0.675165832px
+    rgba(0, 0, 0, 0.23);
 }
 
 .loader {
@@ -71,6 +72,14 @@ body {
   transform: translate(-150%, -150%);
 }
 
+.overlay {
+  pointer-events: none;
+}
+
+.overlayChild {
+  pointer-events: auto;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -78,4 +87,4 @@ body {
   100% {
     transform: rotate(360deg);
   }
-}/*# sourceMappingURL=style.css.map */
+} /*# sourceMappingURL=style.css.map */

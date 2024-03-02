@@ -13,6 +13,13 @@ const register = async (userData) => {
   return response.data;
 };
 
+//verify email address
+
+const verifyEmail = async (emailToken) => {
+  const response = await axios.post(API_URL + "verify-email", emailToken);
+  return response.data;
+};
+
 //login user
 
 const login = async (userData) => {
@@ -82,6 +89,7 @@ const authService = {
   deleteUser,
   updateUser,
   updatePhoto,
+  verifyEmail,
 };
 
 export default authService;

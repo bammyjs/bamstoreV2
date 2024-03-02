@@ -46,13 +46,14 @@ const updateProduct = async (id, formData) => {
 //   );
 //   return response.data;
 // };
+
 // Review Product
 const reviewProduct = async (productId, formData) => {
   const response = await axios.patch(`${API_URL}review/${productId}`, formData);
   return response.data.message;
 };
 
-// Review Product
+// delete review Product
 const deleteReview = async (productId, userId) => {
   const response = await axios.delete(`${API_URL}deleteReview/${productId}`, {
     userId,
@@ -60,11 +61,10 @@ const deleteReview = async (productId, userId) => {
   return response.data.message;
 };
 
-// Review Product
+//  update Review Product
 const updateReview = async (productId, reviewId, formData) => {
   const response = await axios.patch(
-    `${API_URL}updateReview/${productId}`,
-    reviewId,
+    `${API_URL}updateReview/${productId}/${reviewId}`,
     formData
   );
   return response.data.message;

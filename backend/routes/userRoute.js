@@ -10,11 +10,13 @@ const {
   updatePhoto,
   getUsers,
   deleteUser,
+  verifyEmail,
 } = require("../controllers/userController");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 const router = express.Router();
 
 router.post("/register", registerUser);
+router.post("/verify-email", verifyEmail);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 router.get("/", getUsers);

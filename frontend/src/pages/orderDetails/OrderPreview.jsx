@@ -195,14 +195,17 @@ export const OrderPreview = () => {
                             </button>
                             <dialog id="my_modal_3" className="modal">
                               <div className="modal-box bg-neutral text-gray max-w-4xl">
-                                <form method="dialog">
+                                <form method="dialog" className="text-dark ">
                                   {/* if there is Link button in form, it will close the modal */}
-                                  <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                  <button className="btn btn-sm btn-circle btn-ghost absolute right-10 top-4">
                                     ✕
                                   </button>
                                 </form>
-                                <h3 className="font-bold text-lg text-dark">
-                                  Review {""} {cartHistory.name}
+                                <h3 className=" text-center font-bold text-lg text-dark">
+                                  Review: {""}{" "}
+                                  <span className="font-bold text-lg text-pry-deep">
+                                    {cartHistory.name}
+                                  </span>
                                 </h3>
                                 {selectedProductId && (
                                   <ProductReview
@@ -443,15 +446,18 @@ export const OrderPreview = () => {
                           Review Product
                         </button>
                         <dialog id="my_modal_4" className="modal">
-                          <div className="modal-box bg-neutral text-gray max-w-4xl">
-                            <form method="dialog">
+                          <div className="modal-box bg-neutral  text-gray max-w-4xl">
+                            <form method="dialog" className="text-dark ">
                               {/* if there is Link button in form, it will close the modal */}
-                              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                              <button className="btn btn-sm btn-circle btn-ghost absolute right-10 top-4">
                                 ✕
                               </button>
                             </form>
-                            <h3 className="font-bold text-lg text-dark">
-                              Review {""} {cartHistory.name}
+                            <h3 className=" text-center font-bold text-lg text-dark">
+                              Review: {""}{" "}
+                              <span className="font-bold text-lg text-pry-deep">
+                                {cartHistory.name}
+                              </span>
                             </h3>
                             {selectedProductId && (
                               <ProductReview productId={selectedProductId} />

@@ -46,6 +46,8 @@ const userSchema = mongoose.Schema(
       type: Object,
       //address, state, country
     },
+    isVerified: { type: Boolean, default: false },
+    emailToken: { type: String },
   },
   {
     timestamps: true,
@@ -54,6 +56,7 @@ const userSchema = mongoose.Schema(
 
 //encrypt password before saving to db
 userSchema.pre("save", async function (next) {
+  console.log(`Saving user: ${this.email}, verified: ${this.isVerified}`);
   if (!this.isModified("password")) {
     return next();
   }

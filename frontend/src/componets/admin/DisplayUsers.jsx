@@ -162,7 +162,7 @@ const DisplayUser = () => {
             </div>
           ) : (
             <>
-              <AllUsers users={users} key={users.id} {...users} />
+              <AllUsers users={users} key={users._id} {...users} />
             </>
           )}
         </table>

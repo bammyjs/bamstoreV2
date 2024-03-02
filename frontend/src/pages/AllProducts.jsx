@@ -45,7 +45,7 @@ export default function AllProducts() {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState("latest");
   const [totalPages, setTotalPages] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const {
     data: products,
@@ -225,12 +225,10 @@ export default function AllProducts() {
   const showNextBtn = (currentPage) => 1;
   const showPrevBtn = currentPage > 1;
 
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 5000);
   });
 
   const paginationVariants = {

@@ -7,6 +7,7 @@ import { validateEmail } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { RESET_AUTH, register } from "../redux/features/auth/authSlice";
 import Loader from "../componets/home/Loader";
+import { LoadingButton } from "../componets/extras/LoadingButton";
 
 const initialState = {
   firstName: "",
@@ -16,6 +17,11 @@ const initialState = {
 };
 
 const Register = () => {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const { firstName, lastName, email, password } = formData;
 
@@ -23,16 +29,11 @@ const Register = () => {
     (state) => state.auth
   );
 
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
-  const [showPassword, setShowPassword] = useState(false);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const registerUser = async (e) => {
     e.preventDefault();
 
@@ -58,18 +59,17 @@ const Register = () => {
 
   useEffect(() => {
     if (isSuccess && isLoggedIn) {
-      navigate("/");
+      navigate("/verify-email");
     }
 
-    dispatch(RESET_AUTH());
-  }, [isSuccess, isLoading, dispatch, navigate]);
+    // dispatch(RESET_AUTH());
+  }, [isSuccess, isLoading, navigate]);
 
   return (
     <>
       <Meta title={"Register"} />
       {/* <BreadCrumb title="Register" /> */}
       <>
-        {isLoading && <Loader />}
         <main
           id="main-content"
           className="bg-gray-bk w-full text-dark px-6 flex flex-col items-center justify-center gap-6 my-32 md:my-60"
@@ -170,13 +170,20 @@ const Register = () => {
                 </svg>
               )}
             </div>
-            <button
+            <LoadingButton
+              type="submit"
+              onSubmit={registerUser}
+              isLoading={isLoading}
+            >
+              Create Account
+            </LoadingButton>
+            {/* <button
               onSubmit={registerUser}
               type="submit"
               className="btn btn-primary"
             >
               Create Account
-            </button>
+            </button> */}
           </form>
           <p className="text-dark">
             Already have an account?{" "}

@@ -270,33 +270,25 @@ const deleteReview = asyncHandler(async (req, res) => {
 // Update a review
 const updateReview = asyncHandler(async (req, res) => {
   const { star, review } = req.body;
-  const productId = req.params.id;
+  const { productId, reviewId } = req.params;
   const userId = req.user._id; // Assuming you have the user's ID available here
 
-  if (!star || !review) {
-    res.status(400);
-    throw new Error("Star rating and review text are required.");
+  try {
+    const updatedProduct = await Product.updateOne(
+      { _id: productId, "ratings._id": reviewId },
+      { $set: { "ratings.$.star": star, "ratings.$.review": review } }
+    );
+
+    if (updatedProduct.modifiedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Review not found or no update made." });
+    }
+
+    res.json({ message: "Review updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-
-  const product = await Product.findById(productId);
-  if (!product) {
-    res.status(404);
-    throw new Error("Product not found");
-  }
-
-  const reviewIndex = product.ratings.findIndex((r) => r.userID.equals(userId));
-  if (reviewIndex === -1) {
-    res.status(404);
-    throw new Error("Review not found");
-  }
-
-  // Update the review details
-  product.ratings[reviewIndex].star = star;
-  product.ratings[reviewIndex].review = review;
-
-  await product.save();
-
-  res.status(200).json({ message: "Review updated" });
 });
 
 module.exports = {

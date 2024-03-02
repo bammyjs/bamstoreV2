@@ -155,12 +155,12 @@ function Footer() {
                     <h3 className="font-bold text-lg text-dark">
                       Refund policy
                     </h3>
-                    <p className="py-4 font-normal ">
+                    <p className="py-4 font-normal text-dark ">
                       Orders may be canceled within 24 hours (Does not apply to
-                      rushed orders) or returned only with NEF Technologies'
-                      prior written consent. NEF Technologies reserves the right
-                      to charge Link cancellation or restocking fee on canceled
-                      or returned orders.
+                      rushed orders) or returned only with Bamstore
+                      authorization' prior written consent. Bamstore reserves
+                      the right to charge Link cancellation or restocking fee on
+                      canceled or returned orders.
                     </p>
                   </div>
                 </dialog>
