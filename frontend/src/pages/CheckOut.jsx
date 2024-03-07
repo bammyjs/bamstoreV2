@@ -7,9 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { getUser } from "../redux/features/auth/authSlice";
 import { createOrder } from "../redux/features/product/orderSlice";
 import { CheckoutForm } from "../componets/checkout/CheckoutForm";
-import CheckoutSuccess from "./CheckOutSuccess";
 import { formToJSON } from "axios";
 import { Meta } from "../componets/Meta";
+import CheckoutSuccess from "./CheckoutSuccess";
 
 const CheckOut = () => {
   const dispatch = useDispatch();

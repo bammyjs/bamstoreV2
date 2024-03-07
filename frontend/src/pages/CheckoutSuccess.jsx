@@ -6,7 +6,7 @@ import { IoCheckmarkCircle } from "react-icons/io5";
 import Confetti from "react-confetti";
 import { Meta } from "../componets/Meta";
 
-const CheckoutSuccess = ({ shipRate }) => {
+const CheckoutSuccess = () => {
   // Define state variables for the order details
   const [contactDetails, setContactDetails] = useState({});
   const [shippingDetails, setShippingDetails] = useState({});
