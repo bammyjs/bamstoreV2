@@ -37,7 +37,12 @@ const CartList = () => {
 
   return (
     <>
-      <Meta title={"Cart"} />
+      <Meta
+        title="cart Page - Bamstore.ng"
+        description="Welcome to the BamstoreNG No1 gadget store in Nigeria."
+        keywords="cart, cartlist, bamstore, welcome to bamstore ng"
+        url="http://bamstore.ng/cart"
+      />
       <main id="main-content" className=" flex flex-col gap-6 ">
         {/* <BreadCrumb title="Cart" /> */}
         <section className=" bg-gray-100 py-12 sm:py-16 lg:py-20">

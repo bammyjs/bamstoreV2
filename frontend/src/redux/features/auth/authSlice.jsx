@@ -250,6 +250,37 @@ const authSlice = createSlice({
         toast.error(action.payload);
       })
 
+      //forgot password
+      .addCase(forgotPassword.pending, (state) => {
+        state.isLoading = true;
+        // handle pending state if needed
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        toast.success("Password reset email sent. Check your inbox.");
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.isForgotPasswordSuccess = false;
+        toast.error(action.payload);
+      })
+
+      //reset password
+      .addCase(resetPassword.pending, (state) => {
+        state.isLoading = true;
+        // handle pending state if needed
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.isLoading = false;
+        state.message = action.payload;
+        toast.success("Your password has been reset");
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(action.payload);
+      })
+
       // change Password
       .addCase(changePassword.pending, (state) => {
         state.isLoading = true;
@@ -390,6 +421,44 @@ export const updateUser = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       return await authService.updateUser(userData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+//forgotPassword
+
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async (email, thunkAPI) => {
+    try {
+      return await authService.forgotPassword(email); // Make sure authService.forgotPassword correctly calls your backend
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+//reset Password
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ userId, resetToken, password }, thunkAPI) => {
+    try {
+      return await authService.resetPassword(userId, resetToken, password);
     } catch (error) {
       const message =
         (error.response &&

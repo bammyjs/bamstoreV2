@@ -42,6 +42,7 @@ const Category = ({ title, image, link }) => {
       <Link to={link}>
         <img
           src={image}
+          loading="lazy"
           alt=""
           className="w-full aspect-[2/2] h-auto object-contain scale-50 hover:scale-110 transition-all duration-400  "
         />

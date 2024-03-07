@@ -72,6 +72,31 @@ const updateUser = async (userData) => {
   return response.data;
 };
 
+//forgot password
+const forgotPassword = async (email) => {
+  const response = await axios.post(API_URL + "forgotPassword", email);
+  return response.data;
+};
+
+// Reset password
+const resetPassword = async (userId, resetToken, password) => {
+  const response = await axios.put(
+    `${API_URL}resetPassword/${userId}/${resetToken}`,
+    {
+      password,
+    }
+  );
+  return response.data;
+};
+
+// Change password
+const changePassword = async (userData) => {
+  const response = await axios.patch(API_URL + "changePassword", {
+    userData,
+  });
+  return response.data;
+};
+
 //update user photo
 
 const updatePhoto = async (userData) => {
@@ -90,6 +115,9 @@ const authService = {
   updateUser,
   updatePhoto,
   verifyEmail,
+  forgotPassword,
+  resetPassword,
+  changePassword,
 };
 
 export default authService;

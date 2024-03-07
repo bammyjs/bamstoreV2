@@ -12,6 +12,7 @@ export const ProductCard = ({ product }) => {
       <div className="h-45 w-45 rounded-full bg-gray-bk border-2 border-white flex items-center justify-center text-white text-base mb-3 md:mb-5 overflow-hidden relative">
         <img
           src={product.image[0]}
+          loading="lazy"
           className="object-contain aspect-square w-full bg-blend-exclusion h-auto scale-75 group-hover:scale-110 transition-all duration-400"
           alt={product.name}
         />

@@ -7,9 +7,9 @@ const AllOrders = () => {
   const { data: orders, error, isLoading } = useGetOrdersQuery();
 
   return (
-    <section className="container text-dark w-full p-4 border-2 border-gray  rounded-lg flex flex-col  md:justify-between  max-w-7xl ">
+    <section className="container text-dark w-full  flex flex-col  md:justify-between  max-w-7xl ">
       <h3 className="text-xl text-center mb-4 md:text-3xl font-bold">
-        Your orders<span className="text-red-700">{}</span>
+        All orders<span className="text-red-700">{}</span>
       </h3>
       <div className="overflow-x-scroll">
         <table className="table z-0 table-pin-rows   w-full  ">

@@ -8,7 +8,8 @@ function Workspace() {
       <div className="hidden md:block relative w-full ">
         <img
           src={workspaceImage}
-          alt=""
+          loading="lazy"
+          alt="Workspace"
           className="w-full h-auto object-cover"
         />
         <div className="absolute flex flex-col items-center gap-3 top-10 md:top-20 left-1/2 -translate-x-1/2  ">
@@ -27,7 +28,8 @@ function Workspace() {
       <div className="p-4  md:hidden relative w-full ">
         <img
           src={workspaceImage}
-          alt=""
+          loading="lazy"
+          alt="workspace"
           className="rounded-t-2xl w-full aspect-video h-auto object-cover"
         />
         <div className="rounded-b-2xl flex flex-col items-center gap-2 bg-white p-6">

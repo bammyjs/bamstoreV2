@@ -43,8 +43,13 @@ const userSchema = mongoose.Schema(
       default: "+234",
     },
     address: {
-      type: Object,
-      //address, state, country
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    country: {
+      type: String,
     },
     isVerified: { type: Boolean, default: false },
     emailToken: { type: String },
@@ -57,9 +62,11 @@ const userSchema = mongoose.Schema(
 //encrypt password before saving to db
 userSchema.pre("save", async function (next) {
   console.log(`Saving user: ${this.email}, verified: ${this.isVerified}`);
+
   if (!this.isModified("password")) {
     return next();
   }
+
   //Hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(this.password, salt);

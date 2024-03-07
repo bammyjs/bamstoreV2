@@ -1,9 +1,6 @@
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
-import { Link } from "react-router-dom";
 import { useGetAllProductsQuery } from "../../redux/features/product/productsApi";
-import { shortenText } from "../../utils";
-import { motion } from "framer-motion";
 import { ProductCard } from "./ProductCard";
 
 const Carousel = () => {

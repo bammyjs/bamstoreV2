@@ -17,8 +17,9 @@ const Hero = () => {
         >
           <img
             src={heroImage}
+            loading="lazy"
             className=" w-full object-contain h-auto"
-            alt=""
+            alt="Bamstore hero"
           />
         </motion.picture>
         <motion.div

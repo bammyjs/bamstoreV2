@@ -347,7 +347,7 @@ function Header() {
           <ul
             className={`
                 md:hidden  z-40 bg-light pt-24 flex flex-col justify-between  items-start pr-6 font-bold  absolute  w-[90%] h-screen  pl-4 duration-500 ${
-                  open ? "left-0 -top-16 pb-20 " : "left-[-100%]"
+                  open ? "left-0 -top-16 pb-10 " : "left-[-100%] -top-16 pb-10"
                 }
                 `}
           >

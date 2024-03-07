@@ -1,41 +1,54 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import authReducer from "../redux/features/auth/authSlice";
-import cartReducer, { getTotals } from "./features/cartSlice";
+import cartReducer from "./features/cartSlice";
 import productReducer from "../redux/features/product/productSlice";
 import categoryReducer from "./features/categoryAndBrand/categorySlice";
 import { productsApi } from "./features/product/productsApi";
 import { userApi } from "./features/user/usersApi";
-
 import orderReducer from "./features/product/orderSlice";
 import { ordersApi } from "./features/order/ordersApi";
 
-export const store = configureStore({
-  reducer: {
-    [userApi.reducerPath]: userApi.reducer,
-    auth: authReducer,
-    cart: cartReducer,
-    product: productReducer,
-    category: categoryReducer,
-    orders: orderReducer,
-    [productsApi.reducerPath]: productsApi.reducer,
-    [ordersApi.reducerPath]: ordersApi.reducer,
-  },
-  middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(
-      productsApi.middleware,
-      userApi.middleware,
-      ordersApi.middleware
-    );
-  },
-  devTools: false,
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["auth", "cart"], // Only persist auth and cart reducers
+};
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  cart: cartReducer,
+  product: productReducer,
+  category: categoryReducer,
+  orders: orderReducer,
+  [userApi.reducerPath]: userApi.reducer,
+  [productsApi.reducerPath]: productsApi.reducer,
+  [ordersApi.reducerPath]: ordersApi.reducer,
 });
 
-// store.dispatch(productsFetch());
-store.dispatch(getTotals());
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// const rootReducer = combineReducers({
-//   authReducer: authReducer,
-//   cartReducer: cartReducer,
-// });
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(productsApi.middleware, userApi.middleware, ordersApi.middleware),
+  devTools: process.env.NODE_ENV !== "production",
+});
 
-// export default configureStore({ reducer: rootReducer });
+export const persistor = persistStore(store);
+
+// store.dispatch(getTotals());

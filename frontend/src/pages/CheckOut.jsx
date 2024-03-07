@@ -9,6 +9,7 @@ import { createOrder } from "../redux/features/product/orderSlice";
 import { CheckoutForm } from "../componets/checkout/CheckoutForm";
 import CheckoutSuccess from "./CheckOutSuccess";
 import { formToJSON } from "axios";
+import { Meta } from "../componets/Meta";
 
 const CheckOut = () => {
   const dispatch = useDispatch();
@@ -217,96 +218,108 @@ const CheckOut = () => {
   };
 
   return (
-    <main
-      id="main-content"
-      className="w-full  bg-light h-fit flex flex-col items-center gap-6   "
-    >
-      {/* <h2 className="text-2xl text-dark text-center font-bold mb-5">
+    <>
+      <Meta
+        title="Checkout items - Bamstore.ng"
+        description="Checkout your cart items "
+        keywords="checkout, bamstore, welcome to bamstore ng"
+        url="http://bamstore.ng/checkout"
+      />
+      <main
+        id="main-content"
+        className="w-full  bg-light h-fit flex flex-col items-center gap-6   "
+      >
+        {/* <h2 className="text-2xl text-dark text-center font-bold mb-5">
         Checkout
       </h2> */}
-      <section className="container w-full   flex flex-col md:flex-row md:justify-between  max-w-7xl ">
-        <div className=" md:hidden">
-          {expand ? (
-            <div
-              onClick={() => onExpandView()}
-              className=" cursor-pointer px-4 py-6 bg-light border-b border-dark  flex items-center justify-between gap-2 text-sec-light-color hover:text-sec-color "
-            >
-              <p className="flex items-center gap-2 text-sec-light-color hover:text-sec-color">
-                Hide Order Summary
-                <span className="cursor-pointer">
-                  <IoChevronUp />
-                </span>
-              </p>
+        <section className="container w-full   flex flex-col md:flex-row md:justify-between  max-w-7xl ">
+          <div className=" md:hidden">
+            {expand ? (
+              <div
+                onClick={() => onExpandView()}
+                className=" cursor-pointer px-4 py-6 bg-light border-b border-dark  flex items-center justify-between gap-2 text-sec-light-color hover:text-sec-color "
+              >
+                <p className="flex items-center gap-2 text-sec-light-color hover:text-sec-color">
+                  Hide Order Summary
+                  <span className="cursor-pointer">
+                    <IoChevronUp />
+                  </span>
+                </p>
 
-              <p className="text-xl font-semibold text-gray-900">
-                <span className="text-xl font-semibold text-dark">&#8358;</span>
-                {new Intl.NumberFormat("en-NG").format(
-                  cart.cartTotalAmount + shipRate
-                )}
-              </p>
+                <p className="text-xl font-semibold text-gray-900">
+                  <span className="text-xl font-semibold text-dark">
+                    &#8358;
+                  </span>
+                  {new Intl.NumberFormat("en-NG").format(
+                    cart.cartTotalAmount + shipRate
+                  )}
+                </p>
+              </div>
+            ) : (
+              <div
+                onClick={() => onExpandView()}
+                className="cursor-pointer px-4 py-6 bg-light flex items-center justify-between gap-2 text-sec-light-color hover:text-sec-color "
+              >
+                <p className="flex items-center gap-2 text-sec-light-color hover:text-sec-color">
+                  Show Order Summary
+                  <span className="cursor-pointer">
+                    <IoChevronDown />
+                  </span>
+                </p>
+
+                <p className="text-xl font-semibold text-gray-900">
+                  <span className="text-xl font-semibold text-dark">
+                    &#8358;
+                  </span>
+                  {new Intl.NumberFormat("en-NG").format(
+                    cart.cartTotalAmount + shipRate
+                  )}
+                </p>
+              </div>
+            )}
+            <div
+              className={`transition-expand ${
+                expand
+                  ? "max-h-[1000px] opacity-100"
+                  : "collapse max-h-0 opacity-50"
+              }`}
+            >
+              <OrderSummary cart={cart} shipRate={shipRate} />
             </div>
+          </div>
+          {!isSubmitted ? (
+            <CheckoutForm
+              handleBillingInputChange={handleBillingInputChange}
+              handleContactInputChange={handleContactInputChange}
+              handleInputChange={handleInputChange}
+              handleCheckboxChange={handleCheckboxChange}
+              handleSubmit={handleSubmit}
+              contactDetails={contactDetails}
+              shippingDetails={shippingDetails}
+              billingDetails={billingDetails}
+              useShippingForBilling={useShippingForBilling}
+              saveInfo={saveInfo}
+              setSaveInfo={setSaveInfo}
+              setBillingDetails={setBillingDetails}
+              handleStateChange={handleStateChange}
+              handleCountryChange={handleCountryChange}
+              cart={cart}
+              shipRate={shipRate}
+              isLoading={isLoading}
+            />
           ) : (
-            <div
-              onClick={() => onExpandView()}
-              className="cursor-pointer px-4 py-6 bg-light flex items-center justify-between gap-2 text-sec-light-color hover:text-sec-color "
-            >
-              <p className="flex items-center gap-2 text-sec-light-color hover:text-sec-color">
-                Show Order Summary
-                <span className="cursor-pointer">
-                  <IoChevronDown />
-                </span>
-              </p>
-
-              <p className="text-xl font-semibold text-gray-900">
-                <span className="text-xl font-semibold text-dark">&#8358;</span>
-                {new Intl.NumberFormat("en-NG").format(
-                  cart.cartTotalAmount + shipRate
-                )}
-              </p>
-            </div>
+            <CheckoutSuccess shipRate={shipRate} />
           )}
-          <div
-            className={`transition-expand ${
-              expand
-                ? "max-h-[1000px] opacity-100"
-                : "collapse max-h-0 opacity-50"
-            }`}
-          >
-            <OrderSummary cart={cart} shipRate={shipRate} />
-          </div>
-        </div>
-        {!isSubmitted ? (
-          <CheckoutForm
-            handleBillingInputChange={handleBillingInputChange}
-            handleContactInputChange={handleContactInputChange}
-            handleInputChange={handleInputChange}
-            handleCheckboxChange={handleCheckboxChange}
-            handleSubmit={handleSubmit}
-            contactDetails={contactDetails}
-            shippingDetails={shippingDetails}
-            billingDetails={billingDetails}
-            useShippingForBilling={useShippingForBilling}
-            saveInfo={saveInfo}
-            setSaveInfo={setSaveInfo}
-            setBillingDetails={setBillingDetails}
-            handleStateChange={handleStateChange}
-            handleCountryChange={handleCountryChange}
-            cart={cart}
-            shipRate={shipRate}
-            isLoading={isLoading}
-          />
-        ) : (
-          <CheckoutSuccess shipRate={shipRate} />
-        )}
 
-        {/* desktop order summary view */}
-        <div className="bg-gray-bk w-full p-4 sticky  flex-col hidden  md:block  text-dark">
-          <div className="  max-w-7xl">
-            <OrderSummary cart={cart} shipRate={shipRate} />
+          {/* desktop order summary view */}
+          <div className="bg-gray-bk w-full p-4 sticky  flex-col hidden  md:block  text-dark">
+            <div className="  max-w-7xl">
+              <OrderSummary cart={cart} shipRate={shipRate} />
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 };
 

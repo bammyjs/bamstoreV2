@@ -20,12 +20,11 @@ const sendEmail = async (subject, send_to, template) => {
     product: {
       color: "#3869D4",
       name: "Bamstore NG",
-      link: "http://127.0.0.1:5173",
+      link: "http://Localhost:5173",
       logo: "https://res.cloudinary.com/bamtech1/image/upload/v1709332282/bamstore/bammylogo_jismsm.png",
       logoHeight: "30px",
     },
   });
-  console.log(mailGenerator);
 
   const emailBody = mailGenerator.generate(template);
   // require("fs").writeFileSync("preview.html", emailBody, "utf8");
@@ -44,14 +43,6 @@ const sendEmail = async (subject, send_to, template) => {
   } catch (error) {
     console.error("Error sending email:", error);
   }
-
-  // transporter.sendMail(mailOptions, function (err, info) {
-  //   if (err) {
-  //     console.log("Error sending email:", err);
-  //   } else {
-  //     console.log("Email sent successfully:", info);
-  //   }
-  // });
 };
 
 module.exports = sendEmail;

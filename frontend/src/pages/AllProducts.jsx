@@ -1,11 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 
-import {
-  IoChevronForward,
-  IoChevronBack,
-  IoLogoWhatsapp,
-} from "react-icons/io5";
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
+import { IoChevronForward, IoChevronBack } from "react-icons/io5";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import CardProducts from "../componets/product/CardProducts";
 import { useGetAllProductsQuery } from "../redux/features/product/productsApi";
@@ -13,23 +9,15 @@ import "react-loading-skeleton/dist/skeleton.css";
 import CardSkeleton from "../componets/product/CardSkeleton";
 import ReactPaginate from "react-paginate";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-} from "@heroicons/react/20/solid";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import ProductFilter from "../componets/product/ProductFilter";
 import SortProducts from "../componets/product/SortProducts";
-import { filters, sortOptions } from "../componets/product/FilterData";
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
+import { sortOptions } from "../componets/product/FilterData";
 import BreadCrumb from "../componets/BreadCrumb";
 import MobileProductFilter from "../componets/product/MobileProductFilter";
+import { Meta } from "../componets/Meta";
 
 export default function AllProducts() {
   // State for managing current page
@@ -249,239 +237,247 @@ export default function AllProducts() {
   };
 
   return (
-    <div
-      id="main-content"
-      className="  bg-gray-bk h-fit flex-col gap-6 mt-10  md:mt-10 lg:mt-10"
-    >
-      <div className="mx-auto container max-w-7xl bg-gray-bk px-4 ">
-        <BreadCrumb
-          crumbs={[
-            { label: "Home", path: "/" },
-            { label: "OurStore", path: "/products" },
-            { label: "All products" },
-          ]}
-        />
+    <>
+      <Meta
+        title="All product Page - Bamstore.ng products"
+        description="Welcome to the BamstoreNG No1 gadget store in Nigeria."
+        keywords="products, bamstore, all product, welcome to bamstore ng"
+        url="http://bamstore.ng/products"
+      />
+      <div
+        id="main-content"
+        className="  bg-gray-bk h-fit flex-col gap-6 mt-10  md:mt-10 lg:mt-10"
+      >
+        <div className="mx-auto container max-w-7xl bg-gray-bk px-4 ">
+          <BreadCrumb
+            crumbs={[
+              { label: "Home", path: "/" },
+              { label: "OurStore", path: "/products" },
+              { label: "All products" },
+            ]}
+          />
 
-        <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-40 lg:hidden"
-            onClose={setMobileFiltersOpen}
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="transition-opacity ease-linear duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity ease-linear duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
+          <Transition.Root show={mobileFiltersOpen} as={Fragment}>
+            <Dialog
+              as="div"
+              className="relative z-40 lg:hidden"
+              onClose={setMobileFiltersOpen}
             >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </Transition.Child>
-
-            <div className="fixed inset-0 z-40 flex">
               <Transition.Child
                 as={Fragment}
-                enter="transition ease-in-out duration-300 transform"
-                enterFrom="translate-x-full"
-                enterTo="translate-x-0"
-                leave="transition ease-in-out duration-300 transform"
-                leaveFrom="translate-x-0"
-                leaveTo="translate-x-full"
+                enter="transition-opacity ease-linear duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity ease-linear duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
               >
-                <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs  flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-                  <div className="flex items-center justify-between px-4">
-                    <h2 className="text-lg  text-gray-700 hover:text-gray-900">
-                      Filters
-                    </h2>
-                    <button
-                      type="button"
-                      className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
-                      onClick={() => setMobileFiltersOpen(false)}
-                    >
-                      <span className="sr-only">Close menu</span>
-                      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-
-                  {/* Filters */}
-                  <MobileProductFilter
-                    categories={categories}
-                    brands={brands}
-                    colors={colors}
-                    handleCategoryChange={handleCategoryChange}
-                    handleBrandChange={handleBrandChange}
-                    handleColorChange={handleColorChange}
-                    handlePriceInputChange={handlePriceRangeChange}
-                    priceRange={priceRange}
-                    handleSliderChange={handleSliderChange}
-                    selectedBrands={selectedBrands}
-                    selectedCategories={selectedCategories}
-                    selectedColors={selectedColors}
-                  />
-                  <div className="px-4 py-2 flex justify-between">
-                    <button
-                      type="button"
-                      className="btn btn-outline"
-                      onClick={handleResetFilters}
-                    >
-                      Reset
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={handleApplyFilters}
-                    >
-                      Apply
-                    </button>
-                  </div>
-                </Dialog.Panel>
+                <div className="fixed inset-0 bg-black bg-opacity-25" />
               </Transition.Child>
-            </div>
-          </Dialog>
-        </Transition.Root>
-        {/* Mobile filter dialog ends*/}
 
-        <main className="max-w-7xl ">
-          <h3 className="text-center w-full text-pry-deep text-base md:text-2xl  my-3 md:my-5 capitalize">
-            All Products
-          </h3>
-          <div className="flex items-baseline justify-between border-y border-gray-200 p-4 md:p-8">
-            <p className="w-full hidden md:block text-sm font-medium text-gray-700 hover:text-gray-900">
-              {currentProducts?.length} products found
-            </p>
-
-            <button
-              type="button"
-              className=" text-gray-400 hover:text-gray-500 sm:ml-6 md:hidden"
-              onClick={() => setMobileFiltersOpen(true)}
-            >
-              <span className="text-sm font-medium text-gray-700 hover:text-gray-900">
-                Filters
-              </span>
-            </button>
-            <div className=" justify-between items-center">
-              <Menu as="div" className="relative inline-block text-left">
-                <div className="">
-                  <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                    Sort
-                    <ChevronDownIcon
-                      className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
-                    />
-                  </Menu.Button>
-                </div>
-
-                <Transition
+              <div className="fixed inset-0 z-40 flex">
+                <Transition.Child
                   as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
+                  enter="transition ease-in-out duration-300 transform"
+                  enterFrom="translate-x-full"
+                  enterTo="translate-x-0"
+                  leave="transition ease-in-out duration-300 transform"
+                  leaveFrom="translate-x-0"
+                  leaveTo="translate-x-full"
                 >
-                  <Menu.Items className="absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="">
-                      <Menu.Item>
-                        <SortProducts
-                          sortOptions={sortOptions}
-                          selectedSortOption={selectedSortOption}
-                          onSortChange={handleSortChange}
-                        />
-                      </Menu.Item>
+                  <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs  flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+                    <div className="flex items-center justify-between px-4">
+                      <h2 className="text-lg  text-gray-700 hover:text-gray-900">
+                        Filters
+                      </h2>
+                      <button
+                        type="button"
+                        className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                        onClick={() => setMobileFiltersOpen(false)}
+                      >
+                        <span className="sr-only">Close menu</span>
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                      </button>
                     </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            </div>
-          </div>
 
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
-            <h2 id="products-heading" className="sr-only">
-              Products
-            </h2>
-
-            <div className="grid  grid-cols-1  gap-y-10 lg:grid-cols-5">
-              {/* Filters */}
-              <ProductFilter
-                categories={categories}
-                brands={brands}
-                colors={colors}
-                onCategoryChange={handleCategoryChange}
-                onBrandChange={handleBrandChange}
-                onColorChange={handleBrandChange}
-                onPriceRangeChange={handlePriceRangeChange}
-                priceRange={priceRange}
-                handleSliderChange={handleSliderChange}
-                handlePriceInputChange={handlePriceInputChange}
-                selectedBrands={selectedBrands}
-                selectedCategories={selectedCategories}
-                selectedColors={selectedColors}
-              />
-
-              {/* Product grid */}
-              <div className="lg:col-span-4  ">
-                <section className="w-full   flex flex-col items-center justify-center  ">
-                  <div className="container max-w-7xl flex flex-col item-center justify-center gap-8 ">
-                    <div className="w-full md:p-2">
-                      {loading ? (
-                        <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
-                          <CardSkeleton cards={8} products={products} />
-                        </div>
-                      ) : (
-                        <>
-                          <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
-                            {currentProducts?.map((product) => {
-                              return (
-                                <CardProducts
-                                  key={product._id}
-                                  product={product}
-                                />
-                              );
-                            })}
-                          </div>
-                        </>
-                      )}
+                    {/* Filters */}
+                    <MobileProductFilter
+                      categories={categories}
+                      brands={brands}
+                      colors={colors}
+                      handleCategoryChange={handleCategoryChange}
+                      handleBrandChange={handleBrandChange}
+                      handleColorChange={handleColorChange}
+                      handlePriceInputChange={handlePriceRangeChange}
+                      priceRange={priceRange}
+                      handleSliderChange={handleSliderChange}
+                      selectedBrands={selectedBrands}
+                      selectedCategories={selectedCategories}
+                      selectedColors={selectedColors}
+                    />
+                    <div className="px-4 py-2 flex justify-between">
+                      <button
+                        type="button"
+                        className="btn btn-outline"
+                        onClick={handleResetFilters}
+                      >
+                        Reset
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={handleApplyFilters}
+                      >
+                        Apply
+                      </button>
                     </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </Dialog>
+          </Transition.Root>
+          {/* Mobile filter dialog ends*/}
+
+          <main className="max-w-7xl ">
+            <h3 className="text-center w-full text-pry-deep text-base md:text-2xl  my-3 md:my-5 capitalize">
+              All Products
+            </h3>
+            <div className="flex items-baseline justify-between border-y border-gray-200 p-4 md:p-8">
+              <p className="w-full hidden md:block text-sm font-medium text-gray-700 hover:text-gray-900">
+                {currentProducts?.length} products found
+              </p>
+
+              <button
+                type="button"
+                className=" text-gray-400 hover:text-gray-500 sm:ml-6 md:hidden"
+                onClick={() => setMobileFiltersOpen(true)}
+              >
+                <span className="text-sm font-medium text-gray-700 hover:text-gray-900">
+                  Filters
+                </span>
+              </button>
+              <div className=" justify-between items-center">
+                <Menu as="div" className="relative inline-block text-left">
+                  <div className="">
+                    <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                      Sort
+                      <ChevronDownIcon
+                        className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                        aria-hidden="true"
+                      />
+                    </Menu.Button>
                   </div>
-                </section>
 
-                <motion.div
-                  variants={paginationVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <ReactPaginate
-                    breakLabel="..."
-                    previousLabel={
-                      showPrevBtn ? (
-                        <span>
-                          <IoChevronBack style={{ fontSize: "15px" }} />
-                        </span>
-                      ) : null
-                    }
-                    nextLabel={
-                      showNextBtn ? (
-                        <span>
-                          <IoChevronForward style={{ fontSize: "15px" }} />
-                        </span>
-                      ) : null
-                    }
-                    pageRangeDisplayed={5}
-                    pageCount={totalPages}
-                    onPageChange={handlePageClick}
-                    containerClassName="join gap-4 flex items-center justify-center mt-8 mb-4"
-                    pageClassName="btn btn-secondary"
-                    activeClassName="btn-active "
-                  />
-                </motion.div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="">
+                        <Menu.Item>
+                          <SortProducts
+                            sortOptions={sortOptions}
+                            selectedSortOption={selectedSortOption}
+                            onSortChange={handleSortChange}
+                          />
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
             </div>
-          </section>
-        </main>
+
+            <section aria-labelledby="products-heading" className="pb-24 pt-6">
+              <h2 id="products-heading" className="sr-only">
+                Products
+              </h2>
+
+              <div className="grid  grid-cols-1  gap-y-10 lg:grid-cols-5">
+                {/* Filters */}
+                <ProductFilter
+                  categories={categories}
+                  brands={brands}
+                  colors={colors}
+                  onCategoryChange={handleCategoryChange}
+                  onBrandChange={handleBrandChange}
+                  onColorChange={handleBrandChange}
+                  onPriceRangeChange={handlePriceRangeChange}
+                  priceRange={priceRange}
+                  handleSliderChange={handleSliderChange}
+                  handlePriceInputChange={handlePriceInputChange}
+                  selectedBrands={selectedBrands}
+                  selectedCategories={selectedCategories}
+                  selectedColors={selectedColors}
+                />
+
+                {/* Product grid */}
+                <div className="lg:col-span-4  ">
+                  <section className="w-full   flex flex-col items-center justify-center  ">
+                    <div className="container max-w-7xl flex flex-col item-center justify-center gap-8 ">
+                      <div className="w-full md:p-2">
+                        {loading ? (
+                          <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
+                            <CardSkeleton cards={8} products={products} />
+                          </div>
+                        ) : (
+                          <>
+                            <div className="grid pb-8 justify-between overflow-auto  grid-cols-2 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 ">
+                              {currentProducts?.map((product) => {
+                                return (
+                                  <CardProducts
+                                    key={product._id}
+                                    product={product}
+                                  />
+                                );
+                              })}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </section>
+
+                  <motion.div
+                    variants={paginationVariants}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <ReactPaginate
+                      breakLabel="..."
+                      previousLabel={
+                        showPrevBtn ? (
+                          <span>
+                            <IoChevronBack style={{ fontSize: "15px" }} />
+                          </span>
+                        ) : null
+                      }
+                      nextLabel={
+                        showNextBtn ? (
+                          <span>
+                            <IoChevronForward style={{ fontSize: "15px" }} />
+                          </span>
+                        ) : null
+                      }
+                      pageRangeDisplayed={5}
+                      pageCount={totalPages}
+                      onPageChange={handlePageClick}
+                      containerClassName="join gap-4 flex items-center justify-center mt-8 mb-4"
+                      pageClassName="btn btn-secondary"
+                      activeClassName="btn-active "
+                    />
+                  </motion.div>
+                </div>
+              </div>
+            </section>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

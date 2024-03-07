@@ -1,8 +1,4 @@
-// import "./Footer.scss"
 import logo from "../../assets/bammylogo.png";
-import facebook from "../../assets/whatsapp-2174.svg";
-import tweeter from "../../assets/twitter-2170.svg";
-import instagram from "../../assets/instagram-2165.svg";
 import { HashLink as Link } from "react-router-hash-link";
 
 function Footer() {

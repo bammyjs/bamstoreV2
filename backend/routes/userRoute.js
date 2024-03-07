@@ -11,6 +11,9 @@ const {
   getUsers,
   deleteUser,
   verifyEmail,
+  changePassword,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/userController");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 const router = express.Router();
@@ -26,5 +29,8 @@ router.get("/getLoginStatus", getLoginStatus);
 router.delete("/:id", protect, adminOnly, deleteUser);
 router.patch("/updateUser", protect, updateUser);
 router.patch("/updatePhoto", protect, updatePhoto);
+router.patch("/changepassword", protect, changePassword);
+router.post("/forgotpassword", forgotPassword);
+router.put("/resetpassword/:userId/:resetToken", resetPassword);
 
 module.exports = router;

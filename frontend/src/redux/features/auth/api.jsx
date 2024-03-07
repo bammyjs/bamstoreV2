@@ -8,5 +8,3 @@ export const setHeaders = () => {
   };
   return headers;
 };
-
-// export const url2 = "https://bamstore-store.onrender.com";

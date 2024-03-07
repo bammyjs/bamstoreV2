@@ -22,12 +22,11 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const { firstName, lastName, email, password } = formData;
 
-  const { isLoading, isLoggedIn, isSuccess } = useSelector(
-    (state) => state.auth
-  );
+  const { isLoggedIn, isSuccess } = useSelector((state) => state.auth);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +53,9 @@ const Register = () => {
       email,
       password,
     };
+    setIsLoading(true);
     await dispatch(register(userData));
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -62,17 +63,21 @@ const Register = () => {
       navigate("/verify-email");
     }
 
-    // dispatch(RESET_AUTH());
+    dispatch(RESET_AUTH());
   }, [isSuccess, isLoading, navigate]);
 
   return (
     <>
-      <Meta title={"Register"} />
-      {/* <BreadCrumb title="Register" /> */}
+      <Meta
+        title="Register Page - Bamstore.ng"
+        description="Register to the BamstoreNG No1 gadget store in Nigeria."
+        keywords="register, bamstore register, welcome to bamstore ng"
+        url="http://bamstore.ng/register"
+      />
       <>
         <main
           id="main-content"
-          className="bg-gray-bk w-full text-dark px-6 flex flex-col items-center justify-center gap-6 my-32 md:my-60"
+          className="bg-gray-bk w-full px-6 flex flex-col items-center justify-center gap-6 py-20  md:py-60"
         >
           <h3 className="text-3xl text-dark text-center md:text-5xl font-bold">
             Sign Up
@@ -172,7 +177,7 @@ const Register = () => {
             </div>
             <LoadingButton
               type="submit"
-              onSubmit={registerUser}
+              // onSubmit={registerUser}
               isLoading={isLoading}
             >
               Create Account

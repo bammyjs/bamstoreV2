@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Carousel from "./Carousel";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { NewItems } from "../../datas/productData";
 import { shortenText } from "../../utils";
-import ReactStars from "react-rating-stars-component";
 import { useGetAllProductsQuery } from "../../redux/features/product/productsApi";
-import CardProducts from "../product/CardProducts";
-import { ProductCard } from "./ProductCard";
+
 import { NewProductCard } from "../product/NewProductCard";
 import CardSkeleton from "../product/CardSkeleton";
 

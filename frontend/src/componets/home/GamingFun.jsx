@@ -6,7 +6,12 @@ function GamingFun() {
   return (
     <section className="w-full items-center justify-center">
       <div className=" relative w-full hidden md:block ">
-        <img src={funImage} alt="" className="w-full h-auto object-cover" />
+        <img
+          src={funImage}
+          loading="lazy"
+          alt="gaming"
+          className="w-full h-auto object-cover"
+        />
         <span className=""></span>
         <div className="absolute flex flex-col items-center gap-3 top-10 md:top-20 left-1/2 -translate-x-1/2  ">
           <h2 className="text-gray-900 text-center text-2xl md:text-5xl lg:text-7xl font-bold mb-2 md:md-4">
@@ -23,7 +28,8 @@ function GamingFun() {
       <div className="p-4  md:hidden relative w-full ">
         <img
           src={funImage}
-          alt=""
+          loading="lazy"
+          alt="gaming"
           className="rounded-t-2xl w-full aspect-video h-auto object-cover"
         />
         <div className="rounded-b-2xl flex flex-col items-center gap-2 bg-white p-6">

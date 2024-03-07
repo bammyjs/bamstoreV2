@@ -1,3 +1,4 @@
+import axios from "axios";
 import Layout from "./componets/Layout/Layout";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -7,11 +8,16 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 
 import "./style.scss";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { OurStore } from "./pages/OurStore";
 import ForgotPassword from "./pages/ForgotPassword";
 import CartList from "./pages/CartList";
-import axios from "axios";
 
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
@@ -33,7 +39,6 @@ import { Admin } from "./pages/Admin";
 import DashBoardPreview from "./componets/admin/DashBoardPreview";
 import AvailableProducts from "./componets/admin/AvailableProducts";
 import DisplayUsers from "./componets/admin/DisplayUsers";
-import Orders from "./componets/admin/Orders";
 import AddProduct from "./componets/admin/product/AddProduct";
 import AdminAccessOnly from "./componets/admin/AdminAccessOnly";
 import NotFound from "./pages/NotFound";
@@ -47,14 +52,39 @@ import { OrderPreview } from "./pages/orderDetails/OrderPreview";
 import AllOrders from "./componets/admin/order/AllOrders";
 import OrderDetails from "./componets/admin/order/OrderDetails";
 import EmailVerification from "./pages/EmailVerification";
+import RequireEmailVerification from "./pages/RequireEmailVerification";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const location = useLocation();
-
-  axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const user = useSelector(selectUser);
+
+  // Setup Axios defaults
+  axios.defaults.withCredentials = true;
+
+  // Axios interceptor to handle 401 Unauthorized globally
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          // Assuming logout action clears the authentication state
+          dispatch(logout());
+          // Redirect to login page
+          navigate("/login", { replace: true });
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // Cleanup the interceptor when the component is unmounted
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, [dispatch, navigate]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -101,7 +131,18 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-email" element={<EmailVerification />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={
+            <RequireEmailVerification>
+              <Profile />
+            </RequireEmailVerification>
+          }
+        />
+        <Route
+          path="/reset-password/:id/:resetToken"
+          element={<ResetPassword />}
+        />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/products" element={<AllProducts />} />
         <Route path="/products/:category" element={<AllProducts />} />
