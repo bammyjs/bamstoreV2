@@ -47,13 +47,13 @@ import UpdateUser from "./componets/admin/user/UpdateUser";
 import AllProducts from "./pages/AllProducts";
 import CheckOut from "./pages/CheckOut";
 import { OrderPage } from "./pages/orderDetails/OrderPage";
-import CheckoutSuccess from "./pages/CheckOutSuccess";
 import { OrderPreview } from "./pages/orderDetails/OrderPreview";
 import AllOrders from "./componets/admin/order/AllOrders";
 import OrderDetails from "./componets/admin/order/OrderDetails";
 import EmailVerification from "./pages/EmailVerification";
 import RequireEmailVerification from "./pages/RequireEmailVerification";
 import ResetPassword from "./pages/ResetPassword";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 
 function App() {
   const location = useLocation();
