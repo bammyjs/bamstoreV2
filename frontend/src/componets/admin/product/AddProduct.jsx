@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-
-import TabList from "../tabList";
 import { useSelector } from "react-redux";
+import TabList from "./TabList";
 
 const AddProduct = () => {
   const isLoading = useSelector((state) => state.selectIsLoading);

@@ -6,14 +6,15 @@ import { toast } from "react-toastify";
 import {
   createProduct,
   selectIsLoading,
-} from "../../redux/features/product/productSlice";
+} from "../../../redux/features/product/productSlice";
+
 import {
   getBrands,
   getCategories,
-} from "../../redux/features/categoryAndBrand/categorySlice";
-import Brand from "./brand/Brand";
-import Category from "./category/Category";
-import ProductForm from "./product/ProductForm";
+} from "../../../redux/features/categoryAndBrand/categorySlice";
+import Brand from "../brand/Brand";
+import Category from "../category/Category";
+import ProductForm from "./ProductForm";
 
 const initialState = {
   name: "",
