@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const {
   registerUser,
   loginUser,
@@ -17,6 +18,9 @@ const {
 } = require("../controllers/userController");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 const router = express.Router();
+
+// Apply CORS middleware at the router level
+router.use(cors());
 
 router.post("/register", registerUser);
 router.post("/verify-email", verifyEmail);

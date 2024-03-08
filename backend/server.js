@@ -21,7 +21,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: [
-      "https://bamstoreng.netlify.app",
+      // "https://bamstoreng.netlify.app",
+      "https://localhost:5173",
       "https://bamstore-store.onrender.com",
     ],
     credentials: true,
