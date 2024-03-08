@@ -20,7 +20,10 @@ app.use(express.urlencoded({ extended: false }));
 // CORS middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://bamstore-store.onrender.com"],
+    origin: [
+      "https://bamstoreng.netlify.app/",
+      "https://bamstore-store.onrender.com",
+    ],
     credentials: true,
   })
 );
