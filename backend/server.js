@@ -9,6 +9,10 @@ const orderRoute = require("./routes/orderRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
 const errorHandler = require("./middleware/errorMiddleware");
+const http = require("http");
+const https = require("https");
+const fs = require("fs"); // For file operations
+const path = require("path");
 
 const app = express();
 
@@ -46,6 +50,25 @@ app.get("*", (req, res) => {
 
 // error Middleware
 app.use(errorHandler);
+
+const options = {
+  cert: fs.readFileSync("certificate/cert.pem"),
+  key: fs.readFileSync("certificate/key.pem"),
+};
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(options, app);
+
+const httpPort = 80;
+const httpsPort = 443;
+
+httpServer.listen(httpPort, () => {
+  console.log(`HTTP Server running on port ${httpPort}`);
+});
+
+httpsServer.listen(httpsPort, () => {
+  console.log(`HTTPS Server running on port ${httpsPort}`);
+});
 
 const PORT = process.env.PORT || 5000;
 
