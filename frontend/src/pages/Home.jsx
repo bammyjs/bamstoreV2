@@ -9,6 +9,7 @@ import Recommendation from "../componets/home/Recommendations";
 import ProductCategory from "../componets/product/ProductCategory";
 import WorkSpaceProducts from "../componets/home/WorkSpaceProducts";
 import { Meta } from "../componets/Meta";
+import FlashSales from "../componets/home/FlashSales";
 
 function Home() {
   return (
@@ -22,13 +23,14 @@ function Home() {
       <main id="main-content" className=" flex flex-col bg-gray-bk ">
         <Hero />
         <FeaturedProduct />
+        <FlashSales />
         <BestSelling />
         <NewProducts />
         <Workspace />
         <WorkSpaceProducts />
         <GamingFun />
         <GamingProduct />
-        {/* <Recommendation /> */}
+        <Recommendation />
       </main>
     </>
   );
