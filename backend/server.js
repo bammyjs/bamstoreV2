@@ -52,7 +52,7 @@ app.use(
 // CORS middleware
 app.use(
   cors({
-    origin: "https://bamstoreng.netlify.app",
+    origin: ["https://bamstoreng.netlify.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "HEAD", "DELETE", "PATCH"],
   })
