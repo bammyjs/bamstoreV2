@@ -55,7 +55,13 @@ app.use(
     origin: "https://bamstoreng.netlify.app", // Explicitly specify the allowed origin
     credentials: true, // Important for cookies, authorization headers with HTTPS
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+    allowedHeaders: [
+      "Origin",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+      "X-Request-With",
+    ], // Specify allowed headers
   })
 );
 
