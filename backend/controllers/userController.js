@@ -106,8 +106,7 @@ const loginUser = asyncHandler(async (req, res) => {
   console.log(`User verified status: ${user.isVerified}`);
   // Ensure the user has verified their email
   if (!user.isVerified) {
-    res.status(401); // 401 Unauthorized is more suitable for login failures
-    throw new Error("Please verify your email before logging in.");
+    return next(new Error("Please verify your email before logging in."));
   }
 
   console.log("Provided password:", password);
@@ -235,11 +234,10 @@ const getLoginStatus = asyncHandler(async (req, res) => {
   }
 
   // verify token
-  const verified = jwt.verify(token, process.env.JWT_SECRET);
-
-  if (verified) {
+  try {
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
     res.json(true);
-  } else {
+  } catch (error) {
     res.json(false);
   }
 });

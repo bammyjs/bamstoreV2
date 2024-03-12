@@ -10,7 +10,6 @@ const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
 const errorHandler = require("./middleware/errorMiddleware");
 const http = require("http");
-const https = require("https");
 const fs = require("fs"); // For file operations
 const path = require("path");
 
@@ -30,7 +29,7 @@ app.use(
       "https://bamstore-store.onrender.com",
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT", "HEAD", "DELETE", "PATCH"],
   })
 );
 

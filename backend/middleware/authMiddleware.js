@@ -23,8 +23,7 @@ const protect = asyncHandler(async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    res.status(401);
-    throw new Error("Not authorized, please login");
+    return next(new Error("Not authorized, please login"));
   }
 });
 
