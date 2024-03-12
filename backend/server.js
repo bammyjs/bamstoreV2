@@ -65,6 +65,10 @@ app.use(
   })
 );
 
+app.get("/test-cors", (req, res) => {
+  res.json({ message: "CORS is configured correctly" });
+});
+
 //routes
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
