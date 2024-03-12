@@ -7,9 +7,7 @@ export const API_URL = `${BACKEND_URL}/api/users/`;
 //register user
 
 const register = async (userData) => {
-  const response = await axios.post(API_URL + "register", userData, {
-    withCredentials: true,
-  });
+  const response = await axios.post(API_URL + "register", userData);
   return response.data;
 };
 
@@ -23,9 +21,7 @@ const verifyEmail = async (emailToken) => {
 //login user
 
 const login = async (userData) => {
-  const response = await axios.post(API_URL + "login", userData, {
-    withCredentials: true,
-  });
+  const response = await axios.post(API_URL + "login", userData);
   return response.data;
 };
 
@@ -39,9 +35,7 @@ const logout = async () => {
 //get login status
 
 const getLoginStatus = async () => {
-  const response = await axios.get(API_URL + "getLoginStatus", {
-    withCredentials: true,
-  });
+  const response = await axios.get(API_URL + "getLoginStatus");
   return response.data;
 };
 
