@@ -1,4 +1,7 @@
-const dotenv = require("dotenv").config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -9,9 +12,7 @@ const orderRoute = require("./routes/orderRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
 const errorHandler = require("./middleware/errorMiddleware");
-const http = require("http");
-const fs = require("fs"); // For file operations
-const path = require("path");
+const helmet = require("helmet");
 
 const app = express();
 
@@ -19,6 +20,34 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  if (
+    req.header("x-forwarded-proto") !== "https" &&
+    process.env.NODE_ENV === "production"
+  ) {
+    res.redirect(`https://${req.header("host")}${req.url}`);
+  } else {
+    next();
+  }
+});
+
+app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'", "https://bamstore-store.onrender.com"],
+      },
+    },
+    hsts: {
+      maxAge: 63072000, // 2 years
+      includeSubDomains: true,
+      preload: true,
+    },
+  })
+);
 
 // CORS middleware
 app.use(
@@ -51,33 +80,16 @@ app.get("*", (req, res) => {
 // error Middleware
 app.use(errorHandler);
 
-const options = {
-  cert: fs.readFileSync("certificate/cert.pem"),
-  key: fs.readFileSync("certificate/key.pem"),
-};
-
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(options, app);
-
-const httpPort = 80;
-const httpsPort = 443;
-
-httpServer.listen(httpPort, () => {
-  console.log(`HTTP Server running on port ${httpPort}`);
-});
-
-httpsServer.listen(httpsPort, () => {
-  console.log(`HTTPS Server running on port ${httpsPort}`);
-});
-
 const PORT = process.env.PORT || 5000;
 
-mongoose.set("strictQuery", false);
+app.listen(PORT, () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
+
 mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`server running on port ${PORT}`);
-    });
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((err) => console.error(err));
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
