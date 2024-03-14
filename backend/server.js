@@ -57,14 +57,14 @@ app.use((req, res, next) => {
   }
 });
 
-// CORS configuration
-app.use(
-  cors({
-    origin: "https://bamstoreng.netlify.app",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  })
-);
+const corsOptions = {
+  origin: "https://bamstoreng.netlify.app",
+  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+};
+
+app.use(cors(corsOptions));
 
 // Static file serving for SPA
 app.get("/test-cors", (req, res) => {
