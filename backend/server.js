@@ -58,6 +58,13 @@ app.use(
   })
 );
 
+// Place this before your existing app.use(cors({...})) middleware for testing
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://bamstoreng.netlify.app");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 // CORS middleware
 app.use(
   cors({
