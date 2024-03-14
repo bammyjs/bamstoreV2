@@ -62,6 +62,7 @@ app.use(
 app.use(
   cors({
     origin: "https://bamstoreng.netlify.app", // Explicitly specify the allowed origin
+    credentials: true, // Important for cookies, authorization headers with HTTPS
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: [
       "Origin",
