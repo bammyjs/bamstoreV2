@@ -89,7 +89,7 @@ const Product = () => {
   return (
     <>
       <Meta
-        title={`${product.name} product - Bamstore.ng`}
+        title="Product description Page - Bamstore.ng"
         description="Product details  BamstoreNG No1 gadget store in Nigeria."
         keywords="product, bamstore product details, welcome to bamstore ng"
         url="http://bamstore.ng/product"
