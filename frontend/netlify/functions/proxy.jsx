@@ -1,5 +1,6 @@
 // netlify/functions/proxy.js
-const fetch = require("node-fetch");
+
+import fetch from "node-fetch";
 
 exports.handler = async function (event, context) {
   const url = "https://bamstore-store.onrender.com" + event.path;
