@@ -6,22 +6,27 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const path = require("path");
+
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
 const orderRoute = require("./routes/orderRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
 const errorHandler = require("./middleware/errorMiddleware");
-const helmet = require("helmet");
-const path = require("path");
 
 const app = express();
 
-//Middlewares
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
+// Middlewares for security
+app.use(helmet());
 
+// Middleware for parsing request bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// HTTPS redirection in production
 app.use((req, res, next) => {
   if (
     req.header("x-forwarded-proto") !== "https" &&
@@ -33,74 +38,33 @@ app.use((req, res, next) => {
   }
 });
 
-app.use((req, res, next) => {
-  console.log("Request Headers:", req.headers);
-  res.on("finish", () => {
-    console.log("Response Headers:", res.getHeaders());
-  });
-  next();
-});
-
-app.use(helmet());
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        connectSrc: ["'self'", "https://bamstore-store.onrender.com"],
-      },
-    },
-    hsts: {
-      maxAge: 63072000, // 2 years
-      includeSubDomains: true,
-      preload: true,
-    },
-  })
-);
-
-// Place this before your existing app.use(cors({...})) middleware for testing
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://bamstoreng.netlify.app");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
-
-// CORS middleware
+// CORS configuration
 app.use(
   cors({
-    origin: "https://bamstoreng.netlify.app", // Explicitly specify the allowed origin
-    credentials: true, // Important for cookies, authorization headers with HTTPS
+    origin: "https://bamstoreng.netlify.app",
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: [
-      "Origin",
-      "Content-Type",
-      "Accept",
-      "Authorization",
-      "X-Request-With",
-    ],
   })
 );
 
+// Static file serving for SPA
 app.get("/test-cors", (req, res) => {
   res.json({ message: "CORS is configured correctly" });
 });
 
-//routes
+// API routes
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/order", orderRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/brand", brandRoute);
 
+// Serve SPA for unmatched routes
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-// app.get("/", (req, res) => {
-//   res.send("Home page...");
-// });
-
-// error Middleware
+// Error handling middleware
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
