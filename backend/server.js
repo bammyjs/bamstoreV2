@@ -13,6 +13,7 @@ const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
 const errorHandler = require("./middleware/errorMiddleware");
 const helmet = require("helmet");
+const path = require("path");
 
 const app = express();
 
@@ -30,6 +31,14 @@ app.use((req, res, next) => {
   } else {
     next();
   }
+});
+
+app.use((req, res, next) => {
+  console.log("Request Headers:", req.headers);
+  res.on("finish", () => {
+    console.log("Response Headers:", res.getHeaders());
+  });
+  next();
 });
 
 app.use(helmet());
@@ -53,7 +62,6 @@ app.use(
 app.use(
   cors({
     origin: "https://bamstoreng.netlify.app", // Explicitly specify the allowed origin
-    credentials: true, // Important for cookies, authorization headers with HTTPS
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: [
       "Origin",
@@ -61,7 +69,7 @@ app.use(
       "Accept",
       "Authorization",
       "X-Request-With",
-    ], // Specify allowed headers
+    ],
   })
 );
 
@@ -94,6 +102,7 @@ app.listen(PORT, () => {
 });
 
 mongoose
+  .set("strictQuery", false)
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
