@@ -54,6 +54,8 @@ import EmailVerification from "./pages/EmailVerification";
 import RequireEmailVerification from "./pages/RequireEmailVerification";
 import ResetPassword from "./pages/ResetPassword";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
+import ManageStore from "./componets/admin/pickupstore/ManageStore";
+import CheckoutDetails from "./componets/checkout/CheckoutDetails";
 
 function App() {
   const location = useLocation();
@@ -150,7 +152,7 @@ function App() {
         <Route path="/cart" element={<CartList />} />
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/checkout-success" element={<CheckoutSuccess />} />
-
+        
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/order-preview/:id" element={<OrderPreview />} />
 
@@ -171,6 +173,7 @@ function App() {
           <Route path="order-details/:id" element={<OrderDetails />} />
           <Route path="users" element={<DisplayUsers />} />
           <Route path="updateUser/:id" element={<UpdateUser />} />
+          <Route path="manageStores" element={<ManageStore/>}/>
         </Route>
       </Route>
     </Routes>

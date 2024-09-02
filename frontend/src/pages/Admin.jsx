@@ -20,7 +20,6 @@ import { Meta } from "../componets/Meta";
 export const Admin = () => {
   const dispatch = useDispatch();
   const { data: orders, error, isLoading } = useGetOrdersQuery();
-  console.log(orders);
   const { user } = useSelector((state) => state.auth);
   const [show, setShow] = useState(false);
 
@@ -192,7 +191,7 @@ export const Admin = () => {
                 </div>
               </NavLink>
               <NavLink
-                to="/admin/settings"
+                to="/admin/manageStores"
                 className={({ isActive }) =>
                   isActive
                     ? "bg-sec-color text-danger-900 hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group"
@@ -205,9 +204,9 @@ export const Admin = () => {
                   </div>
                   <div>
                     <p className="font-bold text-base lg:text-lg leading-4 group-hover:text-indigo-400">
-                      Settings
+                      Stores
                     </p>
-                    <p className=" text-sm hidden md:block">Edit settings</p>
+                    <p className=" text-sm hidden md:block">Manage Stores</p>
                   </div>
                 </div>
               </NavLink>
@@ -368,7 +367,7 @@ export const Admin = () => {
                 </div>
               </NavLink>
               <NavLink
-                to="/admin/settings"
+                to="/admin/manageStores"
                 className={({ isActive }) =>
                   isActive
                     ? "bg-sec-color text-danger-900 hover:bg-white/10 transition duration-150 ease-linear rounded-lg py-3 px-2 group"
@@ -381,9 +380,9 @@ export const Admin = () => {
                   </div>
                   <div>
                     <p className="font-bold text-base lg:text-lg leading-4 group-hover:text-indigo-400">
-                      Settings
+                      Stores
                     </p>
-                    <p className=" text-sm hidden md:block">Edit settings</p>
+                    <p className=" text-sm hidden md:block">Manage Stores</p>
                   </div>
                 </div>
               </NavLink>

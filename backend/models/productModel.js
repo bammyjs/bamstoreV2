@@ -78,6 +78,20 @@ const productSchema = new mongoose.Schema(
     ratings: {
       type: [reviewSchema],
     },
+    stores: [
+      {
+        store: {
+          type:  mongoose.Schema.Types.ObjectId,
+          ref: "PickUpStore",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          default: 0,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

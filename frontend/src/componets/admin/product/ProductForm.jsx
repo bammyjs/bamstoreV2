@@ -10,11 +10,13 @@ const ProductForm = ({
   files,
   setFiles,
   product,
+  storeList,
   description,
   features,
   setFeatures,
   setDescription,
   handleInputChange,
+  handleStoreChange,
   saveProduct,
   categories,
   filteredBrands,
@@ -206,6 +208,28 @@ const ProductForm = ({
                 className="input text-neutral input-bordered w-full max-w-xs"
               />
             </label> */}
+          </div>
+          <div className="flex flex-col w-full items-center" >
+            <h3 className="text-xl text-dark">Assign to Stores</h3>
+            <div className=" w-full flex flex-wrap gap-2">
+
+            {storeList.map((store) => (
+              <div key={store._id} className="flex">
+                <label className="form-control w-full max-w-xs">
+                  {store?.storeName}
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Quantity"
+                    onChange={(e) =>
+                      handleStoreChange(store._id, parseInt(e.target.value, 10))
+                    }
+                    className="input  text-neutral input-bordered w-full max-w-xs"
+                  />
+                </label>
+              </div>
+            ))}
+            </div>
           </div>
           <label>Product features:</label>
           {/* <div dangerouslySetInnerHTML={{ __html: description }} /> */}

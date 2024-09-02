@@ -18,11 +18,12 @@ import { productsApi } from "./features/product/productsApi";
 import { userApi } from "./features/user/usersApi";
 import orderReducer from "./features/product/orderSlice";
 import { ordersApi } from "./features/order/ordersApi";
+import pickUpStoreReducer from "./features/pickupStore/pickUpStoreSlice";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "cart"], // Only persist auth and cart reducers
+  whitelist: ["cart"], // Only persist auth and cart reducers
 };
 
 const rootReducer = combineReducers({
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   product: productReducer,
   category: categoryReducer,
   orders: orderReducer,
+  stores: pickUpStoreReducer,
   [userApi.reducerPath]: userApi.reducer,
   [productsApi.reducerPath]: productsApi.reducer,
   [ordersApi.reducerPath]: ordersApi.reducer,

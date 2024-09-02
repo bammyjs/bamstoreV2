@@ -12,12 +12,14 @@ const initialState = {
   message: "",
 };
 
-// Create New Product order
+// Create New Order and Update Product Quantities
 export const createOrder = createAsyncThunk(
   "orders/create",
   async (formData, thunkAPI) => {
     try {
-      return await orderService.createOrder(formData);
+      // Create the order
+      const order = await orderService.createOrder(formData);
+      return order;
     } catch (error) {
       const message =
         (error.response &&
@@ -113,7 +115,6 @@ const orderSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.orders.push(action.payload);
-        console.log(action.payload);
         toast.success(action.payload);
       })
       .addCase(createOrder.rejected, (state, action) => {

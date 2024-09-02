@@ -25,6 +25,7 @@ const sendEmail = async (subject, send_to, template) => {
       logoHeight: "30px",
     },
   });
+  console.log(mailGenerator);
 
   const emailBody = mailGenerator.generate(template);
   // require("fs").writeFileSync("preview.html", emailBody, "utf8");

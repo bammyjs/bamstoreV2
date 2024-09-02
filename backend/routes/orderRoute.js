@@ -7,11 +7,11 @@ const {
   getOrder,
   getOrdersLast7Days,
   updateOrderStatus,
-  payWithFlutterwave,
-  verifyFlwPayment,
+  // payWithFlutterwave,
+  // verifyFlwPayment,
 } = require("../controllers/orderController");
 
-router.get("/response", verifyFlwPayment);
+// router.get("/response", verifyFlwPayment);
 router.post("/", protect, createOrder);
 router.patch("/:id", protect, adminOnly, updateOrderStatus);
 
@@ -19,6 +19,6 @@ router.get("/", protect, getOrders);
 router.get("/orders7days", protect, getOrdersLast7Days);
 router.get("/:id", protect, getOrder);
 
-router.post("/payWithFlutterwave", payWithFlutterwave);
+// router.post("/payWithFlutterwave", payWithFlutterwave);
 
 module.exports = router;

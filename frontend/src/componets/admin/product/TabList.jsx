@@ -15,6 +15,7 @@ import {
 import Brand from "../brand/Brand";
 import Category from "../category/Category";
 import ProductForm from "./ProductForm";
+import { getStores } from "../../../redux/features/pickupStore/pickUpStoreSlice";
 
 const initialState = {
   name: "",
@@ -36,11 +37,13 @@ const TabList = () => {
   const [description, setDescription] = useState("");
   const [features, setFeatures] = useState("");
   const [filteredBrands, setFilteredBrands] = useState([]);
+  const [stores, setStores] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // const isLoading = useSelector((state) => state.selectIsLoading);
   const { categories, brands } = useSelector((state) => state.category);
+  const { stores: storeList } = useSelector((state) => state.stores);
 
   const { name, category, brand, price, quantity, color, regularPrice } =
     product;
@@ -54,6 +57,7 @@ const TabList = () => {
   useEffect(() => {
     dispatch(getCategories());
     dispatch(getBrands());
+    dispatch(getStores());
   }, [dispatch]);
 
   useEffect(() => {
@@ -78,6 +82,19 @@ const TabList = () => {
     return sku;
   };
 
+  const handleStoreChange = (storeId, quantity) => {
+    setStores((prevStores) => {
+      const existingStore = prevStores.find((s) => s.store === storeId);
+      if (existingStore) {
+        return prevStores.map((s) =>
+          s.store === storeId ? { ...s, quantity } : s
+        );
+      } else {
+        return [...prevStores, { store: storeId, quantity }];
+      }
+    });
+  };
+
   const saveProduct = async (e) => {
     e.preventDefault();
     if (files.length < 1) {
@@ -96,6 +113,7 @@ const TabList = () => {
       description: description,
       features: features,
       image: files,
+      stores: stores
     };
 
     console.log(formData);
@@ -234,6 +252,7 @@ const TabList = () => {
         <ProductForm
           files={files}
           setFiles={setFiles}
+          storeList={storeList}
           product={product}
           productImage={productImage}
           imagePreview={imagePreview}
@@ -243,6 +262,7 @@ const TabList = () => {
           setFeatures={setFeatures}
           setDescription={setDescription}
           handleInputChange={handleInputChange}
+          handleStoreChange={handleStoreChange}
           saveProduct={saveProduct}
           categories={categories}
           filteredBrands={filteredBrands}

@@ -19,7 +19,9 @@ import { AdminOnlyLink } from "../componets/admin/AdminAccessOnly";
 import { LoadingButton } from "../componets/extras/LoadingButton";
 
 function Profile() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
 
@@ -118,7 +120,7 @@ function Profile() {
         className="bg-gray-bk mt-10 flex flex-col gap-6 items-center md:mt-10"
       >
         {/* <BreadCrumb title="Profile" /> */}
-        <h3 className="text-dark text-center text-lg md:text-3xl md:my-10  font-bold">
+        <h3 className="text-dark text-center text-lg md:text-3xl md:mt-10  font-bold">
           Profile
         </h3>
         {!user?.isVerified && (
@@ -163,7 +165,7 @@ function Profile() {
             <form
               onSubmit={saveProfile}
               action=""
-              className="w-full container   px-6  bg-light py-6 rounded-lg max-w-md gap-2 flex flex-col  shadow-2xl"
+              className="w-full container text-dark  px-6  bg-light py-6 rounded-lg max-w-md gap-2 flex flex-col  shadow-2xl"
             >
               {/*    <!-- Component: Rounded basic input  --> */}
               <div className="flex flex-wrap justify-between gap-2">
@@ -218,12 +220,12 @@ function Profile() {
                   Password change
                 </p>
                 <label htmlFor="oldPassword" className="mt-4">
-                  Current password (leave it blank to leave unchanged)
+                  Current password <br /> (leave it blank to leave unchanged)
                 </label>
                 <div className="relative ">
                   <input
-                    id=""
-                    type={showPassword ? "text" : "password"}
+                    id="oldPassword"
+                    type={showOldPassword ? "text" : "password"}
                     name="oldPassword"
                     placeholder="Old Password"
                     value={userData?.oldPassword}
@@ -231,9 +233,9 @@ function Profile() {
                     className="peer relative h-10 w-full rounded border  border-gray px-4 pr-12 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
                   />
 
-                  {showPassword ? (
+                  {showOldPassword ? (
                     <svg
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowOldPassword(!showOldPassword)}
                       xmlns="http://www.w3.org/2000/svg"
                       className="absolute top-2.5 right-4 h-5 w-5 cursor-pointer stroke-slate-400 peer-disabled:cursor-not-allowed"
                       fill="none"
@@ -258,7 +260,7 @@ function Profile() {
                     </svg>
                   ) : (
                     <svg
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowOldPassword(!showOldPassword)}
                       xmlns="http://www.w3.org/2000/svg"
                       className="absolute top-2.5 right-4 h-5 w-5 cursor-pointer stroke-slate-400 peer-disabled:cursor-not-allowed"
                       fill="none"
@@ -279,12 +281,12 @@ function Profile() {
                   )}
                 </div>
                 <label htmlFor="newPassword">
-                  New password (leave it blank to leave unchanged)
+                  New password <br /> (leave it blank to leave unchanged)
                 </label>
                 <div className="relative ">
                   <input
-                    id=""
-                    type={showPassword ? "text" : "password"}
+                    id="newPassword"
+                    type={showNewPassword ? "text" : "password"}
                     name="newPassword"
                     placeholder="New Password"
                     value={userData?.newPassword}
@@ -292,9 +294,9 @@ function Profile() {
                     className="peer relative h-10 w-full rounded border  border-gray px-4 pr-12 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
                   />
 
-                  {showPassword ? (
+                  {showNewPassword ? (
                     <svg
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowNewPassword(!showNewPassword)}
                       xmlns="http://www.w3.org/2000/svg"
                       className="absolute top-2.5 right-4 h-5 w-5 cursor-pointer stroke-slate-400 peer-disabled:cursor-not-allowed"
                       fill="none"
@@ -319,7 +321,7 @@ function Profile() {
                     </svg>
                   ) : (
                     <svg
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowNewPassword(!showNewPassword)}
                       xmlns="http://www.w3.org/2000/svg"
                       className="absolute top-2.5 right-4 h-5 w-5 cursor-pointer stroke-slate-400 peer-disabled:cursor-not-allowed"
                       fill="none"
@@ -340,12 +342,13 @@ function Profile() {
                   )}
                 </div>
                 <label htmlFor="confirmPassword">
-                  Confirm New password (leave it blank to leave unchanged)
+                  Confirm New password <br /> (leave it blank to leave
+                  unchanged)
                 </label>
                 <div className="relative ">
                   <input
-                    id=""
-                    type={showPassword ? "text" : "password"}
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     placeholder="Confirm New Password"
                     value={userData?.confirmPassword}
@@ -353,9 +356,11 @@ function Profile() {
                     className="peer relative h-10 w-full rounded border  border-gray px-4 pr-12 text-sm text-slate-500  outline-none transition-all autofill:bg-white invalid:border-pink-500 invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
                   />
 
-                  {showPassword ? (
+                  {showConfirmPassword ? (
                     <svg
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       xmlns="http://www.w3.org/2000/svg"
                       className="absolute top-2.5 right-4 h-5 w-5 cursor-pointer stroke-slate-400 peer-disabled:cursor-not-allowed"
                       fill="none"
@@ -380,7 +385,9 @@ function Profile() {
                     </svg>
                   ) : (
                     <svg
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       xmlns="http://www.w3.org/2000/svg"
                       className="absolute top-2.5 right-4 h-5 w-5 cursor-pointer stroke-slate-400 peer-disabled:cursor-not-allowed"
                       fill="none"

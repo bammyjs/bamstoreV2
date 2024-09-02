@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/productModel");
+const PickUpStore = require("../models/pickUpStoreModel");
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 const dotenv = require("dotenv");
@@ -19,21 +20,38 @@ const createProduct = asyncHandler(async (req, res) => {
       regularPrice,
       color,
       features,
+      stores,
     } = req.body;
 
     //   Validation
     if (
       !name ||
+      !sku ||
       !category ||
       !brand ||
       !quantity ||
       !price ||
       !description ||
       !features ||
-      !regularPrice
+      !regularPrice ||
+      !stores
     ) {
       res.status(400);
       throw new Error("Please fill in all fields");
+    }
+
+    // Validate stores and quantities
+    for (const storeItem of stores) {
+      const store = await PickUpStore.findById(storeItem.store);
+      if (!store) {
+        res.status(400);
+        throw new Error(`Store with ID ${storeItem.store} not found`);
+      }
+
+      if (storeItem.quantity < 0) {
+        res.status(400);
+        throw new Error("Quantity must be a non-negative number");
+      }
     }
 
     // Create Product
@@ -50,6 +68,7 @@ const createProduct = asyncHandler(async (req, res) => {
       regularPrice,
       color,
       features,
+      stores,
     });
 
     res.status(201).json(product);
@@ -86,7 +105,7 @@ const getProductsWithPage = asyncHandler(async (req, res) => {
 
 const getProducts = asyncHandler(async (req, res) => {
   try {
-    const { searchQuery } = req.query; // Get the search query from the request
+    const { searchQuery, region  } = req.query; // Get the search query from the request
 
     let query = {};
 
@@ -100,7 +119,13 @@ const getProducts = asyncHandler(async (req, res) => {
         // Add more fields if necessary
       ];
     }
-    const products = await Product.find(query).sort("-createdAt");
+    // Filter stores by region (city or state)
+    if (region) {
+      query["stores.state"] = region; // or query["stores.city"] = region
+    }
+    const products = await Product.find(query)
+      .populate("stores.store", "storeName address phone")
+      .sort("-createdAt");
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -109,9 +134,17 @@ const getProducts = asyncHandler(async (req, res) => {
 
 // Get single product
 const getProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const { id } = req.params;
 
-  // if product doesn't exist
+  if (!id) {
+    return res.status(400).json({ message: "Product ID is required" });
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid Product ID" });
+  }
+
+  const product = await Product.findById(id).populate("stores.store", "storeName address city state");
 
   if (!product) {
     res.status(404);
@@ -121,32 +154,6 @@ const getProduct = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-// const filterProductsByCategory = asyncHandler(async (req, res) => {
-//   const pageSize = 8;
-//   const page = Number(req.query.pageNumber) || 1;
-
-//   try {
-//     const { category } = req.params;
-//     const count = await Product.countDocuments({ category });
-//     // Validate category if necessary
-
-//     // Use exact match for category filtering
-//     const products = await Product.find({ category })
-//       .limit(pageSize)
-//       .skip(pageSize * (page - 1))
-//       .sort("-createdAt");
-
-//     if (!products) {
-//       res.status(404);
-//       throw new Error("Products in this category not found");
-//     }
-
-//     res.json({ products, page, pages: Math.ceil(count / pageSize) });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 // Delete Product
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -301,5 +308,4 @@ module.exports = {
   deleteReview,
   updateReview,
   getProductsWithPage,
-  // filterProductsByCategory,
 };

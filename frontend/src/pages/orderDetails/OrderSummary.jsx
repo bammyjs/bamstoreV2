@@ -68,7 +68,7 @@ const OrderSummary = ({ cart, shipRate }) => {
           <p className="text-sm text-gray-400">Shipping</p>
           <p className="text-lg font-semibold text-dark">
             <span className="text-lg font-semibold text-dark">&#8358;</span>
-            {new Intl.NumberFormat("en-NG").format(shipRate)}
+            {shipRate===null ? "0" : new Intl.NumberFormat("en-NG").format(shipRate)}
           </p>
         </div>
       </div>

@@ -15,7 +15,6 @@ import {
   IoLogoFacebook,
   IoLogoTwitter,
   IoLogoInstagram,
-  IoNotificationsOutline,
 } from "react-icons/io5";
 import { TECollapse, TERipple } from "tw-elements-react";
 import { useEffect, useRef, useState } from "react";
@@ -24,7 +23,6 @@ import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/hiddenLink";
 import { NavList } from "./NavList";
 import CartList from "../../pages/CartList";
 import CartModal from "../product/CartModal";
-import CardProducts from "../product/CardProducts";
 import axios from "axios"; // or use fetch
 import SearchProducts from "../product/SearchProducts";
 // import { motion } from "framer-motion";
@@ -122,7 +120,7 @@ function Header() {
         id="main-content"
         className="border-b border-slate-200 bg-pry-deep px-4"
       >
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-4 gap-6 py-2 px-text-sec-light-color md:grid-cols-8 lg:max-w-5xl lg:grid-cols-12 xl:max-w-7xl ">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-4 gap-6 py-3 px-text-sec-light-color md:grid-cols-8 lg:max-w-5xl lg:grid-cols-12 xl:max-w-7xl ">
           <div className="col-span-2 items-center md:col-span-4 lg:col-span-6">
             <Link
               to=""
@@ -178,7 +176,7 @@ function Header() {
                 alt="Bamstore Logo"
               />
             </Link>
-            <div className="flex md:hidden items-base justify-center gap-4">
+            {/* <div className="flex md:hidden items-base justify-center gap-4">
               <div className="flex-none gap-2 hidden md:block">
                 <div className="dropdown dropdown-end">
                   <ShowOnLogout>
@@ -254,18 +252,18 @@ function Header() {
                   <IoBagOutline style={{ fontSize: "20px" }} />
                 </Link>
               </div>
-            </div>
+            </div> */}
           </div>
           <ul className="md:relative md:flex flex-wrap md:pl-2 w-full  md:ml-4 hidden justify-start items-center gap-2">
             <NavList dropdownRef={dropdownRef} />
             <div className="md:flex w-[40] h-[40] place-items-end place-content-end absolute right-0 items-center  gap-4  ">
-              <div className="flex-none gap-2">
+              <div className="flex gap-2">
+                <ShowOnLogout>
+                  <Link to={"login"}>
+                    <IoPersonOutline style={{ fontSize: "20px" }} />
+                  </Link>
+                </ShowOnLogout>
                 <div className="dropdown dropdown-end">
-                  <ShowOnLogout>
-                    <Link to={"login"}>
-                      <IoPersonOutline style={{ fontSize: "20px" }} />
-                    </Link>
-                  </ShowOnLogout>
                   <ShowOnLogin>
                     <Link>
                       <IoPerson style={{ fontSize: "20px" }} />

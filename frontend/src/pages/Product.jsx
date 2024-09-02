@@ -38,10 +38,13 @@ const Product = () => {
   const [activeImg, setActiveImage] = useState("");
   const [expand, setExpand] = useState(false);
   const [averageRating, setAverageRating] = useState(0);
+  const [availableStores, setAvailableStores] = useState([]);
 
   const cart = useSelector((state) => state.cart);
   const { data: product, error, isLoading } = useGetSingleProductQuery(id);
-  console.log(product);
+
+
+//  
 
   useEffect(() => {
     dispatch(getTotals());

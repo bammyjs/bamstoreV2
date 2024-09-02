@@ -14,12 +14,13 @@ const productRoute = require("./routes/productRoute");
 const orderRoute = require("./routes/orderRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
+const pickUpStoreRoute = require("./routes/pickUpStoreRoute");
 const errorHandler = require("./middleware/errorMiddleware");
 
 const app = express();
 
 // Middlewares for security
-app.use(helmet());
+// app.use(helmet());
 
 // Middleware for parsing request bodies
 app.use(express.json());
@@ -27,38 +28,39 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // HTTPS redirection in production
-app.use((req, res, next) => {
-  if (
-    req.header("x-forwarded-proto") !== "https" &&
-    process.env.NODE_ENV === "production"
-  ) {
-    res.redirect(`https://${req.header("host")}${req.url}`);
-  } else {
-    next();
-  }
-});
+// app.use((req, res, next) => {
+//   if (
+//     req.header("x-forwarded-proto") !== "https" &&
+//     process.env.NODE_ENV === "production"
+//   ) {
+//     res.redirect(`https://${req.header("host")}${req.url}`);
+//   } else {
+//     next();
+//   }
+// });
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://bamstoreng.netlify.app"); // Replace with your Netlify domain
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "https://bamstoreng.netlify.app"); // Replace with your Netlify domain
+//   res.header(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+//   );
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
+//   res.header("Access-Control-Allow-Credentials", "true");
 
-  if ("OPTIONS" == req.method) {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
+//   if ("OPTIONS" == req.method) {
+//     res.sendStatus(200);
+//   } else {
+//     next();
+//   }
+// });
 
 const corsOptions = {
-  origin: "https://bamstoreng.netlify.app",
+  origin: "http://localhost:5173",
+  // origin: "https://bamstoreng.netlify.app",
   credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
@@ -77,6 +79,11 @@ app.use("/api/products", productRoute);
 app.use("/api/order", orderRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/brand", brandRoute);
+app.use("/api/pickupstore", pickUpStoreRoute);
+
+app.get("/test", (req, res) => {
+  res.send("Test endpoint response");
+});
 
 // Serve SPA for unmatched routes
 app.get("*", (req, res) => {

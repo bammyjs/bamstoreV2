@@ -123,7 +123,6 @@ const AvailableProducts = () => {
     error,
     isLoading,
   } = useGetAllProductsQuery(currentPage);
-  console.log(products);
 
   const handlePageClick = (event) => {
     setCurrentPage(event.selected + 1); // +1 because event.selected is zero-based

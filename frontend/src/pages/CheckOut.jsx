@@ -12,14 +12,17 @@ import { Meta } from "../componets/Meta";
 import CheckoutSuccess from "./CheckoutSuccess";
 
 const CheckOut = () => {
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   const [isLoading, setIsLoading] = useState(false); // Add loading state
   const [expand, setExpand] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [contactDetails, setContactDetails] = useState({ contact: "" });
-
+  const [paymentMethod, setPaymentMethod] = useState("pay_online");
   const [shippingDetails, setShippingDetails] = useState({
     firstName: "",
     lastName: "",
@@ -45,11 +48,15 @@ const CheckOut = () => {
 
   const [useShippingForBilling, setUseShippingForBilling] = useState(false);
   const [saveInfo, setSaveInfo] = useState(false);
-  const shipRate = 5000;
+  const shipRate = null;
 
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.auth);
   const { isSuccess, isError, message } = useSelector((state) => state.orders);
+
+  const handlePaymentChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
 
   useEffect(() => {
     if (isError) {
@@ -85,7 +92,7 @@ const CheckOut = () => {
       orderDate: new Date().toLocaleDateString(),
       orderTime: new Date().toLocaleTimeString(),
       orderAmount: cart.cartTotalAmount, // Implement this function based on your logic
-      orderStatus: "pending", // Assuming you have user context
+      orderStatus: paymentMethod === "pay_online" ? "pending" : "reserved", // Assuming you have user context
       cartItems: cart.cartItems, // Assuming you have cart context
       shippingAddress: shippingDetails,
       paymentMethod: "Direct Bank Transfer", // Example payment method
@@ -135,12 +142,7 @@ const CheckOut = () => {
       localStorage.setItem("billingDetails", JSON.stringify(billingDetails));
       localStorage.setItem("contactDetail", JSON.stringify(contactDetails));
     }
-    // Submit or process data here
   };
-
-  // const handleViewOrder = () => {
-  //   navigate(`/order/${order._id}`);
-  // };
 
   useEffect(() => {
     syncAddresses();
@@ -293,6 +295,7 @@ const CheckOut = () => {
               handleContactInputChange={handleContactInputChange}
               handleInputChange={handleInputChange}
               handleCheckboxChange={handleCheckboxChange}
+              handleCheckboxEmail={handleCheckboxEmail}
               handleSubmit={handleSubmit}
               contactDetails={contactDetails}
               shippingDetails={shippingDetails}
@@ -303,16 +306,19 @@ const CheckOut = () => {
               setBillingDetails={setBillingDetails}
               handleStateChange={handleStateChange}
               handleCountryChange={handleCountryChange}
+              handlePaymentChange={handlePaymentChange}
+              paymentMethod={paymentMethod}
               cart={cart}
               shipRate={shipRate}
               isLoading={isLoading}
+              cartItems={cartItems}
             />
           ) : (
             <CheckoutSuccess shipRate={shipRate} />
           )}
 
           {/* desktop order summary view */}
-          <div className="bg-gray-bk w-full p-4 sticky  flex-col hidden  md:block  text-dark">
+          <div className=" w-full p-4 sticky  flex-col hidden  md:block  text-dark">
             <div className="  max-w-7xl">
               <OrderSummary cart={cart} shipRate={shipRate} />
             </div>
