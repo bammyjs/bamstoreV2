@@ -2,7 +2,6 @@ import logo from "../../assets/bammylogo.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Popover } from "@headlessui/react";
-import { debounce } from "lodash";
 
 import {
   IoBagOutline,
@@ -118,7 +117,7 @@ function Header() {
     <>
       <div
         id="main-content"
-        className="border-b border-slate-200 bg-pry-deep px-4"
+        className="hidden md:block border-b border-slate-200 bg-pry-deep px-4"
       >
         <div className="mx-auto grid w-full max-w-7xl grid-cols-4 gap-6 py-3 px-text-sec-light-color md:grid-cols-8 lg:max-w-5xl lg:grid-cols-12 xl:max-w-7xl ">
           <div className="col-span-2 items-center md:col-span-4 lg:col-span-6">
@@ -158,7 +157,7 @@ function Header() {
       </div>
       <header
         ref={dropdownRef}
-        className="z-30 overlay text-base-100 sticky top-0  bg-light w-full px-2 py-4 h-14 md:h-20 md:px-4 md:py-4 flex justify-center items-center    "
+        className=" z-30 overlay   text-base-100 sticky top-0  bg-light w-full p-4  md:h-20 md:px-4 md:py-4 md:flex justify-center items-center    "
       >
         <nav className="container max-w-7xl  p-1 flex   font-medium justify-between  w-full  items-center">
           <div className="   md:w-auto w-full flex justify-between items-center">
@@ -176,86 +175,17 @@ function Header() {
                 alt="Bamstore Logo"
               />
             </Link>
-            {/* <div className="flex md:hidden items-base justify-center gap-4">
-              <div className="flex-none gap-2 hidden md:block">
-                <div className="dropdown dropdown-end">
-                  <ShowOnLogout>
-                    <Link to={"login"}>
-                      <IoPersonOutline style={{ fontSize: "20px" }} />
-                    </Link>
-                  </ShowOnLogout>
-                  <ShowOnLogin>
-                    <Link>
-                      <IoPerson style={{ fontSize: "20px" }} />
-                    </Link>
-                  </ShowOnLogin>
-                  <ul
-                    tabIndex={0}
-                    className="mt-3 z-[1] p-4 flex flex-col gap-2 shadow menu menu-sm dropdown-content bg-light rounded-box w-52"
-                  >
-                    {[
-                      { to: "/profile", label: "Profile" },
-                      { to: "/orders", label: "Orders" },
-                    ].map((link) => (
-                      <NavLink
-                        key={link.to}
-                        to={link.to}
-                        onClick={toggleProfileOpen}
-                        className={({ isActive }) =>
-                          getNavLinkClassName(isActive)
-                        }
-                      >
-                        {link.label}
-                      </NavLink>
-                    ))}
+            <NavLink to={"/cart"} className=" relative md:hidden">
+              <span className="absolute -right-1 -top-2">
+                {cartTotalQuantity}
+              </span>
 
-                    <ShowOnLogin>
-                      <NavLink
-                        onClick={logoutUser}
-                        className={({ isActive }) =>
-                          `text-dark hover:text-sec-light-color transition duration-150 ease-linear  py-1  group
-                        ${
-                          isActive
-                            ? "  text-dark hover:bg-white/10 "
-                            : " hover:text-sec-light-color "
-                        }`
-                        }
-                      >
-                        Logout
-                      </NavLink>
-                    </ShowOnLogin>
-                    <ShowOnLogout>
-                      <NavLink
-                        to={"/login"}
-                        className={({ isActive }) =>
-                          isActive
-                            ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
-                            : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
-                        }
-                      >
-                        Login
-                      </NavLink>
-                    </ShowOnLogout>
-                  </ul>
-                </div>
-              </div>
-
-              <IoSearchOutline
-                style={{ fontSize: "20px" }}
-                onClick={toggleShow}
-              />
-              <div className="relative">
-                <span className="absolute -right-2 -top-2">
-                  {cartTotalQuantity}
-                </span>
-                <Link to={"/cart"}>
-                  <IoBagOutline style={{ fontSize: "20px" }} />
-                </Link>
-              </div>
-            </div> */}
+              <IoBagOutline style={{ fontSize: "20px" }} />
+            </NavLink>
           </div>
-          <ul className="md:relative md:flex flex-wrap md:pl-2 w-full  md:ml-4 hidden justify-start items-center gap-2">
+          <ul className="md:relative md:flex flex-wrap md:pl-2 w-full   md:ml-4 hidden justify-start items-center gap-2">
             <NavList dropdownRef={dropdownRef} />
+            {/* <NavLink to={"#"}>Services</NavLink> */}
             <div className="md:flex w-[40] h-[40] place-items-end place-content-end absolute right-0 items-center  gap-4  ">
               <div className="flex gap-2">
                 <ShowOnLogout>
@@ -350,62 +280,12 @@ function Header() {
                 `}
           >
             <NavList toggleOpen={toggleOpen} />
-            <ShowOnLogin>
-              <div className="flex flex-col font-normal">
-                <span className={"flex items-center gap-2 "}>
-                  <IoPerson style={{ fontSize: "20px" }} />
-                  <NavLink
-                    onClick={toggleOpen}
-                    to={"/orders"}
-                    className={({ isActive }) =>
-                      `text-dark hover:text-sec-light-color transition duration-150 ease-linear  py-1  group
-                        ${
-                          isActive
-                            ? "  text-dark hover:bg-white/10 "
-                            : " hover:text-sec-light-color "
-                        }`
-                    }
-                  >
-                    Orders
-                  </NavLink>
-                </span>
-                <span className="flex items-center gap-2 ">
-                  <IoPerson style={{ fontSize: "20px" }} />
-                  <NavLink
-                    onClick={logoutUser}
-                    className={({ isActive }) =>
-                      `text-dark hover:text-sec-light-color transition duration-150 ease-linear  py-1  group
-                        ${
-                          isActive
-                            ? "  text-dark hover:bg-white/10 "
-                            : " hover:text-sec-light-color "
-                        }`
-                    }
-                  >
-                    Logout
-                  </NavLink>
-                </span>
-              </div>
-            </ShowOnLogin>
-            <ShowOnLogout>
-              <span className="flex items-center gap-2 font-normal">
-                <IoPersonOutline style={{ fontSize: "20px" }} />
-                <NavLink
-                  to={"/login"}
-                  className={({ isActive }) =>
-                    isActive
-                      ? " text-sec-color hover:bg-white/10 transition duration-150 ease-linear  py-1  group"
-                      : "hover:text-sec-light-color transition duration-150 ease-linear rounded-lg py-1  group"
-                  }
-                >
-                  Login
-                </NavLink>
-              </span>
-            </ShowOnLogout>
           </ul>
         </nav>
+        
+
         <TECollapse show={show}>
-          <div className="absolute  border-0  z-40 bg-light p-4 top-10 md:top-20  left-0 w-full   mx-auto">
+          <div className="hidden md:block absolute  border-0  z-40 bg-light p-4 top-10 md:top-20  left-0 w-full   mx-auto">
             <div className=" input bg-light  container max-w-7xl relative  left-0 right-0 m-auto  flex w-full flex-wrap items-center">
               <span className="">
                 <IoSearchOutline style={{ fontSize: "20px" }} />
@@ -458,6 +338,7 @@ function Header() {
           </div>
         </TECollapse>
       </header>
+      
     </>
   );
 }

@@ -7,7 +7,7 @@ const API_URL = `${BACKEND_URL}/api/order/`;
 // Create New Order
 const createOrder = async (formData) => {
   const response = await axios.post(API_URL, formData);
-  return response.data.message;
+  return response.data;
 };
 
 // Get all products

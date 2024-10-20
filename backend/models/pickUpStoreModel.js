@@ -16,12 +16,12 @@ const pickUpStoreSchema = new mongoose.Schema(
     phone: {
       type: String,
       default: "+234",
-    //   validate: {
-    //     validator: function(v) {
-    //       return /\+\d{1,3}-\d{1,14}(-\d{1,13})?/.test(v);
-    //     },
-    //     message: props => `${props.value} is not a valid phone number!`
-    //   }
+      //   validate: {
+      //     validator: function(v) {
+      //       return /\+\d{1,3}-\d{1,14}(-\d{1,13})?/.test(v);
+      //     },
+      //     message: props => `${props.value} is not a valid phone number!`
+      //   }
     },
     address: {
       type: String,
@@ -29,12 +29,16 @@ const pickUpStoreSchema = new mongoose.Schema(
     },
     state: {
       type: String,
-    //   required: [true, "State is required"],
+      //   required: [true, "State is required"],
+    },
+    city: {
+      type: String,
+      //   required: [true, "State is required"],
     },
     country: {
       type: String,
-      default: "NGN"
-    //   required: [true, "Country is required"],
+      default: "NGN",
+      //   required: [true, "Country is required"],
     },
     email: {
       type: String,
@@ -42,11 +46,11 @@ const pickUpStoreSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       validate: {
-        validator: function(v) {
+        validator: function (v) {
           return /^([\w-.]+@([\w-]+.)+[\w-]{2,4})?$/.test(v);
         },
-        message: props => `${props.value} is not a valid email!`
-      }
+        message: (props) => `${props.value} is not a valid email!`,
+      },
     },
     contactPerson: {
       name: {
@@ -62,12 +66,12 @@ const pickUpStoreSchema = new mongoose.Schema(
         // required: [true, "Contact person email is required"],
         trim: true,
         lowercase: true,
-      }
+      },
     },
     storeManager: {
       type: ObjectId,
       ref: "User", // Assuming you have a User model for managing store managers
-    //   required: [true, "Store manager is required"],
+      //   required: [true, "Store manager is required"],
     },
     remittance: {
       totalAmountDue: {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BreadCrumb from "../componets/BreadCrumb";
 import { Meta } from "../componets/Meta";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { validateEmail } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,10 @@ const initialState = {
 };
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [formData, setFormData] = useState(initialState);
   const { email, password } = formData;
   const [isLoading, setIsLoading] = useState(false); // Add loading state
@@ -22,19 +26,26 @@ const Login = () => {
     (state) => state.auth
   );
 
-  const dispatch = useDispatch();
+  // Capture the `redirect` parameter
+  const redirect = location.search ? new URLSearchParams(location.search).get("redirect") : "/";
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    // Navigate to the `redirect` path if the user is logged in
+    if (user) {
+      navigate(redirect);
+    }
+  }, [user, navigate, redirect]);
+
 
   // Adjust useEffect to navigate on success, no need to manually toggle loading state here
   useEffect(() => {
     if (isSuccess && user) {
-      navigate("/");
+      navigate(redirect);
       // Reset any auth state if needed here
     }
 
     dispatch(RESET_AUTH());
-  }, [user, isSuccess, isLoggedIn, navigate, dispatch]);
+  }, [user, isSuccess, isLoggedIn, navigate, redirect, dispatch]);
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -58,7 +69,7 @@ const Login = () => {
 
     try {
       await dispatch(login(userData)).unwrap();
-      navigate("/"); // Navigate to dashboard or home page
+      navigate(redirect); // Navigate to dashboard or home page
     } catch (error) {
       setIsLoading(false);
       if (error.info === "Please verify your email before logging in.") {
@@ -89,7 +100,7 @@ const Login = () => {
       />
       <main
         id="main-content"
-        className="bg-gray-bk w-full px-6 flex flex-col items-center justify-center gap-6 py-20  md:py-60"
+        className="bg-gray-bk w-full h-screen md:h-fit px-6 flex flex-col items-center justify-center gap-6 py-20  md:py-60"
       >
         <h3 className="text-3xl text-dark text-center md:text-4xl font-bold">
           Login

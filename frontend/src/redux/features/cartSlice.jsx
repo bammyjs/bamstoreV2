@@ -1,5 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+
+
+
+export const updateCartItems = createAsyncThunk(
+  'cart/updateCartItems',
+  async (updatedItems, thunkAPI) => {
+    try {
+      // You can add any additional logic or API calls here if necessary
+      return updatedItems;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const initialState = {
   cartItems: localStorage.getItem("cartItems")
@@ -46,11 +60,11 @@ const cartSlice = createSlice({
     },
     decreaseCart(state, action) {
       const itemIndex = state.cartItems.findIndex(
-        (cartItem) => cartItem._id == action.payload._id
+        (cartItem) => cartItem._id === action.payload._id
       );
       if (state.cartItems[itemIndex].cartQuantity > 1) {
         state.cartItems[itemIndex].cartQuantity--;
-        toast.error(`${action.payload.name} removed from cart`);
+        toast.info(`${action.payload.name} removed from cart`);
       } else if (state.cartItems[itemIndex].cartQuantity === 1) {
         const nextCartItems = state.cartItems.filter(
           (cartItem) => cartItem._id !== action.payload._id
@@ -63,7 +77,7 @@ const cartSlice = createSlice({
     },
 
     itemTotalQuantity(state, action) {
-      state.totalItems = cartItems;
+      state.totalItems = state.cartItems;
     },
 
     getTotals(state, action) {
@@ -86,6 +100,11 @@ const cartSlice = createSlice({
       state.cartTotalQuantity = quantity;
       state.cartTotalAmount = total;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateCartItems.fulfilled, (state, action) => {
+      state.cartItems = action.payload;  // Update the cart items with new storeId
+    });
   },
 });
 

@@ -12,7 +12,6 @@ import {
   removeFromCart,
   itemTotalQuantity,
 } from "../redux/features/cartSlice";
-import CheckOutWhatsAppButton from "../componets/extras/CheckOutWhatsAppButton";
 import { IoArrowBackOutline } from "react-icons/io5";
 
 const CartList = () => {
@@ -43,22 +42,24 @@ const CartList = () => {
         keywords="cart, cartlist, bamstore, welcome to bamstore ng"
         url="http://bamstore.ng/cart"
       />
-      <main id="main-content" className=" flex flex-col gap-6 ">
+      <main id="main-content" className="h-screen bg-gray-100 flex flex-col ">
         {/* <BreadCrumb title="Cart" /> */}
-        <section className=" bg-gray-100 py-12 sm:py-16 lg:py-20">
+        <section className="  py-12 sm:py-16 lg:py-20">
           <div className="mx-auto px-4 sm:px-6 lg:px-8">
             <div className="w-full flex flex-col items-center justify-center">
-              <h1 className="text-2xl font-semibold text-gray-900">
-                Your Cart
+              <h1 className="text-2xl md:text-3xl  text-gray-900">
+                Cart
               </h1>
               {cart.cartItems.length === 0 ? (
-                <div>
+                <div className="flex flex-col items-center gap-4   w-full p-4">
                   <p>Your cart is empty</p>
-                  <div>
-                    <Link to="/product">
-                      <p>Shop ITEMS</p>
-                    </Link>
-                  </div>
+                  <button
+                      type="btn"
+                      className="btn"
+                      onClick={() => navigate("/products")}
+                    >
+                      Shop Items
+                    </button>
                 </div>
               ) : (
                 <div className="w-full mx-auto mt-8 max-w-7xl md:mt-12">

@@ -56,6 +56,9 @@ import ResetPassword from "./pages/ResetPassword";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import ManageStore from "./componets/admin/pickupstore/ManageStore";
 import CheckoutDetails from "./componets/checkout/CheckoutDetails";
+import VerifyPayment from "./pages/checkout/VerifyPayment";
+import FeedPost from "./componets/feedPost/FeedPost";
+import FeedPage from "./pages/Feedpage";
 
 function App() {
   const location = useLocation();
@@ -133,14 +136,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-email" element={<EmailVerification />} />
-        <Route
-          path="/profile"
-          element={
-            <RequireEmailVerification>
-              <Profile />
-            </RequireEmailVerification>
-          }
-        />
+        <Route path="/profile" element={<Profile />} />
         <Route
           path="/reset-password/:id/:resetToken"
           element={<ResetPassword />}
@@ -151,10 +147,13 @@ function App() {
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<CartList />} />
         <Route path="/checkout" element={<CheckOut />} />
+        <Route path="/verify-payment" element={<VerifyPayment />} />
+
         <Route path="/checkout-success" element={<CheckoutSuccess />} />
-        
+
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/order-preview/:id" element={<OrderPreview />} />
+        <Route path="/feed" element={<FeedPage />} />
 
         {/* <Route path="/createProduct" element={<CreateProduct />} /> */}
         <Route
@@ -173,7 +172,7 @@ function App() {
           <Route path="order-details/:id" element={<OrderDetails />} />
           <Route path="users" element={<DisplayUsers />} />
           <Route path="updateUser/:id" element={<UpdateUser />} />
-          <Route path="manageStores" element={<ManageStore/>}/>
+          <Route path="manageStores" element={<ManageStore />} />
         </Route>
       </Route>
     </Routes>

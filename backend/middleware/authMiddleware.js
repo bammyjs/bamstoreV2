@@ -6,8 +6,7 @@ const protect = asyncHandler(async (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (!token) {
-      res.status(401);
-      throw new Error("Not authorized, please login");
+      return res.status(401).json({ message: "Not authorized, please login" });
     }
 
     // verify token
@@ -17,10 +16,15 @@ const protect = asyncHandler(async (req, res, next) => {
     const user = await User.findById(verified.id).select("-password");
 
     if (!user) {
-      res.status(401);
+      res.status(404);
       throw new Error("user not found");
     }
-    req.user = user;
+    // Convert the ObjectId to a string format
+    req.user = {
+      ...user.toObject(), // Spread the user details
+      _id: user._id.toString(), // Convert _id to a string format
+    };
+    console.log("req.user:", user);
     next();
   } catch (error) {
     return next(new Error("Not authorized, please login"));

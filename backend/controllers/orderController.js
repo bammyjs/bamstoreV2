@@ -8,8 +8,152 @@ const User = require("../models/userModel");
 const { orderSuccessEmail } = require("../emailTemplates/orderTemplate");
 const sendEmail = require("../utils/sendEmail");
 const { orderUpdateEmail } = require("../emailTemplates/orderUpdate");
+const flw = require("../utils/flutterwaveService");
+const { default: mongoose } = require("mongoose");
+
+// createOrder controller with improvements
+// const createOrder = asyncHandler(async (req, res) => {
+//   console.log("createOrder called");
+//   const {
+//     orderDate,
+//     orderTime,
+//     orderAmount,
+//     orderStatus,
+//     cartItems,
+//     shippingAddress,
+//     paymentMethod,
+//     deliveryMethod,
+//     selectedStore,
+//   } = req.body;
+
+//   if (!cartItems || !orderStatus || !shippingAddress || !paymentMethod) {
+//     return res.status(400).json({ message: "Order data missing!!!" });
+//   }
+
+//   // Update product sales count and quantity
+//   await Promise.all(
+//     cartItems.map(async (item) => {
+//       // Update product quantity globally
+//       await Product.findByIdAndUpdate(item._id, {
+//         $inc: { salesCount: item.cartQuantity, quantity: -item.cartQuantity },
+//       });
+
+//       // Find the specific store and update its quantity
+//       const store = item.storeId;
+//       if (store) {
+//         await Product.updateOne(
+//           { _id: item._id, "stores.store": store },
+//           { $inc: { "stores.$.quantity": -item.cartQuantity } }
+//         );
+//       } else {
+//         console.warn(
+//           `No matching store found for product ${item._id} with storeId ${store}`
+//         );
+//       }
+//     })
+//   );
+
+//   let finalOrderStatus =
+//     paymentMethod === "pay_online" ? "Pending" : "Reserved";
+//   let finalShippingDetails = shippingAddress;
+
+//   if (deliveryMethod === "inStorePickup" && selectedStore) {
+//     finalShippingDetails = {
+//       storeName: selectedStore.storeName,
+//       storeAddress: selectedStore.address,
+//       storeCity: selectedStore.city,
+//       storeState: selectedStore.state,
+//       storeContact: selectedStore.contactPerson.phone,
+//     };
+//   }
+
+//   // Ensure the user ID is a string
+//   const userIdStr = req.user._id.toString();
+
+//   // Generate a unique transaction reference (tx_ref) for the order
+//   const tx_ref = `bamstore_${Date.now()}_${userIdStr}`;
+
+//   console.log("tx_ref from order creation:", tx_ref); // Log tx_ref
+//   console.log("Request User:", userIdStr);
+
+//   // Create Order
+//   const user = await User.findById(req.user._id).select("-password");
+//   if (!req.user || !mongoose.Types.ObjectId.isValid(req.user._id)) {
+//     return res.status(400).json({ message: "Invalid or missing user ID." });
+//   }
+
+//   const order = await Order.create({
+//     user: userIdStr,
+//     orderDate,
+//     orderTime,
+//     orderStatus: finalOrderStatus,
+//     cartItems,
+//     shippingAddress: finalShippingDetails,
+//     paymentMethod,
+//     orderAmount,
+//     tx_ref,
+//     paymentStatus: "pending",
+//   });
+
+//   // Handle Flutterwave payment
+//   if (paymentMethod === "pay_online") {
+//     try {
+//       const paymentResponse = await payWithFlutterwave(
+//         userIdStr,
+//         cartItems, // assuming cartItems are passed
+//         tx_ref
+//       );
+
+//       console.log("Payment Response:", paymentResponse);
+
+//       if (!paymentResponse.success) {
+//         return res.status(400).json({ message: paymentResponse.message });
+//       }
+
+//       await order.save();
+
+//       // Get the link for payment from the Flutterwave response
+//       const paymentLink = paymentResponse.data.link;
+
+//       return res.status(201).json({
+//         message: "Order Created. Redirecting to payment...",
+//         payment_link: paymentLink,
+//         tx_ref: tx_ref,
+//       });
+//     } catch (error) {
+//       return res.status(500).json({
+//         message: "Payment initialization failed",
+//         error: error.message,
+//       });
+//     }
+//   } else {
+//     // Complete order for non-online payments
+//     await order.save();
+
+//     // Send order success email
+//     // const user = await User.findById(req.user._id).select("-password");
+//     const emailContent = orderSuccessEmail(
+//       user.firstName,
+//       cartItems,
+//       finalOrderStatus,
+//       orderDate,
+//       finalShippingDetails.address,
+//       finalShippingDetails.city,
+//       finalShippingDetails.state,
+//       finalShippingDetails.zipCode,
+//       finalShippingDetails.country,
+//       finalShippingDetails.phone,
+//       orderAmount
+//     );
+//     await sendEmail("Bamstore Order Placed", user.email, emailContent);
+
+//     res.status(201).json({ message: "Order Created", order, tx_ref });
+//   }
+// });
 
 const createOrder = asyncHandler(async (req, res) => {
+  console.log("createOrder called");
+
   const {
     orderDate,
     orderTime,
@@ -18,90 +162,161 @@ const createOrder = asyncHandler(async (req, res) => {
     cartItems,
     shippingAddress,
     paymentMethod,
+    deliveryMethod,
+    selectedStore,
   } = req.body;
 
-  //   Validation
   if (!cartItems || !orderStatus || !shippingAddress || !paymentMethod) {
-    res.status(400);
-    throw new Error("Order data missing!!!");
+    return res.status(400).json({ message: "Order data missing!!!" });
   }
 
-  // Update each product's salesCount
+  // Update product sales count and quantity
   await Promise.all(
     cartItems.map(async (item) => {
       await Product.findByIdAndUpdate(item._id, {
         $inc: { salesCount: item.cartQuantity, quantity: -item.cartQuantity },
       });
 
-       // Update product quantity in specific store
-       await Product.findOneAndUpdate(
-        { _id: item._id, "stores.store": item.storeId },
-        {
-          $inc: { "stores.$.quantity": -item.cartQuantity },
-        }
-      );
+      // Update specific store quantity if applicable
+      const store = item.storeId;
+      if (store) {
+        await Product.updateOne(
+          { _id: item._id, "stores.store": store },
+          { $inc: { "stores.$.quantity": -item.cartQuantity } }
+        );
+      } else {
+        console.warn(
+          `No matching store found for product ${item._id} with storeId ${store}`
+        );
+      }
     })
   );
-  // Payment/Reservation Logic
-  let finalOrderStatus;
-  if (paymentMethod === "store") {
-    finalOrderStatus = "Reserved";
-    // If paying at store, no need to process payment here
-  } else if (paymentMethod === "online") {
-    // Implement payment processing logic here
-    // For example, if using a payment gateway like Stripe or Flutterwave:
 
-    try {
-      // Assume `processOnlinePayment` is a function that processes payment and returns a result
-      const paymentResult = await processOnlinePayment(orderAmount, req.user, cartItems);
+  // Define Order Status and Shipping Details
+  let finalOrderStatus =
+    paymentMethod === "pay_online" ? "Pending" : "Reserved";
+  let finalShippingDetails = shippingAddress;
 
-      if (paymentResult.success) {
-        finalOrderStatus = "Completed"; // Payment successful, mark order as completed
-      } else {
-        res.status(400);
-        throw new Error("Payment failed, order not created");
-      }
-    } catch (error) {
-      res.status(500);
-      throw new Error("Payment processing failed");
-    }
-  } else {
-    res.status(400);
-    throw new Error("Invalid payment method");
+  if (deliveryMethod === "inStorePickup" && selectedStore) {
+    finalShippingDetails = {
+      storeName: selectedStore.storeName,
+      storeAddress: selectedStore.address,
+      storeCity: selectedStore.city,
+      storeState: selectedStore.state,
+      storeContact: selectedStore.contactPerson.phone,
+    };
   }
+
+  // Generate a unique transaction reference (tx_ref) for the order
+  const userIdStr = req.user._id.toString();
+  const tx_ref = `bamstore_${Date.now()}_${userIdStr}`;
+
+  console.log("tx_ref from order creation:", tx_ref); // Log tx_ref
+  console.log("Request User:", userIdStr);
 
   // Create Order
   const order = await Order.create({
-    user: req.user.id,
+    user: userIdStr,
     orderDate,
     orderTime,
     orderStatus: finalOrderStatus,
     cartItems,
-    shippingAddress,
+    shippingAddress: finalShippingDetails,
     paymentMethod,
+    deliveryMethod,
+    orderAmount,
+    tx_ref,
+    paymentStatus: "pending",
   });
 
-  const user = await User.findById(req.user._id).select("-password");
+  if (paymentMethod === "payAtStore") {
+    try {
+       // Send order success email
+    const user = await User.findById(req.user._id).select("-password");
+    const emailContent = orderSuccessEmail(
+      user.firstName,
+      cartItems,
+      finalOrderStatus,
+      orderDate,
+      finalShippingDetails.address,
+      finalShippingDetails.city,
+      finalShippingDetails.state,
+      finalShippingDetails.zipCode,
+      finalShippingDetails.country,
+      finalShippingDetails.phone,
+      orderAmount
+    );
+    console.log("Generated email content:", emailContent);
+    await sendEmail("Bamstore Order Placed", user.email, emailContent);
+    console.log(`Email sent: ${user.email}`);
+    } catch (error) {
+      console.error("Error sending email:", error.message);
+    }
+    return res.status(201).json({ message: "Order Created", order });
+  }
 
-  const emailContent = orderSuccessEmail(
-    user.firstName,
-    cartItems,
-    finalOrderStatus,
-    orderDate,
-    order.shippingAddress.address,
-    order.shippingAddress.city,
-    order.shippingAddress.state,
-    order.shippingAddress.zipCode,
-    order.shippingAddress.country,
-    order.shippingAddress.phone,
-    orderAmount
-  );
-  const subject = "Bamstore Order Placed";
-  const send_to = user.email;
-  // Send order receipt email
-  await sendEmail(subject, send_to, emailContent);
+  // Handle Flutterwave payment immediately after order creation
+  if (paymentMethod === "pay_online") {
+    try {
+      // Calculate the total amount based on items in cart
+      const products = await Product.find(); // Fetch products if needed
+      const orderAmount = calculateTotalPrice(products, cartItems); // Calculate total price from items
 
-  res.status(201).json({ message: "Order Created", data: order });
+      // Define the payload for Flutterwave
+      const payload = {
+        tx_ref: tx_ref,
+        amount: orderAmount,
+        currency: "NGN",
+        redirect_url: `${process.env.CLIENT_URL}/verify-payment`, // Your frontend's payment verification URL
+        customer: {
+          email: req.user.email,
+          phone_number: req.user.phone || "08012345678",
+          name: `${req.user.firstName} ${req.user.lastName}`,
+        },
+        customizations: {
+          title: "Bamstore Online Store",
+          description: "Payment for products",
+          logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
+        },
+      };
+
+      // Make the request to Flutterwave
+      const url = "https://api.flutterwave.com/v3/payments";
+      const { data } = await axios.post(url, payload, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
+        },
+      });
+
+      console.log("Flutterwave response:", data);
+
+      if (data && data.status === "success" && data.data && data.data.link) {
+        console.log("Payment link generated successfully:", data.data.link);
+
+        return res.status(201).json({
+          message: data,
+          payment_link: data.data.link,
+          tx_ref: tx_ref,
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "Failed to create payment link with Flutterwave" });
+      }
+    } catch (error) {
+      console.error("Error in payment initialization: ", error.message);
+      return res.status(500).json({
+        message: "Payment initialization failed",
+        error: error.message,
+      });
+    }
+  } else {
+    await order.save();
+   
+    return res.status(201).json({ message: "Order Created", order, tx_ref });
+  }
 });
 
 // Get all Orders
@@ -124,15 +339,140 @@ const getOrder = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Order not found");
   }
-  if (req.user.role === "admin") {
-    return res.status(200).json(order);
-  }
-  // Match Order to its user
-  if (order.user.toString() !== req.user.id) {
-    res.status(401);
-    throw new Error("User not authorized");
+  if (
+    order.user.toString() !== req.user.id &&
+    req.user.role !== "admin" &&
+    req.user.role !== "customer"
+  ) {
+    return res.status(401).json({ message: "User not authorized" });
   }
   res.status(200).json(order);
+});
+
+const payWithFlutterwave = asyncHandler(async (userID, items, tx_ref) => {
+  const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+
+  try {
+    if (!isValidObjectId(userID)) {
+      throw new Error("Invalid user ID format");
+    }
+    if (!userID) {
+      throw new Error("userID is required");
+    }
+    const user = await User.findById(userID);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Calculate the total amount based on items in cart
+    const products = await Product.find(); // Fetch products if needed
+    const orderAmount = calculateTotalPrice(products, items); // Calculate total price from items
+
+    // Define the payload for Flutterwave
+    const payload = {
+      tx_ref: tx_ref, // Unique transaction reference
+      amount: orderAmount,
+      currency: "NGN",
+      redirect_url: "http://localhost:5173/verify-payment", // Your frontend's payment verification URL
+      customer: {
+        email: user.email,
+        phone_number: user.phone || "08012345678",
+        name: `${user.firstName} ${user.lastName}`,
+      },
+      customizations: {
+        title: "Bamstore Online Store",
+        description: "Payment for products",
+        logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
+      },
+    };
+
+    console.log("Payload to Flutterwave:", payload); // Log the payload
+
+    console.log("tx_ref from paywithflw:", tx_ref);
+
+    // Flutterwave API URL
+    const url = "https://api.flutterwave.com/v3/payments";
+
+    // Make the request to Flutterwave
+    const { data } = await axios.post(url, payload, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`, // Ensure your secret key is correct
+      },
+    });
+    // Log the response to ensure it's correct
+    // console.log("Flutterwave response:", data);
+
+    // Send back the Flutterwave response
+    return { success: true, data };
+  } catch (error) {
+    console.error("Error in payment initialization: ", error);
+    return {
+      success: false,
+      message: "Server error during payment initialization",
+      error: error.message,
+    };
+  }
+});
+
+const verifyFlwPayment = asyncHandler(async (req, res) => {
+  const { transaction_id } = req.query; // Extract transaction_id from query params
+  if (!transaction_id) {
+    return res.status(400).json({ message: "Transaction ID is required" });
+  }
+  const url = `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`;
+
+  try {
+    const response = await axios({
+      url,
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`, // Use the secret key correctly
+      },
+    });
+
+    // Get the payment status and reference
+    const { status, tx_ref, payment_type } = response.data.data;
+
+    console.log("response:", response.data.data);
+    console.log("status:", status);
+    console.log("tx_ref:", response.data.data.tx_ref);
+
+    const order = await Order.findOne({ tx_ref });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (status === "successful") {
+      // Update the order with the payment status and payment option
+      order.paymentStatus = "completed";
+      order.paymentOption = payment_type; // This is the actual payment method used
+
+      await order.save();
+
+      return res.status(200).json({
+        message: "Payment verified successfully",
+        orderId: order._id,
+        paymentStatus: order.paymentStatus,
+      });
+    } else {
+      return res.status(400).json({
+        message: `Payment verification failed. Status: ${status}`,
+        orderId: order._id,
+        paymentStatus: order.paymentStatus,
+      });
+    }
+  } catch (error) {
+    console.error("Error during payment verification:", error.message);
+    return res.status(500).json({
+      message: "Payment verification error",
+      error: error.message,
+    });
+  }
 });
 
 const getOrdersLast7Days = asyncHandler(async (req, res) => {
@@ -189,118 +529,12 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Order status updated" });
 });
 
-const processOnlinePayment = async (amount, user, items) => {
-  // Example with a mock payment gateway API call
-  try {
-    const paymentResponse = await mockPaymentGatewayAPI({
-      amount,
-      userId: user.id,
-      items,
-      currency: "NGN", // or whatever currency you're using
-    });
-
-    if (paymentResponse.status === "success") {
-      return { success: true };
-    } else {
-      return { success: false };
-    }
-  } catch (error) {
-    return { success: false, message: error.message };
-  }
-};
-
-
-// Pay with stripe
-
-// Verify FLW Payment
-// const verifyFlwPayment = asyncHandler(async (req, res) => {
-//   const { transaction_id } = req.query;
-
-//   // Confirm transaction
-//   const url = `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`;
-
-//   const response = await axios({
-//     url,
-//     method: "get",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Accept: "application/json",
-//       Authorization: process.env.FLW_SECRET_KEY,
-//     },
-//   });
-
-//   // console.log(response.data.data);
-//   const { amount, customer, tx_ref } = response.data.data;
-
-//   const successURL =
-//     process.env.FRONTEND_URL +
-//     `/checkout-flutterwave?payment=successful&ref=${tx_ref}`;
-//   const failureURL =
-//     process.env.FRONTEND_URL + "/checkout-flutterwave?payment=failed";
-//   if (req.query.status === "successful") {
-//     res.redirect(successURL);
-//   } else {
-//     res.redirect(failureURL);
-//   }
-// });
-
-// Pay With Flutterwave // NOT WORKING
-// const payWithFlutterwave = async (req, res) => {
-//   const { items, userID } = req.body;
-//   const products = await Product.find();
-//   const user = await User.findById(userID);
-//   const orderAmount = calculateTotalPrice(products, items);
-//   // console.log(orderAmount);
-//   // const url = "https://jsonplaceholder.typicode.com/posts";
-//   const url = "https://api.flutterwave.com/v3/payments";
-//   const json = {
-//     tx_ref: "shopito-48981487343MDI0NzMx",
-//     amount: orderAmount,
-//     currency: "USD",
-//     // payment_options: "card, banktransfer, ussd",
-//     redirect_url: "http://localhost:5000/response",
-//     //   meta: {
-//     //     consumer_id: 23,
-//     //     consumer_mac: "92a3-912ba-1192a",
-//     //   },
-//     customer: {
-//       email: user?.email,
-//       phone_number: user.phone,
-//       name: user.firstName,
-//     },
-//     customizations: {
-//       title: "Shopito Online Store",
-//       description: "Payment for products",
-//       logo: "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
-//     },
-//   };
-
-//   axios
-//     .post(url, json, {
-//       headers: {
-//         Accept: "application/json",
-//         "Content-Type": "application/json;charset=UTF-8",
-//         Authorization: `Bearer ${process.env.FLW_SECRET_KEY}`,
-//       },
-//     })
-//     .then(({ data }) => {
-//       // console.log(data);
-//       return res.status(200).json(data);
-//     })
-//     .catch((err) => {
-//       // console.log(err.message);
-//       return res.json(err.message);
-//     });
-// };
-
-
-
 module.exports = {
   createOrder,
   getOrders,
   getOrder,
   getOrdersLast7Days,
   updateOrderStatus,
-  // verifyFlwPayment,
-  // payWithFlutterwave,
+  payWithFlutterwave,
+  verifyFlwPayment,
 };

@@ -13,9 +13,9 @@ const EmailVerification = () => {
 
   const user = useSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   dispatch(getUser(user));
-  // }, []);
+  useEffect(() => {
+    dispatch(getUser(user));
+  }, []);
 
   useEffect(() => {
     // Extract the email token from the URL

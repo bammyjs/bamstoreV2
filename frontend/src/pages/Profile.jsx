@@ -11,7 +11,6 @@ import {
   logout,
   updateUser,
 } from "../redux/features/auth/authSlice";
-import Loader from "../componets/home/Loader";
 import { useState, useEffect } from "react";
 import ShowOnLogin from "../componets/hiddenLink/hiddenLink";
 import { IoLogOutOutline } from "react-icons/io5";
@@ -19,11 +18,16 @@ import { AdminOnlyLink } from "../componets/admin/AdminAccessOnly";
 import { LoadingButton } from "../componets/extras/LoadingButton";
 
 function Profile() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
+
+
 
   const initialState = {
     firstName: user?.firstName || "",
@@ -40,9 +44,7 @@ function Profile() {
   };
 
   const [userData, setUserData] = useState(initialState);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+ 
 
   useEffect(() => {
     if (user === null) {
@@ -51,7 +53,7 @@ function Profile() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (user && user.isVerified) {
+    if (user) {
       setUserData({
         ...userData,
         firstName: user.firstName || "",
@@ -64,8 +66,10 @@ function Profile() {
         state: user?.state || "",
         country: user?.country || "",
       });
+    } else {
+      navigate("/login?redirect=/profile");
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, navigate]);
 
   const saveProfile = async (e) => {
     e.preventDefault();

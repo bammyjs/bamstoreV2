@@ -19,11 +19,12 @@ import { userApi } from "./features/user/usersApi";
 import orderReducer from "./features/product/orderSlice";
 import { ordersApi } from "./features/order/ordersApi";
 import pickUpStoreReducer from "./features/pickupStore/pickUpStoreSlice";
+import feedPostReducer from "./features/feed/feedPostSlice";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart"], // Only persist auth and cart reducers
+  whitelist: ["auth","cart"], // Only persist auth and cart reducers
 };
 
 const rootReducer = combineReducers({
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   category: categoryReducer,
   orders: orderReducer,
   stores: pickUpStoreReducer,
+  feeds: feedPostReducer,
   [userApi.reducerPath]: userApi.reducer,
   [productsApi.reducerPath]: productsApi.reducer,
   [ordersApi.reducerPath]: ordersApi.reducer,

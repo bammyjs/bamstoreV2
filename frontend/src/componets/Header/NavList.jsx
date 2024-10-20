@@ -10,8 +10,7 @@ export const NavList = ({ toggleOpen }) => {
     <>
       <ul className="w-full text-base lg:text-lg font-medium md:max-w-3xl flex flex-col gap-2 items-start py-4 md:py-0 md:flex-row justify-between md:justify-start md:items-center ">
         {[
-          { to: "/phones", label: "Phones" },
-          { to: "/laptop", label: "Laptops" },
+         
           { to: "/gaming", label: "Gaming" },
           { to: "/workspace", label: "WorkSpace" },
           { to: "/products", label: "All Products" },

@@ -3,10 +3,30 @@ import { IoEyeOutline } from "react-icons/io5";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useGetOrdersQuery } from "../../redux/features/order/ordersApi";
 import { Meta } from "../../componets/Meta";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../redux/features/auth/authSlice";
 
 export const OrderPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, isLoading } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
+
+  // Check if the user is logged in
+  useEffect(() => {
+    if ( !user) {
+      // Redirect to login page with the current path as the return URL
+      navigate("/login?redirect=/orders");
+    }
+  }, [user,  navigate]);
   const shipRate = 5000;
-  const { data: orders, error, isLoading } = useGetOrdersQuery();
+  const { data: orders, error, isLoading: ordersLoading } = useGetOrdersQuery();
+
+  
 
   return (
     <>
@@ -18,16 +38,16 @@ export const OrderPage = () => {
       />
       <main
         id="main-content"
-        className="w-full  bg-light h-fit flex flex-col items-center gap-6  p-4   "
+        className="w-full  bg-light  h-screen flex flex-col items-center gap-6  p-4    "
       >
-        <section className="container text-dark w-full p-4 border-2 border-gray  rounded-lg flex flex-col  md:justify-between  max-w-7xl ">
+        <section className="container h-full text-dark w-full p-4 border-2 border-gray   rounded-lg flex flex-col  md:justify-between  max-w-7xl ">
           <h3 className="text-xl text-center mb-4 md:text-3xl font-bold">
             Your orders<span className="text-red-700">{}</span>
           </h3>
-          <div className="overflow-x-scroll">
+          <div className="overflow-x-scroll  mb-10">
             <table className="table z-0 table-pin-rows   w-full  ">
-              {isLoading ? (
-                <div className="flex  justify-center ">
+              {ordersLoading ? (
+                <div className=" flex  justify-center ">
                   <span className="loading loading-ball loading-xs"></span>
                   <span className="loading loading-ball loading-sm"></span>
                   <span className="loading loading-ball loading-md"></span>

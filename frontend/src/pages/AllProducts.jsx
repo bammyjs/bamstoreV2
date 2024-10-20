@@ -1,6 +1,10 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 
-import { IoChevronForward, IoChevronBack } from "react-icons/io5";
+import {
+  IoChevronForward,
+  IoChevronBack,
+  IoSearchOutline,
+} from "react-icons/io5";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import CardProducts from "../componets/product/CardProducts";
@@ -18,6 +22,12 @@ import { sortOptions } from "../componets/product/FilterData";
 import BreadCrumb from "../componets/BreadCrumb";
 import MobileProductFilter from "../componets/product/MobileProductFilter";
 import { Meta } from "../componets/Meta";
+import axios from "axios";
+import SearchProducts from "../componets/product/SearchProducts";
+
+const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
+const API_URL = `${BACKEND_URL}/api/products/`;
 
 export default function AllProducts() {
   // State for managing current page
@@ -35,6 +45,12 @@ export default function AllProducts() {
   const [totalPages, setTotalPages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [show, setShow] = useState(false);
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [searchError, setSearchError] = useState(null);
+
+  const [searchResults, setSearchResults] = useState([]);
   const {
     data: products,
     isError,
@@ -42,6 +58,63 @@ export default function AllProducts() {
     isLoading,
   } = useGetAllProductsQuery();
   const ITEMS_PER_PAGE = 12; // Set desired items per page
+
+  const toggleShow = () => setShow(!show);
+
+  // Debounce input value
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(inputValue);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [inputValue]);
+
+  // Fetch products based on debouncedValue
+  useEffect(() => {
+    if (debouncedValue.length > 2) {
+      setLoading(true);
+      axios
+        .get(`${API_URL}?searchQuery=${debouncedValue}`)
+        .then((response) => {
+          setSearchResults(response.data);
+          setLoading(false);
+        })
+        .catch((searchError) => {
+          setSearchError(searchError);
+          setLoading(false);
+        });
+    } else {
+      setSearchResults([]);
+    }
+  }, [debouncedValue]);
+
+  // useEffect(() => {
+  //   if (show || open) {
+  //     // Apply the classes to disable scrolling and blur the background
+  //     document.body.classList.add("no-scroll");
+  //   } else {
+  //     // Remove the classes when the menu is closed
+  //     document.body.classList.remove("no-scroll");
+  //   }
+  // }, [show, open]);
+
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShow(false);
+        setOpen(false);
+        setProfileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownRef]);
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
 
   // Effect to organize products into categories once they are fetched
   useEffect(() => {
@@ -245,10 +318,61 @@ export default function AllProducts() {
         url="http://bamstore.ng/products"
       />
       <div
-        id="main-content"
-        className="  bg-gray-bk h-fit flex-col gap-6 mt-10  md:mt-10 lg:mt-10"
+        // id="main-content"
+        className=" relative bg-light h-fit flex-col gap-6   "
       >
-        <div className="mx-auto container max-w-7xl bg-gray-bk px-4 ">
+        <div className=" md:hidden   border-0  bg-light px-4 top-10 left-0 w-full   mx-auto">
+          <div className=" input border-gray bg-light  container max-w-7xl relative  left-0 right-0 m-auto  flex w-full flex-wrap items-center ">
+            <span className="">
+              <IoSearchOutline style={{ fontSize: "20px" }} />
+            </span>
+            <input
+              type="search"
+              className="input-ghost  m-0 -mr-0.5  block w-[1px]  flex-auto rounded-lg   bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-transparent focus:text-neutral-700  focus:outline-none dark:text-neutral-200 dark:placeholder:text-neutral-200 "
+              placeholder="Search for..."
+              aria-label="Search"
+              aria-describedby="button-addon3"
+              value={inputValue}
+              onChange={handleInputChange}
+            />
+          </div>
+          {isLoading && (
+            <div className="flex  justify-center ">
+              <span className="loading loading-ball loading-xs"></span>
+              <span className="loading loading-ball loading-sm"></span>
+              <span className="loading loading-ball loading-md"></span>
+              <span className="loading loading-ball loading-lg"></span>
+            </div>
+          )}
+          {error && (
+            <p className="text-center">Error loading search results.</p>
+          )}
+
+          {searchResults ? (
+            <div className="absolute w-full flex overlayChild z-50  text-gray-400  justify-between items-center   focus:border-y  border-gray-200  ">
+              <div className="w-full flex flex-col gap-4 items-center justify-center">
+                <ul className="flex flex-col w-full max-w-7xl   items-center h-auto  gap-2 overflow-y-auto hide-scrollbar ">
+                  <li className="grid  justify-between overflow-auto w-full mt-auto  grid-cols-1 gap-2 md:gap-4 md:grid-cols-3 lg:grid-cols-3 hide-scrollbar">
+                    {searchResults.map((result) => (
+                      <SearchProducts
+                        toggleShow={toggleShow}
+                        product={result}
+                        key={result.id}
+                      />
+                    ))}
+
+                    {/* <button className="btn btn-primary w-[90%]">
+                        View all search result
+                      </button> */}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <p className="text-dark text-center">0 product found</p>
+          )}
+        </div>
+        <div className="mx-auto container max-w-7xl  bg-light px-4 md:pt-10 ">
           <BreadCrumb
             crumbs={[
               { label: "Home", path: "/" },

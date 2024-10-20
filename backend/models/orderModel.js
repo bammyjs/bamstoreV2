@@ -31,6 +31,13 @@ const orderSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    paymentOption: { type: String }, // New field
+    tx_ref: { type: String }, // New field for transaction reference
+    paymentStatus: { type: String, default: "Pending" }, // To track payment status
+    deliveryMethod: {
+      type: String,
+      trim: true,
+    },
     cartItems: {
       type: [Object],
       required: [true],

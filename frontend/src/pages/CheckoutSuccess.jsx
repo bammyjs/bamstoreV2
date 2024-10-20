@@ -1,35 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { clearCart, itemTotalQuantity } from "../redux/features/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import { clearCart } from "../redux/features/cartSlice";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import Confetti from "react-confetti";
 import { Meta } from "../componets/Meta";
+import { QRCodeSVG } from "qrcode.react";
 
 const CheckoutSuccess = () => {
-  // Define state variables for the order details
-  const [contactDetails, setContactDetails] = useState({});
-  const [shippingDetails, setShippingDetails] = useState({});
-  const [totalCartAmount, setTotalCartAmount] = useState(0);
-  const dispatch = useDispatch();
+  const location = useLocation();
+  const user = useSelector((state) => state.auth); // Get the current user state
+
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Extract the orderId from the URL query parameters
+  const query = new URLSearchParams(location.search);
+  const orderId = query.get("orderId");
 
   useEffect(() => {
-    const storedOrderDetails = localStorage.getItem("orderDetails");
-    if (storedOrderDetails) {
-      const orderDetails = JSON.parse(storedOrderDetails);
-      // Now you can use orderDetails as needed, for example:
-      setContactDetails(orderDetails.contactDetails);
-      setShippingDetails(orderDetails.shippingDetails);
-      setTotalCartAmount(orderDetails.totalCartAmount);
-    }
-  }, []);
+    const fetchOrderDetails = async () => {
+      try {
+        if (!orderId) {
+          setError("Order ID not found in URL.");
+          return;
+        }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    dispatch(clearCart());
-    // Optionally, clear cart and item total quantity if needed
-  };
-  // Component logic...
+        setLoading(true);
+
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_BACKEND_URL}/api/order/${orderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`, // Pass JWT for authentication
+            },
+            withCredentials: true,
+          }
+        );
+
+        setOrderDetails(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError("Failed to fetch order details.");
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [orderId, user?.token]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading order details...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>{error}</p>
+      </div>
+    );
+  }
+
+  if (!orderDetails) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>No order found</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -39,7 +83,7 @@ const CheckoutSuccess = () => {
         keywords="checkout success, success, bamstore, welcome to bamstore ng"
         url="http://bamstore.ng/checkout-success"
       />
-      <section className="w-full">
+      <section className="w-full  bg-light h-fit flex flex-col items-center gap-6  ">
         <Confetti />
         <div className="md:max-w-xl mx-auto mb-4  p-4 bg-light ">
           <div className=" flex flex-col items-center gap-4  text-dark">
@@ -48,84 +92,78 @@ const CheckoutSuccess = () => {
             <div className="text-dark flex items-center gap-4">
               <IoCheckmarkCircle style={{ fontSize: "40px" }} />
               <div className="flex flex-col items-left justify-center">
-                {/* <p>Order #{formData._id}</p> */}
-                <h3 className="text-2xl">
-                  Thank you, {shippingDetails?.firstName} for your purchase
+                <h3 className="text-lg">
+                  Thank you, {orderDetails.shippingAddress?.firstName}, for your purchase
                 </h3>
-              </div>
-            </div>
-            <div className="flex flex-col  border border-gray rounded-md">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.913911960699!2d5.1871185758496665!3d7.250638364284851!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10478f9c061d7827%3A0xc550ed134a7985a1!2sST%20THOMAS&#39;%20ANGLICAN%20CHURCH%2C%20340110%2C%20Akure%2C%20Ondo!5e0!3m2!1sen!2sng!4v1693995367901!5m2!1sen!2sng"
-                width="100%"
-                height="250"
-                className="border-b rounded-t-2xl max-w-7xl"
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                frameborder="0"
-              ></iframe>
-              <div className="flex flex-col p-4 ">
-                <h3 className="text-lg text-dark font-semibold ">
-                  Your Order as been placed
-                </h3>
-                <p className="text-black">
-                  Please save your payment receipt and share it with our sales
-                  rep on Instagram: @neftechnologies or on WhatsApp through this
-                  link: https://wa.link/h1q6wy ALSO PLEASE NOTE THAT ALL
-                  SHIPPING AND DELIVERY FEES ARE CALCULATED & DETERMINED BY ITEM
-                  WEIGHT AND DISTANCE.
+                <p className="text-lg">
+                  Your Order ID: <strong>{orderDetails._id}</strong>
                 </p>
               </div>
             </div>
-            <div className="bg-light border border-gray rounded-md p-4 flex flex-col gap-4  w-full   text-dark">
-              <h3 className="text text-dark font-semibold ">Order details</h3>
 
+            {/* Display QR code for in-store payment */}
+            {orderDetails.paymentMethod === "payAtStore" && (
+              <div className="w-full flex flex-col items-center gap-4">
+                <h3 className="text-lg text-center text-emerald-600">
+                  Present this QR code at the store to complete your payment:
+                </h3>
+                <QRCodeSVG value={orderDetails._id} size={200} />
+                <p className="mt-2 text-sm text-center text-gray-600">
+                  Scan this code at the selected store to proceed with your
+                  payment and pickup.
+                </p>
+              </div>
+            )}
+
+            <div className="bg-light border border-gray rounded-md p-4 flex flex-col gap-4  w-full   text-dark">
+              {/* <h3 className="text text-dark font-semibold ">Order details</h3> */}
               <div className="w-full mx-auto  max-w-7xl flex flex-col  gap-2">
+              <div className="flex flex-col  items-start gap-1">
+                  <h4 className="text font-semibold">Order Status</h4>
+                  <p className="text-warning  uppercase">{orderDetails.orderStatus}</p>
+                </div>
                 <div className="flex flex-col  items-start gap-1">
                   <h4 className="text font-semibold">Contact Information</h4>
-                  <p>{contactDetails?.contact}</p>
+                  <p>{orderDetails.shippingAddress?.phone || "N/A"}</p>
                 </div>
                 <div className="flex flex-col  items-start gap-1">
                   <h4 className="text font-semibold">Shipping Address</h4>
                   <p>
-                    {shippingDetails?.firstName} {""}{" "}
-                    {shippingDetails?.lastName}
+                    {orderDetails.shippingAddress?.firstName} {orderDetails.shippingAddress?.lastName}
                   </p>
-
-                  <p>{shippingDetails?.address}</p>
-
+                  <p>{orderDetails.shippingAddress?.address}</p>
                   <p>
-                    {shippingDetails?.city} {","} {shippingDetails?.state}
+                    {orderDetails.shippingAddress?.city}, {orderDetails.shippingAddress?.state}
                   </p>
-
-                  <p>{shippingDetails?.zipCode}</p>
-
-                  <p>{shippingDetails?.country}</p>
-
-                  <p>{shippingDetails?.phone}</p>
+                  <p>{orderDetails.shippingAddress?.zipCode}</p>
+                  <p>{orderDetails.shippingAddress?.country}</p>
+                  <p>{orderDetails.shippingAddress?.phone}</p>
                 </div>
                 <div className="flex flex-col  items-start gap-1">
-                  <h4 className="text font-semibold">Shipping Method</h4>
-                  <p>GIG logistics</p>
+                  <h4 className="text font-semibold">Delivery Method</h4>
+                  <p>{orderDetails.deliveryMethod}</p>
                 </div>
                 <div className="flex flex-col  items-start gap-1">
                   <h4 className="text font-semibold">Payment Method</h4>
                   <div className="flex items-center gap-3">
-                    <p>Direct Bank Transfer :</p>
+                    <p>{orderDetails.paymentMethod} :</p>
                     <p className="text-lg font-semibold text-gray-900">
                       <span className="text-lg font-semibold text-dark">
                         &#8358;
                       </span>
-                      {new Intl.NumberFormat("en-NG").format(totalCartAmount)}
+                      {new Intl.NumberFormat("en-NG").format(orderDetails.orderAmount)}
                     </p>
                   </div>
+                </div>
+                <div className="flex flex-col  items-start gap-1">
+                  <h4 className="text font-semibold">Payment Status</h4>
+                  <p>{orderDetails.paymentStatus}</p>
                 </div>
               </div>
             </div>
 
-            <button onClick={handleSubmit} className="btn btn-primary w-full">
-              <Link to="/orders">View Order Status</Link>
+            <button className="btn btn-primary w-full">
+              <Link to={`/order-preview/${orderId}`}>View Order Status</Link>
             </button>
           </div>
         </div>

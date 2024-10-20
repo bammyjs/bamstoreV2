@@ -127,16 +127,16 @@ const Product = () => {
               <div className="text-dark body-font   ">
                 <div className=" py-6 mx-auto ">
                   <div className="w-full max-w-7xl  mx-auto  flex md:justify-between flex-wrap  ">
-                    <div className=" w-full flex flex-col gap-6 lg:w-1/2 md:sticky top-24  h-fit ">
+                    <div className=" w-full flex flex-col gap-4 lg:w-1/2 md:sticky top-24  h-fit ">
                       <Zoom>
                         <img
                           src={activeImg}
                           alt=""
-                          className="w-full h-full aspect-square object-cover rounded-xl"
+                          className="w-full h-full aspect-square object-cover  rounded-xl"
                           width="500"
                         />
                       </Zoom>
-                      <div className="w-full flex flex-row justify-between h-24 bg-light py-2 ">
+                      <div className="w-full flex flex-row justify-between h-24  rounded-xl bg-light py-2 ">
                         {product &&
                           product.image &&
                           product.image.length > 0 &&

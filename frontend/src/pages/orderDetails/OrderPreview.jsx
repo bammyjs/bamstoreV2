@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGetOrderQuery } from "../../redux/features/order/ordersApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {
@@ -14,18 +14,29 @@ import { useSelector } from "react-redux";
 import logo from "../../assets/bammylogo.png";
 import ProductReview from "../../componets/product/ProductReview";
 import { Meta } from "../../componets/Meta";
+import { QRCodeSVG } from "qrcode.react";
 
 export const OrderPreview = () => {
+  const navigate = useNavigate();
   const pdfRef = useRef();
   const { id } = useParams();
-  console.log(id);
   const shipRate = 5000;
   const [expand, setExpand] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
-  const cart = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
 
+  
   const { data: order, error, isLoading } = useGetOrderQuery(id);
   console.log("current order:", order);
+
+   // Check if the user is logged in
+   useEffect(() => {
+    if (!user) {
+      // Redirect to login page with the current path as the return URL
+      navigate(`/login?redirect=/order-preview/${id}`);
+    }
+  }, [user, navigate, id]);
+
 
   const handleReviewClick = (productId) => {
     setSelectedProductId(productId);
@@ -325,72 +336,65 @@ export const OrderPreview = () => {
                   </p>
                 </div>
               </div>
+              {/* Display QR code for in-store payment */}
+              {order?.paymentMethod === "payAtStore" && (
+                <div className="w-full flex flex-col items-center gap-4">
+                  <h3 className="text-lg text-center text-emerald-600">
+                    Present this QR code at the store to complete your payment:
+                  </h3>
+                  <QRCodeSVG value={order?._id} size={200} />
+                  <p className="mt-2  text-sm text-center text-gray-600">
+                    Scan this code at the selected store to proceed with your
+                    payment and pickup.
+                  </p>
+                </div>
+              )}
+
               <div className="bg-light border border-gray rounded-md p-4 flex flex-col gap-4  w-full   text-dark">
-                <h3 className="text text-dark font-semibold ">Order details</h3>
+                {/* <h3 className="text text-dark font-semibold ">Order details</h3> */}
 
                 <div className="w-full mx-auto  max-w-7xl flex flex-col  gap-2">
                   <div className="flex flex-col  items-start gap-1">
                     <h4 className="text font-semibold">Contact Information</h4>
-                    <p>{order?.shippingAddress?.phone}</p>
+                    <p>{order?.shippingAddress?.phone || "N/A"}</p>
                   </div>
                   <div className="flex flex-col  items-start gap-1">
                     <h4 className="text font-semibold">Shipping Address</h4>
                     <p>
-                      {order?.shippingAddress?.firstName} {""}{" "}
+                      {order?.shippingAddress?.firstName}{" "}
                       {order?.shippingAddress?.lastName}
                     </p>
-
                     <p>{order?.shippingAddress?.address}</p>
-
                     <p>
-                      {order?.shippingAddress?.city} {","}{" "}
+                      {order?.shippingAddress?.city},{" "}
                       {order?.shippingAddress?.state}
                     </p>
-
                     <p>{order?.shippingAddress?.zipCode}</p>
-
                     <p>{order?.shippingAddress?.country}</p>
-
                     <p>{order?.shippingAddress?.phone}</p>
                   </div>
                   <div className="flex flex-col  items-start gap-1">
-                    <h4 className="text font-semibold">Shipping Method</h4>
-                    <p>GIG logistics</p>
+                    <h4 className="text font-semibold">Delivery Method</h4>
+                    <p>{order?.deliveryMethod}</p>
                   </div>
                   <div className="flex flex-col  items-start gap-1">
                     <h4 className="text font-semibold">Payment Method</h4>
                     <div className="flex items-center gap-3">
-                      <p>Direct Bank Transfer :</p>
+                      <p>{order?.paymentMethod} :</p>
                       <p className="text-lg font-semibold text-gray-900">
                         <span className="text-lg font-semibold text-dark">
                           &#8358;
                         </span>
                         {new Intl.NumberFormat("en-NG").format(
-                          order?.orderAmount + shipRate
+                          order?.orderAmount
                         )}
                       </p>
                     </div>
                   </div>
-                  {/* <div className="flex flex-col  items-start gap-1">
-                <h4 className="text font-semibold">Billing Address</h4>
-                <p>
-                  {useShippingForBilling?.firstName} {""}{" "}
-                  {useShippingForBilling?.lastName}
-                </p>
-
-                <p>{useShippingForBilling?.address}</p>
-
-                <p>
-                  {useShippingForBilling?.city} {","}{" "}
-                  {useShippingForBilling?.state}
-                </p>
-
-                <p>{useShippingForBilling?.zipCode}</p>
-
-                <p>{useShippingForBilling?.country}</p>
-
-                <p>{useShippingForBilling?.phone}</p>
-              </div> */}
+                  <div className="flex flex-col  items-start gap-1">
+                    <h4 className="text font-semibold">Payment Status</h4>
+                    <p>{order?.paymentStatus}</p>
+                  </div>
                 </div>
               </div>
               <div className="w-full flex items-center justify-between gap-3">

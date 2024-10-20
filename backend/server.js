@@ -15,6 +15,8 @@ const orderRoute = require("./routes/orderRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const brandRoute = require("./routes/brandRoute");
 const pickUpStoreRoute = require("./routes/pickUpStoreRoute");
+const paymentRoutes = require("./routes/payment.js")
+const feedPostRoutes = require("./routes/feedPostRoute");
 const errorHandler = require("./middleware/errorMiddleware");
 
 const app = express();
@@ -64,6 +66,7 @@ const corsOptions = {
   credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  exposedHeaders: ["set-cookie"],
 };
 
 app.use(cors(corsOptions));
@@ -80,6 +83,8 @@ app.use("/api/order", orderRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/brand", brandRoute);
 app.use("/api/pickupstore", pickUpStoreRoute);
+app.use('/api/payment', paymentRoutes);
+app.use('/api/feeds', feedPostRoutes);
 
 app.get("/test", (req, res) => {
   res.send("Test endpoint response");

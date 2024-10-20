@@ -1,32 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RegionDropdown } from "react-country-region-selector";
 import { getStores } from "../../redux/features/pickupStore/pickUpStoreSlice";
 
 const StoreSelection = ({
   product,
+  selectedState,
+  selectedCity,
   cart,
   isLoading,
-  shippingDetails,
-  handleStateChange,
+  onStoreSelect,
+  handleStoreSelect,
 }) => {
   const dispatch = useDispatch();
   const { stores } = useSelector((state) => state.stores);
   const [selectedStore, setSelectedStore] = useState(null);
   const [availabilityMessage, setAvailabilityMessage] = useState("");
+  const [storeFetched, setStoreFetched] = useState(false);
 
   useEffect(() => {
-    if (shippingDetails.state) {
-      dispatch(getStores({ state: shippingDetails.state }));
+    // Reset storeFetched when the city or state changes
+    if (storeFetched) {
+      setStoreFetched(false);
     }
-  }, [shippingDetails.state, dispatch]);
+  }, [selectedCity, selectedState]);
+  const fetchStores = () => {
+    if (selectedState && selectedCity) {
+      dispatch(getStores({ state: selectedState, city: selectedCity }));
+      setStoreFetched(true); // Indicate that stores have been fetched
+    } else {
+      <div role="alert" className="alert alert-info">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          className="h-6 w-6 shrink-0 stroke-current"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+        <span>Please select both state and city to fetch stores.</span>
+      </div>;
+    }
+  };
 
   const handleStoreSelection = (storeId) => {
-    if (!product || isLoading || !product.stores) {
+    if (!product || !product.stores) {
       setAvailabilityMessage("Loading product availability...");
       return;
     }
+
     const store = stores.find((store) => store._id === storeId);
+
+    if (store) {
+      handleStoreSelect(store); // Pass the entire store object, not just the ID
+    } else {
+      console.error("Store not found!");
+    }
     setSelectedStore(store);
 
     const storeProductInfo = product.stores.find(
@@ -50,48 +83,46 @@ const StoreSelection = ({
         `Product "${product.name}" is not available in this store. It will be available for pickup in 3 days.`
       );
     }
+
+    // Show the modal after selecting a store
+    document.getElementById("my_modal_5").showModal();
   };
 
   return (
-    <div className="flex flex-col gap-4 ">
-      <div className="relative  w-full  md:w-[30%]">
-        <RegionDropdown
-          country={"Nigeria"}
-          value={shippingDetails.state}
-          required
-          name="state"
-          defaultOptionLabel="State"
-          // value={region}
-          onChange={(val) => handleStateChange(val)}
-          className="peer  relative h-10 w-full rounded border border-gray px-4 text-sm text-gray bk-light placeholder-transparent outline-none transition-all autofill:bg-white invalid:border-gray invalid:text-bg-light focus:border-emerald-500 focus:outline-none invalid:focus:bg-light focus:bg-light invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-light disabled:text-slate-400"
-        />
-        <label
-          htmlFor="stateSelect"
-          className="absolute bg-light left-2 -top-2 z-[1] cursor-text px-2 text-xs text-slate-400 transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full before:w-full before:bg-white before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-autofill:-top-2 peer-required:after:text-pink-500 peer-required:after:content-['\00a0*'] peer-invalid:text-gray peer-focus:-top-2 peer-focus:cursor-default peer-focus:text-xs peer-focus:text-emerald-500 peer-invalid:peer-focus:text-pink-500 peer-disabled:cursor-not-allowed peer-disabled:text-slate-400 peer-disabled:before:bg-transparent"
-        >
-          State
-        </label>
-      </div>
-      {/* <div className="relative w-full md:w-[30%]">
-        <input
-          type="text"
-          name="city"
-          placeholder="city"
-          required
-          value={shippingDetails.city}
-          className="peer relative h-10 w-full rounded border border-gray px-4 text-sm text-dark placeholder-transparent outline-none transition-all autofill:bg-white invalid:border-gray invalid:text-pink-500 focus:border-emerald-500 focus:outline-none invalid:focus:border-pink-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
-          onChange={handleInputChange}
-        />
-        <label
-          htmlFor="city"
-          className="absolute left-2 -top-2 z-[1] cursor-text px-2 text-xs text-slate-400 transition-all before:absolute before:top-0 before:left-0 before:z-[-1] before:block before:h-full before:w-full before:bg-white before:transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-sm peer-autofill:-top-2 peer-required:after:text-pink-500 peer-required:after:content-['\00a0*'] peer-invalid:text-gray peer-focus:-top-2 peer-focus:cursor-default peer-focus:text-xs peer-focus:text-emerald-500 peer-invalid:peer-focus:text-pink-500 peer-disabled:cursor-not-allowed peer-disabled:text-slate-400 peer-disabled:before:bg-transparent"
-        >
-          City
-        </label>
-      </div> */}
-      <div className="max-w-sm p-2 flex flex-col gap-2 items-start ">
+    <div className="flex flex-col ">
+      <button
+        className="btn btn-primary"
+        onClick={fetchStores}
+        disabled={isLoading || storeFetched}
+      >
+        Available Stores
+      </button>
+
+      {storeFetched && stores.length === 0 && (
+        <div role="alert" className="alert alert-error">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="h-6 w-6 shrink-0 stroke-current"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span>No stores found for the selected state and city.</span>
+        </div>
+      )}
+
+      <div className="max-w-sm p-2 flex flex-col gap-2 items-start">
         {stores
-          .filter((store) => store.state === shippingDetails.state)
+          .filter(
+            (store) =>
+              store.state === selectedState && store.city === selectedCity
+          )
           .map((store) => (
             <div className="flex gap-1 items-start" key={store._id}>
               <input
@@ -101,9 +132,6 @@ const StoreSelection = ({
                 id={`store-${store._id}`}
                 onChange={(e) => handleStoreSelection(e.target.value)}
                 disabled={stores.length === 0}
-                onClick={() =>
-                  document.getElementById("my_modal_5").showModal()
-                }
                 className="radio radio-secondary radio-sm"
               />
               <label
@@ -126,16 +154,19 @@ const StoreSelection = ({
             </div>
           ))}
       </div>
+
       {availabilityMessage && (
         <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
           <div className="modal-box bg-light">
-            <h3 className="font-bold text-lg">Hello!</h3>
+            <h3 className="font-bold text-lg">Product Availability</h3>
             <p className="py-4">{availabilityMessage}</p>
             <div className="modal-action">
-              <form method="dialog">
-                {/* if there is a button in form, it will close the modal */}
-                <button className="btn">Close</button>
-              </form>
+              <button
+                className="btn"
+                onClick={() => document.getElementById("my_modal_5").close()}
+              >
+                Close
+              </button>
             </div>
           </div>
         </dialog>
