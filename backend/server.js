@@ -22,7 +22,7 @@ const errorHandler = require("./middleware/errorMiddleware");
 const app = express();
 
 // Middlewares for security
-// app.use(helmet());
+
 
 // Middleware for parsing request bodies
 app.use(express.json());
