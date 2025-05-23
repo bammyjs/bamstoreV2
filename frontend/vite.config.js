@@ -6,11 +6,12 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: 'https://api.flutterwave.com',
+        target: "https://api.flutterwave.com",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
   plugins: [react()],
+  base: "/",
 });

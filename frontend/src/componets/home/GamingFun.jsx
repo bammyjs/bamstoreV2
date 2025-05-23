@@ -16,7 +16,7 @@ function GamingFun() {
         </Suspense>
 
         <span className=""></span>
-        <div className="absolute flex flex-col items-center gap-3 top-10 md:top-20 left-1/2 -translate-x-1/2  ">
+        <div className=" flex flex-col items-center gap-3   ">
           <h2 className="text-gray-900 text-center text-2xl md:text-5xl lg:text-7xl font-bold mb-2 md:md-4">
             Get More Fun With Us
           </h2>
@@ -28,7 +28,7 @@ function GamingFun() {
           </Link>
         </div>
       </div>
-      <div className="p-4  md:hidden relative w-full ">
+      <div className=" p-4  md:hidden relative w-full ">
         <Suspense fallback={<div className="spinner">Loading...</div>}>
           <LazyLoadImage
             src={funImage}
