@@ -57,8 +57,6 @@ import CheckoutSuccess from "./pages/CheckoutSuccess";
 import ManageStore from "./componets/admin/pickupstore/ManageStore";
 import CheckoutDetails from "./componets/checkout/CheckoutDetails";
 import VerifyPayment from "./pages/checkout/VerifyPayment";
-import FeedPost from "./componets/feedPost/FeedPost";
-import FeedPage from "./pages/Feedpage";
 
 function App() {
   const location = useLocation();
@@ -153,7 +151,6 @@ function App() {
 
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/order-preview/:id" element={<OrderPreview />} />
-        <Route path="/feed" element={<FeedPage />} />
 
         {/* <Route path="/createProduct" element={<CreateProduct />} /> */}
         <Route
